@@ -8,7 +8,7 @@ import BlogDetailRow from "../components/BlogDetailRow";
 
 const BlogDetailPage = () => {
   return (
-    <section>
+    <main>
     <Container >
       <div className=" flex col-span-4 gap-5">
       <BlogSideBar className=" col-span-1"/>
@@ -24,7 +24,7 @@ const BlogDetailPage = () => {
       </div>
       </div>
     </Container>
-  </section>
+  </main>
   )
 }
 

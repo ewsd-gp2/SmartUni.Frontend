@@ -5,7 +5,7 @@ import StudentList from '../components/StudentList'
 
 const AdminDashboardForStu = () => {
   return (
-    <section>
+    <main>
         <Container>
             <div className=' flex col-span-4 gap-5'>
             <AdminSideBar className=" col-span-1"/>
@@ -15,7 +15,7 @@ const AdminDashboardForStu = () => {
             </div>
             </div>
         </Container>
-    </section>
+    </main>
   )
 }
 

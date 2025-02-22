@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import { HiSearch } from "react-icons/hi";
 const BlogPage = () => {
   return (
-    <section>
+    <main>
       <Container >
         <div className=" flex col-span-4 gap-5">
         <BlogSideBar className=" col-span-1"/>
@@ -23,7 +23,7 @@ const BlogPage = () => {
         </div>
         </div>
       </Container>
-    </section>
+    </main>
   );
 };
 
