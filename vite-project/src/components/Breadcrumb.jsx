@@ -1,9 +1,46 @@
-import React from 'react'
+import React from "react";
+import { HiChevronRight, HiHome, HiMiniHome } from "react-icons/hi2";
+import { Link } from "react-router-dom";
 
-const Breadcrumb = () => {
+const Breadcrumb = ({currentPageTitle,links}) => {
   return (
-    <div>Breadcrumb</div>
-  )
-}
+    <div className=" w-full flex gap-3 mb-5">
+      <nav
+        className="flex px-5 py-3 text-gray-700 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-800 dark:border-gray-700"
+        aria-label="Breadcrumb"
+      >
+        <ol className="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
+          <li className="inline-flex items-center">
+            <Link
+             to={"/"}
+              className="inline-flex gap-1 items-center text-sm font-medium text-gray-700 hover:text-teal-600 dark:text-gray-400 dark:hover:text-white"
+            >
+              <HiMiniHome/>
+              Home
+            </Link>
+          </li>
+          {links && links.map((link,index)=>(
+            <li aria-current="page" key={index}>
+            <div className="flex items-center gap-1">
+            <HiChevronRight />
+              <Link to={link.path} className="inline-flex gap-1 items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white">
+                {link.title}
+              </Link>
+            </div>
+          </li>
+          ))}
+          <li aria-current="page">
+            <div className="flex items-center">
+            <HiChevronRight />
+              <span className="ms-1 text-sm font-medium text-gray-500 md:ms-2 dark:text-gray-400">
+                {currentPageTitle}
+              </span>
+            </div>
+          </li>
+        </ol>
+      </nav>
+    </div>
+  );
+};
 
-export default Breadcrumb
+export default Breadcrumb;
