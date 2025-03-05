@@ -5,6 +5,7 @@ import Layout from "./components/Layout";
 import BlogPage from "./pages/BlogPage";
 import BlogDetailPage from "./pages/BlogDetailPage";
 import AdminDashboardForStu from "./pages/AdminDashboardForStu";
+import CreateAccountPage from "./pages/CreateAccountPage";
 
 const router = createBrowserRouter([
     {
@@ -33,6 +34,10 @@ const router = createBrowserRouter([
             {
               path : "admin",
               element : <AdminDashboardForStu/>
+            },
+            {
+              path : "admin/create/account",
+              element : <CreateAccountPage/>
             }
           ]
         }

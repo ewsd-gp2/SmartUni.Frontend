@@ -5,27 +5,31 @@ import { HiSearch } from "react-icons/hi";
 import { BsSortDown } from "react-icons/bs";
 import { BsFilter } from "react-icons/bs";
 import { AiOutlinePlus } from "react-icons/ai";
+import { IoIosArrowBack } from "react-icons/io";
+import { Link } from "react-router-dom";
+import { IoIosArrowForward } from "react-icons/io";
 const StudentList = () => {
   return (
     <div>
       <div className=" flex items-center justify-between">
-      <form className="max-w-sm mb-3">
-        <select
-          id="users"
-          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-500 focus:border-teal-500 block w-[100px] p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-teal-500 dark:focus:border-teal-500"
-        >
-          <option value="student" selected>
-            Student
-          </option>
-          <option value="tutor">Tutor</option>
-          <option value="staff">Staff</option>
-        </select>
-      </form>
-      <div>
-        <button className=" flex items-center gap-2 bg-teal-500 p-2 rounded text-white">
-        <AiOutlinePlus />
-          Create Account</button>
-      </div>
+        <form className="max-w-sm mb-3">
+          <select
+            id="users"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-500 focus:border-teal-500 block w-[100px] p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-teal-500 dark:focus:border-teal-500"
+          >
+            <option value="student" selected>
+              Student
+            </option>
+            <option value="tutor">Tutor</option>
+            <option value="staff">Staff</option>
+          </select>
+        </form>
+        <div>
+          <button className=" flex items-center gap-2 bg-teal-500 p-2 rounded text-white">
+            <AiOutlinePlus />
+            Create Account
+          </button>
+        </div>
       </div>
       <div className=" flex items-center gap-5">
         <div className="relative">
@@ -39,11 +43,11 @@ const StudentList = () => {
           />
         </div>
         <div className=" flex items-center gap-2">
-          <BsSortDown  className=" text-2xl"/>
+          <BsSortDown className=" text-2xl" />
           <span>Sorting</span>
         </div>
         <div className=" flex items-center gap-2">
-          <BsFilter  className=" text-2xl"/>
+          <BsFilter className=" text-2xl" />
           <span>Filter</span>
         </div>
       </div>
@@ -149,6 +153,62 @@ const StudentList = () => {
             </tr>
           </tbody>
         </table>
+      </div>
+
+      <div className=" flex justify-between mt-3">
+        <p className=" text-xs text-gray-500">Showing 1 to 10 of 50 entries</p>
+        <nav aria-label="Page navigation">
+          <ul className="inline-flex -space-x-px text-xs">
+            <li>
+              <Link
+                to={""}
+                className="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500  rounded-s-lg bg-gray-300 hover:bg-gray-300 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+              >
+                <IoIosArrowBack />
+              </Link>
+            </li>
+            <li>
+              <Link
+                to={""}
+                className="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white  hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+              >
+                1
+              </Link>
+            </li>
+            <li>
+              <Link
+                to={""}
+                className="  flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white hover:bg-teal-500 hover:text-white dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+              >
+                2
+              </Link>
+            </li>
+            <li>
+              <Link
+                to={""}
+                className="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+              >
+                3
+              </Link>
+            </li>
+            <li>
+              <Link
+                to={""}
+                className="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white  hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+              >
+                4
+              </Link>
+            </li>
+            <li>
+              <Link
+                to={""}
+                className="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-gray-300  rounded-e-lg hover:bg-gray-300 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+              >
+                <IoIosArrowForward />
+              </Link>
+            </li>
+          </ul>
+        </nav>
       </div>
     </div>
   );
