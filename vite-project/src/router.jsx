@@ -1,13 +1,23 @@
 import { createBrowserRouter } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
+import StudentDashboard from "./screens/Student Dashboard";
 
 const router = createBrowserRouter([
     {
-      path: "/",
+      path: "/login",
       children: [
         {
-          path: "/",
+          path: "/login",
           element: <LoginPage />,
+        }
+      ],
+    },
+    {
+      path: "/dashboard",
+      children: [
+        {
+          path: "/dashboard",
+          element: <StudentDashboard />,
         }
       ],
     },
