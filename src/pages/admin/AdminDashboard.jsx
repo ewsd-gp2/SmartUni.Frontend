@@ -1,24 +1,85 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Container from "../../components/Container";
 import SideBar from "../../components/SideBar";
-import StudentList from "../../components/StudentList";
+import TableLayout from "../../components/TableLayout";
 import { HiSearch } from "react-icons/hi";
 import { BsSortDown } from "react-icons/bs";
 import { BsFilter } from "react-icons/bs";
 import { AiOutlinePlus } from "react-icons/ai";
 import HeaderTitle from "../../components/common/HeaderTitle";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+import axios from "axios";
+import Lottie from "lottie-react";
+import loadingAnimation from "../../assets/lottie/loading.json";
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
+  const userRole = localStorage.getItem("userRole");
+
+  // const [pagination, setPagination] = useState({
+  //   page: "",
+  //   loading: false,
+  // });
+  const [openDelete, setOpenDelete] = useState({
+    isOpen: false,
+    id: "",
+  });
+  const [loading, setLoading] = useState(false);
+  const [tutorData, setTutorData] = useState([]);
   const CreateAccount = () => {
-    navigate("/admin/dashboard/create");
+    navigate(`/${userRole}/dashboard/create`);
   };
+
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     setPagination((prev) => ({ ...prev, loading: false }));
+  //   }, 2000);
+  // }, []);
+
+  useEffect(() => {
+    const fetchTutorData = async () => {
+      const url = "http://localhost:7142/tutor";
+      setLoading(true);
+      axios
+        .get(url)
+        .then((response) => {
+          console.log(response);
+          setTutorData(response.data);
+        })
+        .catch((error) => {
+          console.log(error);
+          toast.error("Sorry, something went wrong.", {
+            position: "top-right",
+          });
+        });
+      setLoading(false);
+    };
+    fetchTutorData();
+  }, []);
+
+  const handleDelete = (id) => {
+    const url = `http://localhost:7142/tutor/${id}`;
+    console.log("deleting...");
+    setLoading(true);
+    axios
+      .delete(url)
+      .then((response) => {
+        console.log("delete res", response);
+      })
+      .catch((error) => {
+        console.log(error);
+        toast.error("Sorry, something went wrong.", {
+          position: "top-right",
+        });
+      });
+    setLoading(false);
+  };
+
   return (
     <main>
       <Container>
         <div className=' flex col-span-4 gap-5'>
-          {/* <SideBar className=' col-span-1' /> */}
           <div className=' mt-5 w-full px-10'>
             <HeaderTitle title='Dashboard' />
             <div className=' flex items-center justify-between mt-5'>
@@ -35,7 +96,7 @@ const AdminDashboard = () => {
               </form>
               <div>
                 <button
-                 onClick={CreateAccount}
+                  onClick={CreateAccount}
                   className=' flex items-center gap-2 bg-teal-500 p-2 rounded text-white'
                 >
                   <AiOutlinePlus />
@@ -63,7 +124,25 @@ const AdminDashboard = () => {
                 <span>Filter</span>
               </div>
             </div>
-            <StudentList />
+            {loading ? (
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  height: "200px",
+                }}
+              >
+                <Lottie
+                  autoplay
+                  loop
+                  animationData={loadingAnimation}
+                  style={{ width: "100px", height: "100px" }}
+                />
+              </div>
+            ) : (
+              <TableLayout data={tutorData} handleDelete={handleDelete} />
+            )}
           </div>
         </div>
       </Container>

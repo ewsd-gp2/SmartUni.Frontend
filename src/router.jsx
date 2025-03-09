@@ -7,6 +7,7 @@ import BlogDetailPage from "./pages/BlogDetailPage";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import Chat from "./pages/Chat";
 import CreateTutor from "./pages/admin/CreateTutor";
+import UpdateTutor from "./pages/admin/UpdateTutor";
 
 const router = createBrowserRouter([
   {
@@ -23,17 +24,15 @@ const router = createBrowserRouter([
           {
             path: "dashboard",
             element: <AdminDashboard />,
-            // children: [
-            //   {
-            //     path: "create",
-            //     element: <CreateTutor />,
-            //   },
-            // ],
           },
           {
             path: 'dashboard/create',
             element: <CreateTutor />
-          }
+          },
+          {
+            path: 'dashboard/update',
+            element: <UpdateTutor />
+          },
         ],
       },
       {

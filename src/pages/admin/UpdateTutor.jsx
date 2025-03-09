@@ -2,27 +2,66 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import HeaderTitle from "../../components/common/HeaderTitle";
 import toast, { Toaster } from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
-const CreateTutor = () => {
-  const [tutorData, setTutorData] = useState({
+const Gender = {
+  Male: 0,
+  Female: 1,
+};
+const Major = {
+  Computing: 0,
+  InformationSystems: 1,
+  Networking: 2,
+};
+const UpdateTutor = () => {
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [tutorDetails, setTutorDetails] = useState({
     name: "",
     email: "",
     phoneNumber: "",
-    gender: "Female",
-    major: "Computing",
+    gender: "",
+    major: "",
   });
-  const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
+  const detailsId = location.state.detailsId || {};
+  useEffect(() => {
+    fetchDetails();
+  }, []);
+
+  const fetchDetails = async () => {
+    const url = `http://localhost:7142/tutor/${detailsId}`;
+    setLoading(true);
+    axios
+      .get(url)
+      .then((response) => {
+        console.log("FETCHDETAILS", response);
+        const res = response.data;
+        setTutorDetails({
+          name: res.name,
+          email: res.email,
+          phoneNumber: res.phoneNumber,
+          gender: res.gender,
+          major: res.major,
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+        toast.error("Sorry, something went wrong.", {
+          position: "top-right",
+        });
+      });
+    setLoading(false);
+  };
 
   const handleChange = (event) => {
     const { id, value } = event.target;
-    setTutorData((prev) => ({ ...prev, [id]: value }));
+    setTutorDetails((prev) => ({ ...prev, [id]: value }));
   };
 
-  const onPressRegister = async (event) => {
+  const onPressUpdate = async (event) => {
     event.preventDefault();
-    const isEmptyField = Object.values(tutorData).some(
+    const isEmptyField = Object.values(tutorDetails).some(
       (value) => value.trim() === ""
     );
     if (isEmptyField) {
@@ -31,13 +70,15 @@ const CreateTutor = () => {
       });
       return;
     }
-
-    const url = "http://localhost:7142/tutor";
+    const updatedTutorDetails = {
+      ...tutorDetails, 
+      gender: Gender[tutorDetails.gender],
+      major: Major[tutorDetails.major],
+    };
+    const url = `http://localhost:7142/tutor/${detailsId}`;
     axios
-      .post(url, tutorData, {
-      })
+      .put(url, updatedTutorDetails)
       .then((response) => {
-        console.log(tutorData)    
         toast.success("Tutor Created Successfully!", {
           position: "top-right",
         });
@@ -53,7 +94,7 @@ const CreateTutor = () => {
 
   return (
     <div>
-      <HeaderTitle title='Create Tutor Account' />
+      <HeaderTitle title='Update Tutor Account' />
       <form>
         <div class='grid gap-6 mb-6 md:grid-cols-2 w-5xl mt-10'>
           <div>
@@ -66,7 +107,7 @@ const CreateTutor = () => {
             <input
               type='text'
               id='name'
-              value={tutorData.name}
+              value={tutorDetails.name}
               onChange={handleChange}
               class='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
               placeholder='Full Name'
@@ -82,7 +123,7 @@ const CreateTutor = () => {
             </label>
             <select
               id='gender'
-              value={tutorData.gender}
+              value={tutorDetails.gender}
               onChange={handleChange}
               class='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
             >
@@ -101,7 +142,7 @@ const CreateTutor = () => {
             </label>
             <select
               id='major'
-              value={tutorData.major}
+              value={tutorDetails.major}
               onChange={handleChange}
               class='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
             >
@@ -122,7 +163,7 @@ const CreateTutor = () => {
             <input
               type='text'
               id='email'
-              value={tutorData.email}
+              value={tutorDetails.email}
               onChange={handleChange}
               class='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
               placeholder='xxx@gmail.com'
@@ -140,7 +181,7 @@ const CreateTutor = () => {
             <input
               type='text'
               id='phoneNumber'
-              value={tutorData.phoneNumber}
+              value={tutorDetails.phoneNumber}
               onChange={handleChange}
               class='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
               placeholder='+959xxxx'
@@ -157,7 +198,7 @@ const CreateTutor = () => {
             <input
               type='text'
               id='password'
-              value={tutorData.password}
+              value={tutorDetails.password}
               onChange={handleChange}
               class='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
               placeholder=''
@@ -166,11 +207,11 @@ const CreateTutor = () => {
           </div>
           <div className='md:col-start-2 flex justify-end gap-5 mt-10'>
             <button
-              onClick={onPressRegister}
+              onClick={onPressUpdate}
               type='submit'
               class='text-white w-68 bg-[#11a186] hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
             >
-              Register
+              Update
             </button>
             <button
               type='cancel'
@@ -185,4 +226,4 @@ const CreateTutor = () => {
   );
 };
 
-export default CreateTutor;
+export default UpdateTutor;

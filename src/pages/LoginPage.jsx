@@ -1,7 +1,16 @@
 import React from "react";
 import Breadcrumb from "../components/Breadcrumb";
+import { useNavigate } from "react-router-dom";
 
 const LoginPage = () => {
+  const navigate = useNavigate();
+  const onClickLogin = () => {
+    localStorage.setItem('userRole', 'admin')
+    const userRole = localStorage.getItem('userRole');
+    if (userRole) {
+      navigate(`${userRole}/dashboard`) 
+    }
+  }
   return (
     <div className="flex items-center justify-center h-screen gap-10">
       <div className=" col-span-1">
@@ -29,7 +38,7 @@ const LoginPage = () => {
           />
         </div>
         
-        <button type="submit" className=" w-full text-white bg-gradient-to-r from-teal-600 via-teal-500 to-teal-400 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800 font-medium rounded-lg text-sm px-5 py-3 text-center me-2">Log In</button>
+          <button onClick={onClickLogin} type="submit" className=" w-full text-white bg-gradient-to-r from-teal-600 via-teal-500 to-teal-400 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800 font-medium rounded-lg text-sm px-5 py-3 text-center me-2">Log In</button>
 
 
       </form>
