@@ -11,8 +11,9 @@ import { useNavigate } from "react-router-dom";
 import DeleteConfirmation from "./dialog/DeleteConfirmation";
 
 const Major = ["Computing", "Information Systems", "Networking"];
-const TableLayout = ({ data, handleDelete }) => {
-  const userRole = localStorage.getItem('userRole');
+const TableLayout = ({data}) => {
+  console.log(data)
+  // const userRole = localStorage.getItem('userRole');
   const [openDelete, setOpenDelete] = useState({
     isOpen: false,
     id: "",
@@ -78,9 +79,9 @@ const TableLayout = ({ data, handleDelete }) => {
             </tr>
           </thead>
           <tbody>
-            {data?.length > 0 &&
+            {data?.length >0 &&
               data.map((item) => (
-                <tr className='odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-200'>
+                <tr key={item.id} className='odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-200'>
                   <th
                     scope='row'
                     className='px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white'
@@ -110,13 +111,14 @@ const TableLayout = ({ data, handleDelete }) => {
                   </td>
                 </tr>
               ))}
+             
           </tbody>
         </table>
       </div>
       <DeleteConfirmation
         isVisible={openDelete.isOpen}
         isClose={() => setOpenDelete((prev) => ({ ...prev, isOpen: false }))}
-        onConfirm={()=>handleDelete(openDelete.id)}
+        // onConfirm={()=>handleDelete(openDelete.id)}
       />
     </div>
   );

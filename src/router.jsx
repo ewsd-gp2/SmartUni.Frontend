@@ -9,6 +9,7 @@ import Chat from "./pages/Chat";
 import CreateTutor from "./pages/admin/CreateTutor";
 import UpdateTutor from "./pages/admin/UpdateTutor";
 
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -32,7 +33,7 @@ const router = createBrowserRouter([
           {
             path: 'dashboard/update',
             element: <UpdateTutor />
-          },
+          }
         ],
       },
       {
