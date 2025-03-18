@@ -10,6 +10,7 @@ import CreateTutor from "./pages/admin/CreateTutor";
 import UpdateTutor from "./pages/admin/UpdateTutor";
 import TutorMeeting from "./pages/tutor/TutorMeeting";
 
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -33,7 +34,7 @@ const router = createBrowserRouter([
           {
             path: 'dashboard/update',
             element: <UpdateTutor />
-          },
+          }
         ],
       },
       {

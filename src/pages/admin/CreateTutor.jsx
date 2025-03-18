@@ -14,11 +14,11 @@ const CreateTutor = () => {
   });
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-
   const handleChange = (event) => {
     const { id, value } = event.target;
     setTutorData((prev) => ({ ...prev, [id]: value }));
   };
+  const token = localStorage.getItem("access_token");
 
   const onPressRegister = async (event) => {
     event.preventDefault();
@@ -31,11 +31,23 @@ const CreateTutor = () => {
       });
       return;
     }
-
+  if (!token) {
+    toast.error("Token not found, please log in again.", {
+      position: "top-right",
+    });
+    return;
+  }
     const url = "http://localhost:7142/tutor";
     axios
-      .post(url, tutorData, {
-      })
+    .post(url, tutorData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json", 
+        Accept: "application/json",
+        "Allow-Control-Allow-Origin":"*"
+
+      },
+    })
       .then((response) => {
         console.log(tutorData)    
         toast.success("Tutor Created Successfully!", {
@@ -55,7 +67,7 @@ const CreateTutor = () => {
     <div>
       <HeaderTitle title='Create Tutor Account' />
       <form>
-        <div class='grid gap-6 mb-6 md:grid-cols-2 w-5xl mt-10'>
+        <div className='grid gap-6 mb-6 md:grid-cols-2 w-5xl mt-10'>
           <div>
             <label
               for='name'
@@ -94,8 +106,8 @@ const CreateTutor = () => {
           </div>
           <div>
             <label
-              for='major'
-              class='block mb-2 text-sm font-medium text-gray-900 dark:text-white'
+              htmlFor='major'
+              className='block mb-2 text-sm font-medium text-gray-900 dark:text-white'
             >
               Major
             </label>
@@ -114,8 +126,8 @@ const CreateTutor = () => {
           </div>
           <div>
             <label
-              for='email'
-              class='block mb-2 text-sm font-medium text-gray-900 dark:text-white'
+              htmlFor='email'
+              className='block mb-2 text-sm font-medium text-gray-900 dark:text-white'
             >
               Email Address
             </label>
@@ -149,8 +161,8 @@ const CreateTutor = () => {
           </div>
           <div>
             <label
-              for='visitors'
-              class='block mb-2 text-sm font-medium text-gray-900 dark:text-white'
+              htmlFor='visitors'
+              className='block mb-2 text-sm font-medium text-gray-900 dark:text-white'
             >
               Password
             </label>
