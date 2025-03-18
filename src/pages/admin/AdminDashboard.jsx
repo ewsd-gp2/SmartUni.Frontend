@@ -86,7 +86,7 @@ const AdminDashboard = () => {
               <form className='max-w-sm mb-3'>
                 <select
                   id='users'
-                  className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-500 focus:border-teal-500 block w-[100px] p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-teal-500 dark:focus:border-teal-500'
+                  className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-500 focus:border-teal-500 block w-[100px] p-2.5'
                   value='tutor'
                 >
                   <option value='student'>Student</option>
@@ -111,7 +111,7 @@ const AdminDashboard = () => {
                 </div>
                 <input
                   type='search'
-                  className='block w-52 p-3 ps-8 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-teal-500 focus:border-teal-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-teal-500 dark:focus:border-teal-500'
+                  className='block w-52 p-3 ps-8 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-teal-500 focus:border-teal-500 '
                   placeholder='Search'
                 />
               </div>

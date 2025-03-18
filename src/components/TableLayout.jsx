@@ -9,10 +9,11 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import DeleteConfirmation from "./dialog/DeleteConfirmation";
+import ShowEmpty from "./common/ShowEmpty";
 
 const Major = ["Computing", "Information Systems", "Networking"];
 const TableLayout = ({ data, handleDelete }) => {
-  const userRole = localStorage.getItem('userRole');
+  const userRole = localStorage.getItem("userRole");
   const [openDelete, setOpenDelete] = useState({
     isOpen: false,
     id: "",
@@ -48,8 +49,8 @@ const TableLayout = ({ data, handleDelete }) => {
   return (
     <div>
       <div className='relative overflow-x-auto shadow-md sm:rounded-lg mt-5'>
-        <table className='w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400'>
-          <thead className='text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400'>
+        <table className='w-full text-sm text-left rtl:text-right text-gray-500'>
+          <thead className='text-xs text-gray-700 uppercase bg-gray-50'>
             <tr>
               <th scope='col' className='px-6 py-3'>
                 Image
@@ -78,12 +79,12 @@ const TableLayout = ({ data, handleDelete }) => {
             </tr>
           </thead>
           <tbody>
-            {data?.length > 0 &&
+            {data?.length > 0 ? (
               data.map((item) => (
-                <tr className='odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-200'>
+                <tr className='odd:bg-white  even:bg-gray-50 border-gray-200'>
                   <th
                     scope='row'
-                    className='px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white'
+                    className='px-6 py-4 font-medium text-gray-900 whitespace-nowrap '
                   >
                     <img
                       className=' size-8 rounded-full'
@@ -109,14 +110,19 @@ const TableLayout = ({ data, handleDelete }) => {
                     />
                   </td>
                 </tr>
-              ))}
+              ))
+            ) : (
+              <td colSpan={8} className='py-10 text-center'>
+                <ShowEmpty />
+              </td>
+            )}
           </tbody>
         </table>
       </div>
       <DeleteConfirmation
         isVisible={openDelete.isOpen}
         isClose={() => setOpenDelete((prev) => ({ ...prev, isOpen: false }))}
-        onConfirm={()=>handleDelete(openDelete.id)}
+        onConfirm={() => handleDelete(openDelete.id)}
       />
     </div>
   );

@@ -8,6 +8,7 @@ import AdminDashboard from "./pages/admin/AdminDashboard";
 import Chat from "./pages/Chat";
 import CreateTutor from "./pages/admin/CreateTutor";
 import UpdateTutor from "./pages/admin/UpdateTutor";
+import TutorMeeting from "./pages/tutor/TutorMeeting";
 
 const router = createBrowserRouter([
   {
@@ -68,6 +69,10 @@ const router = createBrowserRouter([
           {
             path: "chat",
             element: <Chat />,
+          },
+          {
+            path: "meeting",
+            element: <TutorMeeting />,
           },
         ],
       },

@@ -9,7 +9,7 @@ const Layout = () => {
     <div className='flex min-h-screen'>
       <SideBar />
 
-      <div className='flex-1 p-4'>
+      <div className='flex-1 p-4 pl-14'>
         <Outlet />
       </div>
     </div>

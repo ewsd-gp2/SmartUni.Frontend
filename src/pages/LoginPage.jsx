@@ -19,11 +19,11 @@ const LoginPage = () => {
       <div className=" col-span-1 flex flex-col w-[400px]">
       <form className="max-w-sm ">
           <h3 className="text-2xl text-center mb-5 text-teal-600">SmartUni</h3>
-        <div className="my-5">
+        <div className="my-5 bg-[#f1f1f1]">
           <input
             type="email"
             id="email"
-            className=" bg-teal-50 border border-teal-300 text-teal-900 text-sm rounded-lg focus:ring-teal-500 focus:border-teal-500 block w-full p-3 dark:bg-teal-700 dark:border-teal-600 dark:placeholder-teal-400 dark:text-white dark:focus:ring-teal-500 dark:focus:border-teal-500"
+            className=" bg-[#f1f1f1] border border-teal-300 text-teal-900 text-sm rounded-lg focus:ring-teal-500 focus:border-teal-500 block w-full p-3 "
             placeholder="Username"
             required
           />
@@ -32,7 +32,7 @@ const LoginPage = () => {
           <input
             type="password"
             id="password"
-            className="bg-teal-50 border border-teal-300 text-teal-900 text-sm rounded-lg focus:ring-teal-500 focus:border-teal-500 block w-full p-3 dark:bg-teal-700 dark:border-teal-600 dark:placeholder-teal-400 dark:text-white dark:focus:ring-teal-500 dark:focus:border-teal-500"
+            className="bg-[#f1f1f1] border border-teal-300 text-teal-900 text-sm rounded-lg focus:ring-teal-500 focus:border-teal-500 block w-full p-3"
             placeholder="Password"
             required
           />

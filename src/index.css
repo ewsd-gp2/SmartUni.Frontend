@@ -2,3 +2,41 @@
 @import "flowbite/src/themes/default";
 @plugin "flowbite/plugin";
 @source "../node_modules/flowbite";
+@source "../node_modules/flowbite-datepicker";
+
+.react-time-picker {
+    border: none !important;
+  }
+  
+  .react-time-picker__wrapper {
+    border: none !important;
+  }
+  
+  .react-time-picker__inputGroup {
+    border: 1px solid #d1d5db; 
+    border-radius: 4px;
+  }
+
+  .form-section {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    transition: transform 0.5s ease-in-out;
+  }
+  
+  .form-section-enter {
+    transform: translateX(100%); /* Initially off-screen (to the right) */
+  }
+  
+  .form-section-enter-active {
+    transform: translateX(0); /* Slide in */
+  }
+  
+  .form-section-exit {
+    transform: translateX(0); /* Keep in place while exiting */
+  }
+  
+  .form-section-exit-active {
+    transform: translateX(-100%); /* Slide out to the left */
+  }
