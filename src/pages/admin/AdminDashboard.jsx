@@ -45,7 +45,7 @@ const AdminDashboard = () => {
     axios
       .get(url, {
         headers: {
-          "Allow-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Origin": "http://localhost:5173",
         },
         withCredentials: "true",
       })

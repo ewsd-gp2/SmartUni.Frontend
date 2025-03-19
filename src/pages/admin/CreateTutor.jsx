@@ -38,13 +38,15 @@ const CreateTutor = () => {
     return;
   }
     const url = "http://localhost:7142/tutor";
+    console.log(tutorData)
     axios
-    .post(url, tutorData, {
+    .post(url, JSON.stringify(tutorData), {
       headers: {
-        Authorization: `Bearer ${token}`,
+       // Authorization: `Bearer ${token}`,
         "Content-Type": "application/json", 
-        Accept: "application/json",
-        "Allow-Control-Allow-Origin":"*"
+        "Access-Control-Allow-Origin": "http://localhost:5173"
+       // Accept: "application/json",
+       // "Allow-Control-Allow-Origin":"*"
 
       },
       withCredentials:true
