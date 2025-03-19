@@ -47,6 +47,7 @@ const CreateTutor = () => {
         "Allow-Control-Allow-Origin":"*"
 
       },
+      withCredentials:true
     })
       .then((response) => {
         console.log(tutorData)    

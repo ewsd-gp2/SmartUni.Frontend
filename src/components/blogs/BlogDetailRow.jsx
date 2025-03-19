@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import { AiOutlineLike } from "react-icons/ai";
 import { AiOutlineDislike } from "react-icons/ai";
 import { FaRegImage } from "react-icons/fa6";
@@ -17,10 +16,10 @@ const BlogDetailRow = () => {
           </div>
         </div>
       <div className=" sm:w-[300px] md:w-[400px] lg:w-[700px] xl:w-[800px] bg-white rounded-lg border border-gray-200 shadow-sm dark:bg-gray-800 dark:border-gray-700">
-        <Link to={""}>
+      <div>
           <img
             className="rounded-t-lg sm:h-[100px] md:h-[200px] lg:h-[300px] w-full"
-            src="https://s3-alpha-sig.figma.com/img/c7b7/df5d/aeb56b6a4622229debe9d0aa7e11c527?Expires=1740960000&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=boRhRgEcCN1jywadNuPwJc-~IiPM41JB2wmfUmy3FYHXZW37iwMxPGajm26bUr7RM~4aR6ue6CYlA4WeG9LsOgto-qGF92GDnPyrY3mxvpkiSuQuf0BCzdxKb8VZ1ymcx7-pNtMpBRFnSO9v2ted1bQWUqnsmBMnW2Jh-gqMvPWyqo2piv6uWDvxTCrbu4iDCL9ZS7WA9dIiYyurRnnQ1f94EB82myB1mxtacWwu4Fz3P7ohM-a4ECRttlDmaMQs6DioFUzXuEne0V9Wbw55B-tj-WcDvQkwei7t6CXI1Ukgu87xuOtG12eJqxHh2Y3DmFxcPF06gYfR8urHDikzKg__"
+            src="https://i.pinimg.com/736x/69/25/a8/6925a8fb2c5f8dbeb84f13ca94e310d3.jpg"
             alt
           />
 
@@ -30,14 +29,10 @@ const BlogDetailRow = () => {
               far, in reverse chronological order.
             </p>
             <div className="mt-3 flex gap-3">
-              <div>
+              
                 <AiOutlineLike />
                 <span className=" text-sm">10</span>
-              </div>
-              <div>
-                <AiOutlineDislike />
-                <span className=" text-sm">10</span>
-              </div>
+              
               <div>
                 <p className=" text-sm text-gray-500">
                   Comments <span className=" text-gray-800">(2)</span>
@@ -45,7 +40,7 @@ const BlogDetailRow = () => {
               </div>
             </div>
           </div>
-        </Link>
+        </div>
       </div>
       <div>
         <p className=" mt-5">Comments</p>
@@ -59,32 +54,7 @@ const BlogDetailRow = () => {
               type="button"
               className="inline-flex justify-center p-2 text-gray-500 rounded-lg cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
             >
-              {/* <svg
-                className="w-5 h-5"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 20 18"
-              >
-                <path
-                  fill="currentColor"
-                  d="M13 5.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0ZM7.565 7.423 4.5 14h11.518l-2.516-3.71L11 13 7.565 7.423Z"
-                />
-                <path
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M18 1H2a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1Z"
-                />
-                <path
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M13 5.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0ZM7.565 7.423 4.5 14h11.518l-2.516-3.71L11 13 7.565 7.423Z"
-                />
-              </svg> */}
+          
              <FaRegImage className=" size-5"/>
               <span className="sr-only">Upload image</span>
             </button>
@@ -100,15 +70,7 @@ const BlogDetailRow = () => {
               type="submit"
               className="inline-flex justify-center p-2 text-blue-600 rounded-full cursor-pointer hover:bg-blue-100 dark:text-blue-500 dark:hover:bg-gray-600"
             >
-              {/* <svg
-                className="w-5 h-5 rotate-90 rtl:-rotate-90"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="currentColor"
-                viewBox="0 0 18 20"
-              >
-                <path d="m17.914 18.594-8-18a1 1 0 0 0-1.828 0l-8 18a1 1 0 0 0 1.157 1.376L8 18.281V9a1 1 0 0 1 2 0v9.281l6.758 1.689a1 1 0 0 0 1.156-1.376Z" />
-              </svg> */}
+              
               <IoMdSend className=" size-5"/>
               <span className="sr-only">Send message</span>
             </button>
@@ -126,7 +88,7 @@ const BlogDetailRow = () => {
         </div>
         <div className=" w-96 flex gap-4 mt-5
         ">
-          <img className=" size-12 rounded-full" src="https://i.pinimg.com/236x/da/c0/8d/dac08dbae85f1e89081126a98568c9e9.jpg" alt="" />
+          <img className=" size-10 rounded-full" src="https://i.pinimg.com/236x/da/c0/8d/dac08dbae85f1e89081126a98568c9e9.jpg" alt="" />
           <div>
             <p className=" mb-3">Taylor</p>
             <p className=" text-sm mb-2">Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellat error eos,  reprehenderit reiciendis?

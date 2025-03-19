@@ -54,12 +54,16 @@ const CreateMeeting = ({ isVisible, onClose }) => {
   console.log(isVisible);
   const modalClasses = `fixed top-0 right-0 left-0 z-50 justify-center items-center w-full h-full md:inset-0 max-h-full overflow-y-auto overflow-x-hidden ${
     isVisible ? "flex" : "hidden"
-    } bg-black bg-opacity-20`;
-  
+  } bg-black bg-opacity-20`;
 
   const handleDateChange = (date) => {
     console.log("Date changed:", date);
     setStartDate(date);
+  };
+
+  const handleCloseIcon = () => {
+    onClose();
+    setCurrentPart(1);
   };
 
   return (
@@ -80,7 +84,7 @@ const CreateMeeting = ({ isVisible, onClose }) => {
               type='button'
               className='text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center '
               data-modal-toggle='crud-modal'
-              onClick={onClose}
+              onClick={handleCloseIcon}
             >
               <svg
                 class='w-3 h-3'
@@ -245,7 +249,12 @@ const CreateMeeting = ({ isVisible, onClose }) => {
                 </div>
               </section>
             )}
-            {currentPart == 2 && <CreateMeeting2 onClose={onClose} setCurrentPart={setCurrentPart} />}
+            {currentPart == 2 && (
+              <CreateMeeting2
+                onClose={onClose}
+                setCurrentPart={setCurrentPart}
+              />
+            )}
           </form>
         </div>
       </div>

@@ -1,15 +1,16 @@
 import { createBrowserRouter } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
-import DashboardPage from "./pages/DashboardPage";
 import Layout from "./components/Layout";
-import BlogPage from "./pages/BlogPage";
-import BlogDetailPage from "./pages/BlogDetailPage";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import Chat from "./pages/Chat";
 import CreateTutor from "./pages/admin/CreateTutor";
 import UpdateTutor from "./pages/admin/UpdateTutor";
 import TutorMeeting from "./pages/tutor/TutorMeeting";
 
+import CreateStaff from "./pages/admin/CreateStaff";
+import AdminAllocation from "./pages/admin/AdminAllocation";
+import BlogPage from "./components/blogs/BlogPage";
+import BlogDetailPage from "./components/blogs/BlogDetailPage";
 
 const router = createBrowserRouter([
   {
@@ -28,13 +29,25 @@ const router = createBrowserRouter([
             element: <AdminDashboard />,
           },
           {
-            path: 'dashboard/create',
-            element: <CreateTutor />
+            path: "dashboard/create",
+            element: <CreateTutor />,
           },
           {
-            path: 'dashboard/update',
-            element: <UpdateTutor />
-          }
+            path: "dashboard/update",
+            element: <UpdateTutor />,
+          },
+          {
+            path: "dashboard/create/staff",
+            element: <CreateStaff />,
+          },
+          {
+            path: "dashboard/update/staff",
+            element: <UpdateTutor />,
+          },
+          {
+            path: "dashboard/allocation",
+            element: <AdminAllocation />,
+          },
         ],
       },
       {
@@ -46,7 +59,7 @@ const router = createBrowserRouter([
             element: <BlogPage />,
           },
           {
-            path: "blog/detail/:id",
+            path: "blog/details/:id",
             element: <BlogDetailPage />,
           },
           {
@@ -64,7 +77,7 @@ const router = createBrowserRouter([
             element: <BlogPage />,
           },
           {
-            path: "blog/detail/:id",
+            path: "blog/details/:id",
             element: <BlogDetailPage />,
           },
           {
@@ -80,5 +93,5 @@ const router = createBrowserRouter([
     ],
   },
 ]);
-  
-  export default router;
+
+export default router;

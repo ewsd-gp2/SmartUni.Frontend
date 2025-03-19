@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Breadcrumb from "../components/Breadcrumb";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
@@ -8,22 +8,22 @@ import useCookie from "react-use-cookie";
 
 const LoginPage = () => {
   const navigate = useNavigate();
-
- 
+  const [role, setRole] = useState("tutor")
   const { register, handleSubmit } = useForm();
   const handleLogIn = async(data) => {
-    const url = "http://localhost:7142/signin/tutor";
+    console.log(data)
+    console.log(role)
+    const url = `http://localhost:7142/signin/${role}`;
     try {
       const response = await axios.post(url, data, {
         headers: {
           "Content-Type": "application/json",
-         "Allow-Control-Allow-Origin":"*"
-        },
+          "Allow-Control-Allow-Origin": "*",
+          "Access-Control-Expose-Headers": "Set-Cookie"
+        }, withCredentials: true
       });
-  
-      console.log(data); 
       
-      // const userRole = response.data.userRole; 
+      // const userRole = response.data.userRole;
       // if (userRole) {
       //   // localStorage.setItem('userRole', userRole);
       //   // navigate(`/${userRole}/dashboard`);
@@ -31,11 +31,14 @@ const LoginPage = () => {
       // } else {
       //   toast.error("Role not found in the response.");
       // }
+      console.log('cookie',document)
       if(response.status === 200){
+       // console.log(document)
         toast.success("Login Successfully!");
         localStorage.setItem("access_token", response.data.access_token);
         console.log(response.data.access_token);
-        navigate("/admin/dashboard");
+        navigate('admin/dashboard')
+       // navigate(role === "admin" ? "/admin/dashboard" : "/admin/dashboard/tutor");
         // setTimeout(() => {
         //   navigate("/admin/dashboard");
         // }, 100);
@@ -65,29 +68,34 @@ const LoginPage = () => {
           alt=""
         />
       </div>
+      <div className="mb-5">
+            <label className="block text-teal-600 mb-2">Select Role</label>
+            <div className="flex gap-4">
+              <label className="flex items-center gap-2">
+                <input
+                  type="radio"
+                  value="tutor"
+                  checked={role === "tutor"}
+                  onChange={(e) => setRole(e.target.value)}
+                  className="w-4 h-4 text-teal-600 focus:ring-teal-500"
+                />
+                Tutor
+              </label>
+              <label className="flex items-center gap-2">
+                <input
+                  type="radio"
+                  value="staff"
+                  checked={role === "staff"}
+                  onChange={(e) => setRole(e.target.value)}
+                  className="w-4 h-4 text-teal-600 focus:ring-teal-500"
+                />
+                Staff
+              </label>
+            </div>
+          </div>
       <div className=" col-span-1 flex flex-col w-[400px]">
         <form onSubmit={handleSubmit(handleLogIn)} className="max-w-sm ">
           <h3 className="text-2xl text-center mb-5 text-teal-600">SmartUni</h3>
-        <div className="my-5 bg-[#f1f1f1]">
-          <input
-            type="email"
-            id="email"
-            className=" bg-[#f1f1f1] border border-teal-300 text-teal-900 text-sm rounded-lg focus:ring-teal-500 focus:border-teal-500 block w-full p-3 "
-            placeholder="Username"
-            required
-          />
-        </div>
-        <div className="my-5">
-          <input
-            type="password"
-            id="password"
-            className="bg-[#f1f1f1] border border-teal-300 text-teal-900 text-sm rounded-lg focus:ring-teal-500 focus:border-teal-500 block w-full p-3"
-            placeholder="Password"
-            required
-          />
-        </div>
-        
-          <button onClick={onClickLogin} type="submit" className=" w-full text-white bg-gradient-to-r from-teal-600 via-teal-500 to-teal-400 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800 font-medium rounded-lg text-sm px-5 py-3 text-center me-2">Log In</button>
           <div className="my-5">
             <input
               type="email"
@@ -115,7 +123,7 @@ const LoginPage = () => {
           >
             Log In
           </button>
-      </form>
+        </form>
       </div>
     </div>
   );

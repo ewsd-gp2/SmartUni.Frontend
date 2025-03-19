@@ -10,10 +10,14 @@ const DropDown = ({
   selectDropDown,
   setSelectDropDown,
 }) => {
-  const selectedItem = data.find(item => item.id === selectDropDown[id]);
+  const selectedItem = data.find((item) => item.id === selectDropDown[id]);
   const selectValue = (item) => {
     setSelectDropDown((prev) => ({ ...prev, [id]: item.id }));
   };
+
+  useEffect(() => {
+    initDropdowns();
+  }, []);
 
   return (
     <div>
@@ -24,7 +28,7 @@ const DropDown = ({
         type='button'
         // onClick={toggleDropdown}
       >
-       {selectedItem.name}
+        {selectedItem.name}
         <svg
           className='w-2.5 h-2.5 ms-3'
           aria-hidden='true'
