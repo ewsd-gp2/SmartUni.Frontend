@@ -56,7 +56,7 @@ const CreateTutor = () => {
         toast.success("Tutor Created Successfully!", {
           position: "top-right",
         });
-        navigate("/admin/dashboard");
+        navigate("/staff/dashboard");
       })
       .catch((error) => {
         console.log(error);

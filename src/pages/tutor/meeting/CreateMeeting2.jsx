@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Select from "react-select";
-import LoadingButton from "../../components/buttons/LoadingButton";
+import LoadingButton from "../../../components/buttons/LoadingButton";
+import { motion } from "framer-motion";
 
 const students = [
   { id: 1, name: "Alice Johnson" },
@@ -27,7 +28,12 @@ const CreateMeeting2 = ({ onClose, setCurrentPart }) => {
     }, 3000);
   };
   return (
-    <div>
+    <motion.div
+      initial={{ opacity: 0, y: -20 }}
+      animate={{ opacity: 1, y: 0 }}
+      enter={{ opacity: 0, y: 20 }}
+      transition={{ duration: 0.5 }}
+    >
       <div className='mb-10'>
         <label
           for='addParticipants'
@@ -45,7 +51,7 @@ const CreateMeeting2 = ({ onClose, setCurrentPart }) => {
         />
       </div>
       <LoadingButton onPress={handleClick} loading={loading} />
-    </div>
+    </motion.div>
   );
 };
 

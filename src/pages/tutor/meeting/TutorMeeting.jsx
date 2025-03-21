@@ -1,11 +1,11 @@
 import { useState } from "react";
-import HeaderTitle from "../../components/common/HeaderTitle";
+import HeaderTitle from "../../../components/common/HeaderTitle";
 import { MdLocationPin, MdAccessTimeFilled } from "react-icons/md";
 import { IoMdAddCircle } from "react-icons/io";
 import { motion } from "framer-motion";
 import { IoAddCircle } from "react-icons/io5";
 import CreateMeeting from "./CreateMeeting";
-import ShowEmpty from "../../components/common/ShowEmpty";
+import ShowEmpty from "../../../components/common/ShowEmpty";
 
 const filterOptions = [
   { id: 1, name: "Today" },

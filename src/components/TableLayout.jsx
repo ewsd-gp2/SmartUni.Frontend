@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { HiOutlinePencil } from "react-icons/hi2";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { HiSearch } from "react-icons/hi";
@@ -10,18 +10,84 @@ import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import DeleteConfirmation from "./dialog/DeleteConfirmation";
 import ShowEmpty from "./common/ShowEmpty";
+import DataTable from "react-data-table-component";
+import SearchInput from "./common/SearchInput";
+import GradientButton from "./buttons/GradientButton";
+import { IoAddCircle } from "react-icons/io5";
+import loadingAnimation from '../assets/lottie/loading.json';
+import Lottie from "lottie-react";
+
 
 const Major = ["Computing", "Information Systems", "Networking"];
-const TableLayout = ({ data, handleDelete }) => {
+
+const TableLayout = ({ data, handleDelete, CreateAccount, loading }) => {
+  const columns = [
+    {
+      name: "Image",
+      cell: (row) => (
+        <img
+          className=' size-8 rounded-full'
+          src='https://i.pinimg.com/236x/da/c0/8d/dac08dbae85f1e89081126a98568c9e9.jpg'
+          alt=''
+        />
+      ),
+    },
+    {
+      name: "Full Name",
+      selector: (row) => row.name,
+      sortable: true,
+    },
+    {
+      name: "Major",
+      selector: (row) => Major[row.major],
+    },
+    {
+      name: "Phone Number",
+      selector: (row) => row.phoneNumber,
+    },
+    {
+      name: "Email Address",
+      selector: (row) => row.userCode,
+    },
+    {
+      name: "ID",
+      selector: (row) => row.userCode,
+    },
+    {
+      name: "Edit",
+      cell: (row) => (
+        <HiOutlinePencil
+          className='size-4 text-blue-500'
+          onClick={() => handleUpdate(row.id)}
+        />
+      ),
+    },
+    {
+      name: "Delete",
+      cell: (row) => (
+        <FaRegTrashAlt
+          className='size-4 text-red-500'
+          onClick={() => openDeleteModal(row.id)}
+        />
+      ),
+    },
+  ];
   const userRole = localStorage.getItem("userRole");
   const [openDelete, setOpenDelete] = useState({
     isOpen: false,
     id: "",
   });
-  const [loading, setLoading] = useState(false);
+  const [filterText, setFilterText] = useState("");
+  const [resetPaginationToggle, setResetPaginationToggle] = useState(false);
+  const filteredItems = data.filter(
+    (item) =>
+      item.name && item.name.toLowerCase().includes(filterText.toLowerCase())
+  );
   const navigate = useNavigate();
+
   const handleUpdate = (id) => {
-    navigate("/admin/dashboard/update", { state: { detailsId: id } });
+    console.log("hello");
+    navigate("/staff/dashboard/update", { state: { detailsId: id } });
   };
   const openDeleteModal = (id) => {
     setOpenDelete({
@@ -29,26 +95,52 @@ const TableLayout = ({ data, handleDelete }) => {
       id: id,
     });
   };
-  // const handleDelete = () => {
-  //   const url = `http://localhost:7142/tutor/${openDelete.id}`;
-  //   setLoading(true);
-  //   axios
-  //     .delete(url)
-  //     .then((response) => {
-  //       console.log(response);
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //       toast.error("Sorry, something went wrong.", {
-  //         position: "top-right",
-  //       });
-  //     });
-  //   setLoading(false);
-  //   setOpenDelete({ isOpen: false });
-  // };
+  const subHeaderComponentMemo = useMemo(() => {
+    const handleClear = () => {
+      if (filterText) {
+        setResetPaginationToggle(!resetPaginationToggle);
+        setFilterText("");
+      }
+    };
+    return (
+      <div className='w-full flex flex-row justify-between items-center py-2 gap-4'>
+        <SearchInput
+          onFilter={(e) => setFilterText(e.target.value)}
+          onClear={handleClear}
+          filterText={filterText}
+          className='self-start'
+        />
+        <GradientButton handleAction={CreateAccount} Icon={IoAddCircle} />
+      </div>
+    );
+  }, [filterText, resetPaginationToggle]);
   return (
-    <div>
-      <div className='relative overflow-x-auto shadow-md sm:rounded-lg mt-5'>
+    <div className=''>
+      <DataTable
+        columns={columns}
+        data={filteredItems}
+        progressComponent={
+          <Lottie
+            autoplay
+            loop
+            animationData={loadingAnimation}
+            style={{ width: "100px", height: "100px" }}
+          />
+        }
+        progressPending={loading}
+        pagination
+        paginationResetDefaultPage={resetPaginationToggle}
+        subHeader
+        subHeaderComponent={subHeaderComponentMemo}
+        customStyles={{
+          subHeader: {
+            style: {
+              padding: "0",
+            },
+          },
+        }}
+      />
+      {/* <div className='relative overflow-x-auto shadow-md sm:rounded-lg mt-5'>
         <table className='w-full text-sm text-left rtl:text-right text-gray-500'>
           <thead className='text-xs text-gray-700 uppercase bg-gray-50'>
             <tr>
@@ -119,6 +211,11 @@ const TableLayout = ({ data, handleDelete }) => {
           </tbody>
         </table>
       </div>
+      <DeleteConfirmation
+        isVisible={openDelete.isOpen}
+        isClose={() => setOpenDelete((prev) => ({ ...prev, isOpen: false }))}
+        onConfirm={() => handleDelete(openDelete.id)}
+      /> */}
       <DeleteConfirmation
         isVisible={openDelete.isOpen}
         isClose={() => setOpenDelete((prev) => ({ ...prev, isOpen: false }))}

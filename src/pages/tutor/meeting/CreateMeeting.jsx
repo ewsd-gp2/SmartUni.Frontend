@@ -1,6 +1,6 @@
 import { useState } from "react";
 import DatePicker from "react-datepicker";
-import DropDown from "../../components/common/DropDown";
+import DropDown from "../../../components/common/DropDown";
 import CreateMeeting2 from "./CreateMeeting2";
 
 import "react-datepicker/dist/react-datepicker.css";

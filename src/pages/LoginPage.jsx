@@ -12,7 +12,7 @@ const LoginPage = () => {
   const { register, handleSubmit } = useForm();
   const handleLogIn = async(data) => {
     console.log(data)
-    console.log(role)
+    // console.log(role)
     const url = `http://localhost:7142/signin/${role}`;
     try {
       const response = await axios.post(url, data, {
@@ -21,27 +21,11 @@ const LoginPage = () => {
           "Allow-Control-Allow-Origin": "*",
           "Access-Control-Expose-Headers": "Set-Cookie"
         }, withCredentials: true
-      });
-      
-      // const userRole = response.data.userRole;
-      // if (userRole) {
-      //   // localStorage.setItem('userRole', userRole);
-      //   // navigate(`/${userRole}/dashboard`);
-      //   console.log(userRole)
-      // } else {
-      //   toast.error("Role not found in the response.");
-      // }
-      console.log('cookie',document)
+      });     
       if(response.status === 200){
-       // console.log(document)
         toast.success("Login Successfully!");
-        localStorage.setItem("access_token", response.data.access_token);
-        console.log(response.data.access_token);
-        navigate('admin/dashboard')
-       // navigate(role === "admin" ? "/admin/dashboard" : "/admin/dashboard/tutor");
-        // setTimeout(() => {
-        //   navigate("/admin/dashboard");
-        // }, 100);
+        localStorage.setItem("user_role", role);
+        navigate(`${role}/dashboard`)
       }else {
         toast.error("Login failed. Please try again.");
     }
@@ -52,13 +36,7 @@ const LoginPage = () => {
       });
     }
   };
-  // const onClickLogin = () => {
-  //   localStorage.setItem('userRole', 'admin')
-  //   const userRole = localStorage.getItem('userRole');
-  //   if (userRole) {
-  //     navigate(`${userRole}/dashboard`)
-  //   }
-  // }
+
   return (
     <div className="flex items-center justify-center h-screen gap-10">
       <div className=" col-span-1">

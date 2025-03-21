@@ -1,16 +1,18 @@
 import { createBrowserRouter } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import Layout from "./components/Layout";
-import AdminDashboard from "./pages/admin/AdminDashboard";
+import TutorList from "./pages/admin/dashboard/TutorList";
 import Chat from "./pages/Chat";
 import CreateTutor from "./pages/admin/CreateTutor";
 import UpdateTutor from "./pages/admin/UpdateTutor";
-import TutorMeeting from "./pages/tutor/TutorMeeting";
+import TutorMeeting from "./pages/tutor/meeting/TutorMeeting";
+import TutorDashboard from "./pages/tutor/TutorDashboard";
 
 import CreateStaff from "./pages/admin/CreateStaff";
 import AdminAllocation from "./pages/admin/AdminAllocation";
 import BlogPage from "./components/blogs/BlogPage";
 import BlogDetailPage from "./components/blogs/BlogDetailPage";
+import PageNotFound from "./pages/PageNotFound";
 
 const router = createBrowserRouter([
   {
@@ -21,13 +23,25 @@ const router = createBrowserRouter([
         element: <LoginPage />,
       },
       {
-        path: "/admin",
+        path: "/staff",
         element: <Layout />,
         children: [
           {
-            path: "dashboard",
-            element: <AdminDashboard />,
+            path: "dashboard/tutorlist",
+            element: <TutorList />,
           },
+          {
+            path: "dashboard",
+            element: <TutorList />,
+          },
+          // {
+          //   path: "dashboard/stafflist",
+          //   element: <AdminDashboard />,
+          // },
+          // {
+          //   path: "dashboard/studentlist",
+          //   element: <AdminDashboard />,
+          // },
           {
             path: "dashboard/create",
             element: <CreateTutor />,
@@ -36,18 +50,18 @@ const router = createBrowserRouter([
             path: "dashboard/update",
             element: <UpdateTutor />,
           },
-          {
-            path: "dashboard/create/staff",
-            element: <CreateStaff />,
-          },
-          {
-            path: "dashboard/update/staff",
-            element: <UpdateTutor />,
-          },
-          {
-            path: "dashboard/allocation",
-            element: <AdminAllocation />,
-          },
+          // {
+          //   path: "dashboard/create/staff",
+          //   element: <CreateStaff />,
+          // },
+          // {
+          //   path: "dashboard/update/staff",
+          //   element: <UpdateTutor />,
+          // },
+          // {
+          //   path: "allocation",
+          //   element: <AdminAllocation />,
+          // },
         ],
       },
       {
@@ -88,7 +102,15 @@ const router = createBrowserRouter([
             path: "meeting",
             element: <TutorMeeting />,
           },
+          {
+            path: "dashboard",
+            element: <TutorDashboard />,
+          },
         ],
+      },
+      {
+        path: "*",
+        element: <PageNotFound />,
       },
     ],
   },
