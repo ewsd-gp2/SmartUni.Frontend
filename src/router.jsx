@@ -7,6 +7,10 @@ import CreateTutor from "./pages/admin/CreateTutor";
 import UpdateTutor from "./pages/admin/UpdateTutor";
 import TutorMeeting from "./pages/tutor/meeting/TutorMeeting";
 import TutorDashboard from "./pages/tutor/TutorDashboard";
+import { ReportSWI } from "./pages/admin/report/ReportSWI/index.jsx";
+import { ReportSWT } from "./pages/admin/report/ReportSWT/index.jsx";
+import { MessageFT } from "./pages/admin/report/MessageFT/index.jsx";
+import { MostViewed } from "./pages/admin/report/MostViewed/index.jsx";
 
 import CreateStaff from "./pages/admin/CreateStaff";
 import AdminAllocation from "./pages/admin/AdminAllocation";
@@ -62,6 +66,23 @@ const router = createBrowserRouter([
           //   path: "allocation",
           //   element: <AdminAllocation />,
           // },
+          {
+            path: "report/swi",
+            element: <ReportSWI />,
+          },
+
+          {
+            path: "report/swt",
+            element: <ReportSWT />,
+          },
+          {
+            path: "report/messagefortutors",
+            element: <MessageFT />,
+          },
+          {
+            path: "report/mostviewed",
+            element: <MostViewed />,
+          },
         ],
       },
       {

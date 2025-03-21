@@ -69,6 +69,12 @@ const SideBar = () => {
     {
       name: "Reports",
       icon: HiOutlinePencilSquare,
+      submenu: [
+        { name: "Student With Interactions", path: "/staff/report/swi" },
+        { name: "Student Without Interactions", path: "/staff/report/swt" },
+        { name: "Message for Tutors", path: "/staff/report/messagefortutors" },
+        { name: "Most Viewed", path: "/staff/report/mostviewed" },
+      ],
     },
   ];
 
