@@ -62,4 +62,24 @@
   .animate-bounceEffect {
     animation: bounceEffect 0.6s ease;
   }
+
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 8px; /* Adjust width */
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #0d9488; /* Scrollbar color */
+    border-radius: 10px;
+    height: 40%; /* SHORTENS the scrollbar */
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #0f766e;
+  }
+
   

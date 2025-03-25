@@ -86,9 +86,9 @@ const SideBar = () => {
       : userRole === "tutor"
       ? tutor
       : null;
-
+//bg-[#F0FDF8]
   return (
-    <section className='h-screen w-72 p-5 px-12'>
+    <section className='fixed left-0 top-0 h-screen w-72 p-5 px-6 shadow-sm bg-white custom-scrollbar'>
       <header>
         <h1 className=' text-teal-600 text-3xl text-center mt-5 mb-5'>SmartUni</h1>
       </header>
@@ -99,8 +99,8 @@ const SideBar = () => {
             item.submenu
           ? "flex flex-col p-3 text-gray-500"
           : isActive
-          ? "flex flex-col my-4 bg-teal-500 rounded-xl p-3 text-teal-100 animate-bounceEffect"
-          : "flex flex-col my-4 p-3 text-gray-500 hover:bg-teal-100 hover:rounded-xl hover:text-teal-600"
+          ? "  flex flex-col my-0 bg-teal-500 rounded-xl p-3 text-teal-100 animate-bounceEffect"
+          : " flex flex-col my-4 p-3 text-gray-500 hover:bg-teal-100 hover:rounded-xl hover:text-teal-600"
           // className={({ isActive }) =>
           //   isActive
           //     ? "flex flex-row gap-2 my-7 bg-teal-600 rounded-xl p-3 justify-start text-teal-100 animate-bounceEffect"
@@ -130,8 +130,8 @@ const SideBar = () => {
                   key={subIndex}
                   to={subItem.path}
                   className={({ isActive }) => 
-                    isActive ? 'block text-sm text-right pr-15 text-teal-100 gap-2 w-full mt-2 p-3 bg-teal-500 rounded-xl animate-bounceEffect'
-                      :'block text-sm text-right w-full pr-15 text-gray-500 mt-2  p-3'
+                    isActive ? 'block text-sm text-left pr-0 text-teal-100 gap-2 w-full mt-2 p-3 bg-teal-500 rounded-xl animate-bounceEffect'
+                      :'block text-sm text-left w-full pr-0 text-gray-500 mt-2  p-3'
                   }
                  // className='block text-sm text-right w-24 pr-15 text-gray-500 gap-2 w-full p-3'
                 >

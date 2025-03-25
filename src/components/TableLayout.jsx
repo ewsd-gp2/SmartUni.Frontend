@@ -79,10 +79,10 @@ const TableLayout = ({ data, handleDelete, CreateAccount, loading }) => {
   });
   const [filterText, setFilterText] = useState("");
   const [resetPaginationToggle, setResetPaginationToggle] = useState(false);
-  const filteredItems = data.filter(
+  const filteredItems = data.length > 0 ? data.filter(
     (item) =>
       item.name && item.name.toLowerCase().includes(filterText.toLowerCase())
-  );
+  ):[];
   const navigate = useNavigate();
 
   const handleUpdate = (id) => {
