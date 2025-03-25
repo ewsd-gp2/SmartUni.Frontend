@@ -67,10 +67,10 @@ const SideBar = () => {
       icon: PiBaseballCapDuotone,
     },
     {
-      name: "Reports",
+      name: "Report",
       icon: HiOutlinePencilSquare,
       submenu: [
-        { name: "Student With Interactions", path: "/staff/report/swi" },
+        { name: "Student With Interactions", path: "/staff/report" },
         { name: "Student Without Interactions", path: "/staff/report/swt" },
         { name: "Message for Tutors", path: "/staff/report/messagefortutors" },
         { name: "Most Viewed", path: "/staff/report/mostviewed" },

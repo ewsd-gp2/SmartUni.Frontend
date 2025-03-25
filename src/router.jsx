@@ -62,15 +62,14 @@ const router = createBrowserRouter([
           //   path: "dashboard/update/staff",
           //   element: <UpdateTutor />,
           // },
-          // {
-          //   path: "allocation",
-          //   element: <AdminAllocation />,
-          // },
           {
-            path: "report/swi",
+            path: "allocation",
+            element: <AdminAllocation />,
+          },
+          {
+            path: "report",
             element: <ReportSWI />,
           },
-
           {
             path: "report/swt",
             element: <ReportSWT />,
