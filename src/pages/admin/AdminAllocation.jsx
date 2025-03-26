@@ -2,30 +2,30 @@ import React, { use, useEffect, useState } from "react";
 import { IoFilterOutline } from "react-icons/io5";
 import { BsSortDown } from "react-icons/bs";
 import axios from "axios";
+import { assignTutor, fetchAllocations, fetchStudents, fetchTutors } from "./api/api";
+import toast from "react-hot-toast";
 const AdminAllocation = () => {
   const [studentData, setStudentData] = useState([]);
   const [tutorData, setTutorData] = useState([]);
   const [allocation, setAllocation] = useState("");
   const [selectedTutor, setSelectedTutor] = useState("");
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [studentsRes, tutorsRes, allocationRes] = await Promise.all([
-          axios.get("http://localhost:7142/students"),
-          axios.get("http://localhost:7142/tutor"),
-          axios.get("http://localhost:7142/allocation"),
-        ]);
-        setStudentData(studentsRes.data);
-        setTutorData(tutorsRes.data);
-        setAllocation(allocationRes.data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
 
-    fetchData();
-  }, []);
+  useEffect(()=>{
+    const loadData = async ()=>{
+      setStudentData(await fetchStudents());
+      setTutorData(await fetchTutors());
+      setAllocation(await fetchAllocations());
+    }
+    loadData();
+  },[])
 
+  const handleAssign =async (studentID)=>{
+    if(!selectedTutor){
+      toast.error("Please select a tutor ahead!")
+    }
+    await assignTutor(selectedTutor,studentID)
+    toast.success("Tutor assigned successfully")
+  }
   return (
     <div>
       <form className="max-w-sm">
@@ -83,12 +83,13 @@ const AdminAllocation = () => {
                     Assign
                   </p>
                 </td>
+                <button onClick={()=>handleAssign(student.id)} className="bg-blue-500 text-white px-4 py-2 rounded">
+                    Assign
+                  </button>
               </tr>
             ))}
           </tbody>
-          <button className="bg-blue-500 text-white px-4 py-2 rounded">
-                    Assign
-                  </button>
+          
         </table>
       </div>
     </div>

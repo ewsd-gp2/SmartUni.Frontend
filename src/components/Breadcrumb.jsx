@@ -23,7 +23,7 @@ const Breadcrumb = ({currentPageTitle,links}) => {
             <li aria-current="page" key={index}>
             <div className="flex items-center gap-1">
             <HiChevronRight />
-              <Link to={link.path} className="inline-flex gap-1 items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white">
+              <Link to={link.path} className="inline-flex gap-1 items-center text-sm font-medium text-gray-700 hover:text-teal-600 dark:text-gray-400 dark:hover:text-white">
                 {link.title}
               </Link>
             </div>

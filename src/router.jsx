@@ -9,6 +9,7 @@ import CreateStaff from "./pages/admin/CreateStaff";
 import AdminAllocation from "./pages/admin/AdminAllocation";
 import BlogPage from "./components/blogs/BlogPage";
 import BlogDetailPage from "./components/blogs/BlogDetailPage";
+import UserProfile from "./pages/profile/UserProfile";
 
 const router = createBrowserRouter([
   {
@@ -46,6 +47,10 @@ const router = createBrowserRouter([
             path: "dashboard/allocation",
             element: <AdminAllocation />,
           },
+          {
+            path:"dashboard/user-profile",
+            element :<UserProfile/>
+          }
         ],
       },
       {
@@ -63,9 +68,10 @@ const router = createBrowserRouter([
           {
             path: "chat",
             element: <Chat />,
-          },
+          }
         ],
       },
+      
       {
         path: "/tutor",
         element: <Layout />,
@@ -84,6 +90,7 @@ const router = createBrowserRouter([
           },
         ],
       },
+      
     ],
   },
 ]);

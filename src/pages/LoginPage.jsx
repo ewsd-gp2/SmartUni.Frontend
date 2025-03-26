@@ -18,8 +18,9 @@ const LoginPage = () => {
       const response = await axios.post(url, data, {
         headers: {
           "Content-Type": "application/json",
-         "Allow-Control-Allow-Origin":"*"
-        },
+          "Allow-Control-Allow-Origin": "*",
+          "Access-Control-Expose-Headers": "Set-Cookie"
+        }, withCredentials: true
       });
   
       console.log(data); 
@@ -32,11 +33,13 @@ const LoginPage = () => {
       // } else {
       //   toast.error("Role not found in the response.");
       // }
+      console.log('cookie',document)
       if(response.status === 200){
         toast.success("Login Successfully!");
-        localStorage.setItem("access_token", response.data.access_token);
-        console.log(response.data.access_token);
-        navigate(role === "admin" ? "/admin/dashboard" : "/admin/dashboard/tutor");
+        // localStorage.setItem("access_token", response.data.access_token);
+        // console.log(response.data.access_token);
+        navigate("/admin/dashboard");
+        // navigate(role === "admin" ? "/admin/dashboard" : "/admin/dashboard/tutor");
         // setTimeout(() => {
         //   navigate("/admin/dashboard");
         // }, 100);
