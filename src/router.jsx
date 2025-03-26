@@ -1,15 +1,22 @@
 import { createBrowserRouter } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import Layout from "./components/Layout";
-import AdminDashboard from "./pages/admin/AdminDashboard";
+import TutorList from "./pages/admin/dashboard/TutorList";
 import Chat from "./pages/Chat";
 import CreateTutor from "./pages/admin/CreateTutor";
 import UpdateTutor from "./pages/admin/UpdateTutor";
+import TutorMeeting from "./pages/tutor/meeting/TutorMeeting";
+import TutorDashboard from "./pages/tutor/TutorDashboard";
+import { ReportSWI } from "./pages/admin/report/ReportSWI/index.jsx";
+import { ReportSWT } from "./pages/admin/report/ReportSWT/index.jsx";
+import { MessageFT } from "./pages/admin/report/MessageFT/index.jsx";
+import { MostViewed } from "./pages/admin/report/MostViewed/index.jsx";
+
 import CreateStaff from "./pages/admin/CreateStaff";
 import AdminAllocation from "./pages/admin/AdminAllocation";
 import BlogPage from "./components/blogs/BlogPage";
 import BlogDetailPage from "./components/blogs/BlogDetailPage";
-import UserProfile from "./pages/profile/UserProfile";
+import PageNotFound from "./pages/PageNotFound";
 
 const router = createBrowserRouter([
   {
@@ -20,13 +27,25 @@ const router = createBrowserRouter([
         element: <LoginPage />,
       },
       {
-        path: "/admin",
+        path: "/staff",
         element: <Layout />,
         children: [
           {
-            path: "dashboard",
-            element: <AdminDashboard />,
+            path: "dashboard/tutorlist",
+            element: <TutorList />,
           },
+          {
+            path: "dashboard",
+            element: <TutorList />,
+          },
+          // {
+          //   path: "dashboard/stafflist",
+          //   element: <AdminDashboard />,
+          // },
+          // {
+          //   path: "dashboard/studentlist",
+          //   element: <AdminDashboard />,
+          // },
           {
             path: "dashboard/create",
             element: <CreateTutor />,
@@ -35,22 +54,34 @@ const router = createBrowserRouter([
             path: "dashboard/update",
             element: <UpdateTutor />,
           },
+          // {
+          //   path: "dashboard/create/staff",
+          //   element: <CreateStaff />,
+          // },
+          // {
+          //   path: "dashboard/update/staff",
+          //   element: <UpdateTutor />,
+          // },
           {
-            path: "dashboard/create/staff",
-            element: <CreateStaff />,
-          },
-          {
-            path: "dashboard/update/staff",
-            element: <UpdateTutor />,
-          },
-          {
-            path: "dashboard/allocation",
+            path: "allocation",
             element: <AdminAllocation />,
           },
           {
-            path:"dashboard/user-profile",
-            element :<UserProfile/>
-          }
+            path: "report",
+            element: <ReportSWI />,
+          },
+          {
+            path: "report/swt",
+            element: <ReportSWT />,
+          },
+          {
+            path: "report/messagefortutors",
+            element: <MessageFT />,
+          },
+          {
+            path: "report/mostviewed",
+            element: <MostViewed />,
+          },
         ],
       },
       {
@@ -88,9 +119,20 @@ const router = createBrowserRouter([
             path: "chat",
             element: <Chat />,
           },
+          {
+            path: "meeting",
+            element: <TutorMeeting />,
+          },
+          {
+            path: "dashboard",
+            element: <TutorDashboard />,
+          },
         ],
       },
-      
+      {
+        path: "*",
+        element: <PageNotFound />,
+      },
     ],
   },
 ]);

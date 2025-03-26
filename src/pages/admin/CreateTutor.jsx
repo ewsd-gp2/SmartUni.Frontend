@@ -38,13 +38,15 @@ const CreateTutor = () => {
     return;
   }
     const url = "http://localhost:7142/tutor";
+    console.log(tutorData)
     axios
-    .post(url, tutorData, {
+    .post(url, JSON.stringify(tutorData), {
       headers: {
-        // Authorization: `Bearer ${token}`,
+       // Authorization: `Bearer ${token}`,
         "Content-Type": "application/json", 
-        // Accept: "application/json",
-        "Allow-Control-Allow-Origin":"http://localhost:5173"
+        "Access-Control-Allow-Origin": "http://localhost:5173"
+       // Accept: "application/json",
+       // "Allow-Control-Allow-Origin":"*"
 
       },
       withCredentials:true
@@ -54,7 +56,7 @@ const CreateTutor = () => {
         toast.success("Tutor Created Successfully!", {
           position: "top-right",
         });
-        navigate("/admin/dashboard");
+        navigate("/staff/dashboard");
       })
       .catch((error) => {
         console.log(error);
@@ -71,8 +73,8 @@ const CreateTutor = () => {
         <div className='grid gap-6 mb-6 md:grid-cols-2 w-5xl mt-10'>
           <div>
             <label
-              htmlFor='name'
-              className='block mb-2 text-sm font-medium text-gray-900 dark:text-white'
+              for='name'
+              class='block mb-2 text-sm font-medium text-gray-900 '
             >
               Full Name
             </label>
@@ -81,15 +83,15 @@ const CreateTutor = () => {
               id='name'
               value={tutorData.name}
               onChange={handleChange}
-              className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
+              class='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 '
               placeholder='Full Name'
               required
             />
           </div>
           <div>
             <label
-              htmlFor='gender'
-              className='block mb-2 text-sm font-medium text-gray-900 dark:text-white'
+              for='gender'
+              class='block mb-2 text-sm font-medium text-gray-900'
             >
               Gender
             </label>
@@ -97,7 +99,7 @@ const CreateTutor = () => {
               id='gender'
               value={tutorData.gender}
               onChange={handleChange}
-              className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
+              class='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 '
             >
               <option value='Male'>Male</option>
               <option value='Female' selected>
@@ -116,7 +118,7 @@ const CreateTutor = () => {
               id='major'
               value={tutorData.major}
               onChange={handleChange}
-              className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
+              class='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 '
             >
               <option value='Computing' selected>
                 Computing
@@ -137,7 +139,7 @@ const CreateTutor = () => {
               id='email'
               value={tutorData.email}
               onChange={handleChange}
-              className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
+              class='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 '
               placeholder='xxx@gmail.com'
               pattern='[0-9]{3}-[0-9]{2}-[0-9]{3}'
               required
@@ -145,8 +147,8 @@ const CreateTutor = () => {
           </div>
           <div>
             <label
-              htmlFor='phoneNumber'
-              className='block mb-2 text-sm font-medium text-gray-900 dark:text-white'
+              for='phoneNumber'
+              class='block mb-2 text-sm font-medium text-gray-900 '
             >
               Phone Number
             </label>
@@ -155,7 +157,7 @@ const CreateTutor = () => {
               id='phoneNumber'
               value={tutorData.phoneNumber}
               onChange={handleChange}
-              className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
+              class='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 '
               placeholder='+959xxxx'
               required
             />
@@ -172,7 +174,7 @@ const CreateTutor = () => {
               id='password'
               value={tutorData.password}
               onChange={handleChange}
-              className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
+              class='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 '
               placeholder=''
               required
             />
@@ -181,13 +183,13 @@ const CreateTutor = () => {
             <button
               onClick={onPressRegister}
               type='submit'
-              className='text-white w-68 bg-[#11a186] hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
+              class='text-white w-68 bg-[#11a186] hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm sm:w-auto px-5 py-2.5 text-center '
             >
               Register
             </button>
             <button
               type='cancel'
-              className=' bg-gray-200 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
+              class=' bg-gray-200 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center '
             >
               Cancel
             </button>

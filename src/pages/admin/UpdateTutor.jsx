@@ -33,7 +33,13 @@ const UpdateTutor = () => {
     const url = `http://localhost:7142/tutor/${detailsId}`;
     setLoading(true);
     axios
-      .get(url)
+      .get(url, {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "http://localhost:5173",
+        },
+        withCredentials: true,
+      })
       .then((response) => {
         console.log("FETCHDETAILS", response);
         const res = response.data;
@@ -64,6 +70,7 @@ const UpdateTutor = () => {
     const isEmptyField = Object.values(tutorDetails).some(
       (value) => value.trim() === ""
     );
+    console.log(tutorDetails);
     if (isEmptyField) {
       toast.error("Please fill in all fields before submitting.", {
         position: "top-right",
@@ -71,13 +78,24 @@ const UpdateTutor = () => {
       return;
     }
     const updatedTutorDetails = {
-      ...tutorDetails, 
+      ...tutorDetails,
       gender: Gender[tutorDetails.gender],
       major: Major[tutorDetails.major],
     };
+    console.log(updatedTutorDetails)
     const url = `http://localhost:7142/tutor/${detailsId}`;
     axios
-      .put(url, updatedTutorDetails)
+      .put(
+        url,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "http://localhost:5173",
+          },
+          withCredentials: true,
+        },
+        updatedTutorDetails
+      )
       .then((response) => {
         toast.success("Tutor Created Successfully!", {
           position: "top-right",
@@ -109,6 +127,7 @@ const UpdateTutor = () => {
               id='name'
               value={tutorDetails.name}
               onChange={handleChange}
+              class='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 '
               className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
               placeholder='Full Name'
               required
@@ -117,6 +136,7 @@ const UpdateTutor = () => {
           <div>
             <label
               for='gender'
+              class='block mb-2 text-sm font-medium text-gray-900'
               className='block mb-2 text-sm font-medium text-gray-900 dark:text-white'
             >
               Gender
@@ -125,6 +145,7 @@ const UpdateTutor = () => {
               id='gender'
               value={tutorDetails.gender}
               onChange={handleChange}
+              class='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 '
               className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
             >
               <option value='Male'>Male</option>
@@ -136,6 +157,7 @@ const UpdateTutor = () => {
           <div>
             <label
               for='major'
+              class='block mb-2 text-sm font-medium text-gray-900'
               className='block mb-2 text-sm font-medium text-gray-900 dark:text-white'
             >
               Major
@@ -144,6 +166,7 @@ const UpdateTutor = () => {
               id='major'
               value={tutorDetails.major}
               onChange={handleChange}
+              class='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 '
               className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
             >
               <option value='Computing' selected>
@@ -156,6 +179,7 @@ const UpdateTutor = () => {
           <div>
             <label
               for='email'
+              class='block mb-2 text-sm font-medium text-gray-900'
               className='block mb-2 text-sm font-medium text-gray-900 dark:text-white'
             >
               Email Address
@@ -165,6 +189,7 @@ const UpdateTutor = () => {
               id='email'
               value={tutorDetails.email}
               onChange={handleChange}
+              class='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 '
               className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
               placeholder='xxx@gmail.com'
               pattern='[0-9]{3}-[0-9]{2}-[0-9]{3}'
@@ -183,6 +208,7 @@ const UpdateTutor = () => {
               id='phoneNumber'
               value={tutorDetails.phoneNumber}
               onChange={handleChange}
+              class='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 '
               className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
               placeholder='+959xxxx'
               required
@@ -191,6 +217,7 @@ const UpdateTutor = () => {
           <div>
             <label
               for='visitors'
+              class='block mb-2 text-sm font-medium text-gray-900'
               className='block mb-2 text-sm font-medium text-gray-900 dark:text-white'
             >
               Password
@@ -200,6 +227,7 @@ const UpdateTutor = () => {
               id='password'
               value={tutorDetails.password}
               onChange={handleChange}
+              class='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 '
               className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
               placeholder=''
               required
@@ -209,12 +237,14 @@ const UpdateTutor = () => {
             <button
               onClick={onPressUpdate}
               type='submit'
+              class='text-white w-68 bg-[#11a186] hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm sm:w-auto px-5 py-2.5 text-center '
               className='text-white w-68 bg-[#11a186] hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
             >
               Update
             </button>
             <button
               type='cancel'
+              class=' bg-gray-200 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center '
               className=' bg-gray-200 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
             >
               Cancel
