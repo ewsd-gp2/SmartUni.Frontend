@@ -17,7 +17,7 @@ const AdminSideBar = () => {
     <PiBaseballCapDuotone className=" text-teal-600" />
     <span className=" text-gray-500">Allocation</span>
   </Link>
-  <Link to="/admin/report" className=" flex items-center gap-3 mb-7">
+  <Link to={""} className=" flex items-center gap-3 mb-7">
     <HiOutlinePencilSquare  className=" text-teal-600 text-xl" />
     <span className=" text-gray-500">Reports</span>
   </Link>

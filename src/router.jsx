@@ -1,20 +1,22 @@
 import { createBrowserRouter } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
-import DashboardPage from "./pages/DashboardPage";
 import Layout from "./components/Layout";
-import BlogPage from "./pages/BlogPage";
-import BlogDetailPage from "./pages/BlogDetailPage";
-import AdminDashboard from "./pages/admin/AdminDashboard";
+import TutorList from "./pages/admin/dashboard/TutorList";
 import Chat from "./pages/Chat";
 import CreateTutor from "./pages/admin/CreateTutor";
 import UpdateTutor from "./pages/admin/UpdateTutor";
-import {Student} from "./pages/admin/Student.jsx";
-import {CreateStudent} from "./pages/admin/CreateStudent.jsx";
-import {ReportSWI} from "./pages/admin/ReportSWI/index.jsx";
-import {ReportSWT} from "./pages/admin/ReportSWT/index.jsx";
-import {MessageFT} from "./pages/admin/MessageFT/index.jsx";
-import {MostViewed} from "./pages/admin/MostViewed/index.jsx";
-import {Landing} from "./pages/user/index.jsx";
+import TutorMeeting from "./pages/tutor/meeting/TutorMeeting";
+import TutorDashboard from "./pages/tutor/TutorDashboard";
+import { ReportSWI } from "./pages/admin/report/ReportSWI/index.jsx";
+import { ReportSWT } from "./pages/admin/report/ReportSWT/index.jsx";
+import { MessageFT } from "./pages/admin/report/MessageFT/index.jsx";
+import { MostViewed } from "./pages/admin/report/MostViewed/index.jsx";
+
+import CreateStaff from "./pages/admin/CreateStaff";
+import AdminAllocation from "./pages/admin/AdminAllocation";
+import BlogPage from "./components/blogs/BlogPage";
+import BlogDetailPage from "./components/blogs/BlogDetailPage";
+import PageNotFound from "./pages/PageNotFound";
 
 const router = createBrowserRouter([
   {
@@ -22,52 +24,64 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <Landing />
-      },
-      {
-        path: "/login",
         element: <LoginPage />,
       },
       {
-        path: "/admin",
+        path: "/staff",
         element: <Layout />,
         children: [
           {
+            path: "dashboard/tutorlist",
+            element: <TutorList />,
+          },
+          {
             path: "dashboard",
-            element: <AdminDashboard />,
+            element: <TutorList />,
+          },
+          // {
+          //   path: "dashboard/stafflist",
+          //   element: <AdminDashboard />,
+          // },
+          // {
+          //   path: "dashboard/studentlist",
+          //   element: <AdminDashboard />,
+          // },
+          {
+            path: "dashboard/create",
+            element: <CreateTutor />,
           },
           {
-            path: 'dashboard/create',
-            element: <CreateTutor />
+            path: "dashboard/update",
+            element: <UpdateTutor />,
+          },
+          // {
+          //   path: "dashboard/create/staff",
+          //   element: <CreateStaff />,
+          // },
+          // {
+          //   path: "dashboard/update/staff",
+          //   element: <UpdateTutor />,
+          // },
+          {
+            path: "allocation",
+            element: <AdminAllocation />,
           },
           {
-            path: 'dashboard/update',
-            element: <UpdateTutor />
+            path: "report",
+            element: <ReportSWI />,
           },
           {
-            path: 'dashboard/student',
-            element: <Student />
+            path: "report/swt",
+            element: <ReportSWT />,
           },
           {
-            path: 'dashboard/student/create',
-            element: <CreateStudent />
+            path: "report/messagefortutors",
+            element: <MessageFT />,
           },
           {
-            path: 'report',
-            element: <ReportSWI/>
+            path: "report/mostviewed",
+            element: <MostViewed />,
           },
-          {
-            path: 'report/swt',
-            element: <ReportSWT />
-          },
-          {
-            path: 'report/messagefortutors',
-            element: <MessageFT />
-          },
-          {
-            path: 'report/mostviewed',
-            element: <MostViewed />
-          }
         ],
       },
       {
@@ -79,7 +93,7 @@ const router = createBrowserRouter([
             element: <BlogPage />,
           },
           {
-            path: "blog/detail/:id",
+            path: "blog/details/:id",
             element: <BlogDetailPage />,
           },
           {
@@ -97,17 +111,29 @@ const router = createBrowserRouter([
             element: <BlogPage />,
           },
           {
-            path: "blog/detail/:id",
+            path: "blog/details/:id",
             element: <BlogDetailPage />,
           },
           {
             path: "chat",
             element: <Chat />,
-          }
+          },
+          {
+            path: "meeting",
+            element: <TutorMeeting />,
+          },
+          {
+            path: "dashboard",
+            element: <TutorDashboard />,
+          },
         ],
+      },
+      {
+        path: "*",
+        element: <PageNotFound />,
       },
     ],
   },
 ]);
-  
-  export default router;
+
+export default router;
