@@ -8,11 +8,13 @@ const Gender = {
   Male: 0,
   Female: 1,
 };
+
 const Major = {
   Computing: 0,
   InformationSystems: 1,
   Networking: 2,
 };
+
 const UpdateTutor = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
