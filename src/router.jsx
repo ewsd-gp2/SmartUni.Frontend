@@ -17,6 +17,10 @@ import AdminAllocation from "./pages/admin/AdminAllocation";
 import BlogPage from "./components/blogs/BlogPage";
 import BlogDetailPage from "./components/blogs/BlogDetailPage";
 import PageNotFound from "./pages/PageNotFound";
+import StudentList from "./pages/admin/dashboard/StudentList.jsx";
+import StaffList from "./pages/admin/dashboard/StaffList.jsx";
+import CreateStudent from "./pages/admin/CreateStudent.jsx";
+import UpdateStudent from "./pages/admin/UpdateStudent.jsx";
 
 const router = createBrowserRouter([
   {
@@ -38,14 +42,14 @@ const router = createBrowserRouter([
             path: "dashboard",
             element: <TutorList />,
           },
-          // {
-          //   path: "dashboard/stafflist",
-          //   element: <AdminDashboard />,
-          // },
-          // {
-          //   path: "dashboard/studentlist",
-          //   element: <AdminDashboard />,
-          // },
+          {
+            path: "dashboard/stafflist",
+            element: <StaffList />,
+          },
+          {
+            path: "dashboard/studentlist",
+            element: <StudentList />,
+          },
           {
             path: "dashboard/create",
             element: <CreateTutor />,
@@ -54,14 +58,22 @@ const router = createBrowserRouter([
             path: "dashboard/update",
             element: <UpdateTutor />,
           },
-          // {
-          //   path: "dashboard/create/staff",
-          //   element: <CreateStaff />,
-          // },
-          // {
-          //   path: "dashboard/update/staff",
-          //   element: <UpdateTutor />,
-          // },
+          {
+            path: "dashboard/create/staff",
+            element: <CreateStaff/>
+          },
+          {
+            path: "dashboard/create/student",
+            element: <CreateStudent/>
+          },
+          {
+            path: "dashboard/update/staff",
+            element: <UpdateTutor />,
+          },
+          {
+            path: "dashboard/update/student",
+            element: <UpdateStudent />,
+          },
           {
             path: "allocation",
             element: <AdminAllocation />,

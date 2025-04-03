@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import toast from "react-hot-toast";
-import useCookie from "react-use-cookie";
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -61,7 +60,7 @@ const LoginPage = () => {
               {...register("email")}
               className=' bg-teal-50 border border-teal-300 text-teal-900 text-sm rounded-lg focus:ring-teal-500 focus:border-teal-500 block w-full p-3 '
               placeholder='Username'
-              required
+              required     
             />
           </div>
           <div className='my-5'>

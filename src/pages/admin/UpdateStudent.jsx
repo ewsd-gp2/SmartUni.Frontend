@@ -3,7 +3,6 @@ import axios from "axios";
 import HeaderTitle from "../../components/common/HeaderTitle";
 import toast, { Toaster } from "react-hot-toast";
 import { useNavigate, useLocation } from "react-router-dom";
-import { create } from "zustand";
 
 const Gender = {
   Male: 0,

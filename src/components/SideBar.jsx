@@ -4,6 +4,7 @@ import { BsChatRightText } from "react-icons/bs";
 import { ImBlog } from "react-icons/im";
 import { IoIosPeople } from "react-icons/io";
 import { IoIosLogOut } from "react-icons/io";
+import { FaPeopleRoof } from "react-icons/fa6";
 import { CiLogout } from "react-icons/ci";
 import { HiOutlinePencilSquare } from "react-icons/hi2";
 import { PiBaseballCapDuotone } from "react-icons/pi";
@@ -64,7 +65,7 @@ const SideBar = () => {
     },
     {
       name: "Allocation",
-      icon: PiBaseballCapDuotone,
+      icon: FaPeopleRoof ,
     },
     {
       name: "Report",

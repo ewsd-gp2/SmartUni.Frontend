@@ -1,4 +1,4 @@
-const GradientButton = ({handleAction, Icon}) => {
+const GradientButton = ({handleAction, Icon,label}) => {
   return (
     <div className='flex flex-row justify-between'>
       <div className=' flex items-center justify-between'>
@@ -7,7 +7,7 @@ const GradientButton = ({handleAction, Icon}) => {
           onClick={handleAction}
         >
           <Icon size={20} color='white' className='self-center' />
-          <span className='self-center font-semibold'>New Tutor</span>
+          <span className='self-center font-semibold'>{label}</span>
         </button>
       </div>
     </div>

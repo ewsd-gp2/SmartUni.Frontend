@@ -4,8 +4,8 @@ import HeaderTitle from "../../components/common/HeaderTitle";
 import toast, { Toaster } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
-const CreateTutor = () => {
-  const [tutorData, setTutorData] = useState({
+const CreateStudent = () => {
+  const [studentData, setStudentData] = useState({
     name: "",
     email: "",
     phoneNumber: "",
@@ -16,13 +16,13 @@ const CreateTutor = () => {
   const navigate = useNavigate();
   const handleChange = (event) => {
     const { id, value } = event.target;
-    setTutorData((prev) => ({ ...prev, [id]: value }));
+    setStudentData((prev) => ({ ...prev, [id]: value }));
   };
   const token = localStorage.getItem("access_token");
 
   const onPressRegister = async (event) => {
     event.preventDefault();
-    const isEmptyField = Object.values(tutorData).some(
+    const isEmptyField = Object.values(studentData).some(
       (value) => value.trim() === ""
     );
     if (isEmptyField) {
@@ -37,10 +37,10 @@ const CreateTutor = () => {
     });
     return;
   }
-    const url = "http://localhost:7142/tutor";
-    console.log(tutorData)
+    const url = "http://localhost:7142/student";
+    console.log(studentData)
     axios
-    .post(url, JSON.stringify(tutorData), {
+    .post(url, JSON.stringify(studentData), {
       headers: {
        // Authorization: `Bearer ${token}`,
         "Content-Type": "application/json", 
@@ -52,11 +52,10 @@ const CreateTutor = () => {
       withCredentials:true
     })
       .then((response) => {
-        console.log(tutorData)    
-        toast.success("Tutor Created Successfully!", {
+        toast.success(`Student ${studentData.name} Created Successfully!`, {
           position: "top-right",
         });
-        navigate("/staff/dashboard");
+        navigate("/staff/dashboard/studentlist");
       })
       .catch((error) => {
         console.log(error);
@@ -68,7 +67,7 @@ const CreateTutor = () => {
 
   return (
     <div>
-      <HeaderTitle title='Create Tutor Account' />
+      <HeaderTitle title='Create Student Account' />
       <form>
         <div className='grid gap-6 mb-6 md:grid-cols-2 w-5xl mt-10'>
           <div>
@@ -81,7 +80,7 @@ const CreateTutor = () => {
             <input
               type='text'
               id='name'
-              value={tutorData.name}
+              value={studentData.name}
               onChange={handleChange}
               className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 '
               placeholder='Full Name'
@@ -97,7 +96,7 @@ const CreateTutor = () => {
             </label>
             <select
               id='gender'
-              value={tutorData.gender}
+              value={studentData.gender}
               onChange={handleChange}
               className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 '
             >
@@ -116,7 +115,7 @@ const CreateTutor = () => {
             </label>
             <select
               id='major'
-              value={tutorData.major}
+              value={studentData.major}
               onChange={handleChange}
               className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 '
             >
@@ -137,7 +136,7 @@ const CreateTutor = () => {
             <input
               type='text'
               id='email'
-              value={tutorData.email}
+              value={studentData.email}
               onChange={handleChange}
               className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 '
               placeholder='xxx@gmail.com'
@@ -155,7 +154,7 @@ const CreateTutor = () => {
             <input
               type='text'
               id='phoneNumber'
-              value={tutorData.phoneNumber}
+              value={studentData.phoneNumber}
               onChange={handleChange}
               className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 '
               placeholder='+959xxxx'
@@ -164,15 +163,15 @@ const CreateTutor = () => {
           </div>
           <div>
             <label
-              htmlFor='visitors'
+              htmlFor='password'
               className='block mb-2 text-sm font-medium text-gray-900 dark:text-white'
             >
               Password
             </label>
             <input
-              type='text'
+              type='password'
               id='password'
-              value={tutorData.password}
+              value={studentData.password}
               onChange={handleChange}
               className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 '
               placeholder=''
@@ -200,4 +199,4 @@ const CreateTutor = () => {
   );
 };
 
-export default CreateTutor;
+export default CreateStudent;

@@ -14,21 +14,28 @@ import DataTable from "react-data-table-component";
 import SearchInput from "./common/SearchInput";
 import GradientButton from "./buttons/GradientButton";
 import { IoAddCircle } from "react-icons/io5";
-import loadingAnimation from '../assets/lottie/loading.json';
+import loadingAnimation from "../assets/lottie/loading.json";
 import Lottie from "lottie-react";
-
 
 const Major = ["Computing", "Information Systems", "Networking"];
 
-const TableLayout = ({ data, handleDelete, CreateAccount, loading }) => {
+const TableLayout = ({ data, handleDelete, CreateAccount, loading ,userRole }) => {
+  // const userData = Array.isArray(data) ? data : [];
+const shouldIncludeMajor = Array.isArray(data) && data.some((row) => row.major !== undefined);
+const roleLabels ={
+  tutor : "New Tutor",
+  student : "New Student",
+  staff : "New Staff"
+}
+
   const columns = [
     {
       name: "Image",
       cell: (row) => (
         <img
-          className=' size-8 rounded-full'
-          src='https://i.pinimg.com/236x/da/c0/8d/dac08dbae85f1e89081126a98568c9e9.jpg'
-          alt=''
+          className=" size-8 rounded-full"
+          src="https://i.pinimg.com/236x/da/c0/8d/dac08dbae85f1e89081126a98568c9e9.jpg"
+          alt=""
         />
       ),
     },
@@ -37,17 +44,21 @@ const TableLayout = ({ data, handleDelete, CreateAccount, loading }) => {
       selector: (row) => row.name,
       sortable: true,
     },
-    {
-      name: "Major",
-      selector: (row) => Major[row.major],
-    },
+    ...(shouldIncludeMajor
+      ? [
+          {
+            name: "Major",
+            selector: (row) => Major[row.major],
+          },
+        ]
+      : []),
     {
       name: "Phone Number",
       selector: (row) => row.phoneNumber,
     },
     {
       name: "Email Address",
-      selector: (row) => row.userCode,
+      selector: (row) => row.email,
     },
     {
       name: "ID",
@@ -57,7 +68,7 @@ const TableLayout = ({ data, handleDelete, CreateAccount, loading }) => {
       name: "Edit",
       cell: (row) => (
         <HiOutlinePencil
-          className='size-4 text-blue-500'
+          className="size-4 text-blue-500"
           onClick={() => handleUpdate(row.id)}
         />
       ),
@@ -66,28 +77,32 @@ const TableLayout = ({ data, handleDelete, CreateAccount, loading }) => {
       name: "Delete",
       cell: (row) => (
         <FaRegTrashAlt
-          className='size-4 text-red-500'
+          className="size-4 text-red-500"
           onClick={() => openDeleteModal(row.id)}
         />
       ),
     },
   ];
-  const userRole = localStorage.getItem("userRole");
   const [openDelete, setOpenDelete] = useState({
     isOpen: false,
     id: "",
   });
   const [filterText, setFilterText] = useState("");
   const [resetPaginationToggle, setResetPaginationToggle] = useState(false);
-  const filteredItems = data.length > 0 ? data.filter(
-    (item) =>
-      item.name && item.name.toLowerCase().includes(filterText.toLowerCase())
-  ):[];
+  const filteredItems =
+    data.length > 0
+      ? data.filter(
+          (item) =>
+            item.name &&
+            item.name.toLowerCase().includes(filterText.toLowerCase())
+        )
+      : [];
+ 
   const navigate = useNavigate();
 
   const handleUpdate = (id) => {
     console.log("hello");
-    navigate("/staff/dashboard/update", { state: { detailsId: id } });
+    navigate(`/staff/dashboard/update/${userRole}`, { state: { detailsId: id } });
   };
   const openDeleteModal = (id) => {
     setOpenDelete({
@@ -103,19 +118,19 @@ const TableLayout = ({ data, handleDelete, CreateAccount, loading }) => {
       }
     };
     return (
-      <div className='w-full flex flex-row justify-between items-center py-2 gap-4'>
+      <div className="w-full flex flex-row justify-between items-center py-2 gap-4">
         <SearchInput
           onFilter={(e) => setFilterText(e.target.value)}
           onClear={handleClear}
           filterText={filterText}
-          className='self-start'
+          className="self-start"
         />
-        <GradientButton handleAction={CreateAccount} Icon={IoAddCircle} />
+        <GradientButton handleAction={CreateAccount} Icon={IoAddCircle} label={roleLabels[userRole]} />
       </div>
     );
   }, [filterText, resetPaginationToggle]);
   return (
-    <div className=''>
+    <div className="">
       <DataTable
         columns={columns}
         data={filteredItems}
@@ -220,6 +235,7 @@ const TableLayout = ({ data, handleDelete, CreateAccount, loading }) => {
         isVisible={openDelete.isOpen}
         isClose={() => setOpenDelete((prev) => ({ ...prev, isOpen: false }))}
         onConfirm={() => handleDelete(openDelete.id)}
+        userRole={userRole}
       />
     </div>
   );

@@ -9,7 +9,6 @@ export const fetchStudents = async () => {
       },
       withCredentials: true,
     });
-    console.log(res.data)
     return res.data;
   } catch (error) {
     console.error("Error fetching students:", error);
@@ -25,7 +24,6 @@ export const fetchTutors = async () => {
       },
       withCredentials: true,
     });
-    console.log(response.data)
 
     return response.data;
   } catch (error) {
@@ -42,7 +40,6 @@ export const fetchAllocations = async () => {
       },
       withCredentials: true,
     });
-    console.log(response.data)
     
     return response.data;
   } catch (error) {
@@ -52,17 +49,20 @@ export const fetchAllocations = async () => {
 };
 
 export const assignTutor = async (tutorID, studentID) => {
-    const createdBy = localStorage.getItem("userId")
-    console.log(createdBy)
+  const assignData = {
+    data: {
+      tutorID: tutorID,
+      requestAllocationModels: [
+        {
+          studentID: studentID,
+        },
+      ],
+    },
+  }
   try {
-    const assign = {
-      data: {
-        createdBy,
-        requestAllocationModels: [{ tutorID, studentID }],
-      },
-    };
-    await axios.post(`${BASE_URL}/allocation`, assign, {
+    await axios.post(`${BASE_URL}/allocation`, assignData, {
       headers: {
+        "Content-Type": "application/json",
         "Access-Control-Allow-Origin": "http://localhost:5173",
       },
       withCredentials: true,
@@ -70,5 +70,39 @@ export const assignTutor = async (tutorID, studentID) => {
     console.log("Allocation successful");
   } catch (error) {
     console.error("Error allocating tutor:", error);
+  }
+};
+
+// export const updateTutorAssignment = async (tutorID, studentID) => {
+//   const updateData = {
+//     tutorID: tutorID,
+//     studentID: studentID,
+//   };
+
+//   try {
+//     await axios.put(`${BASE_URL}/allocation`, updateData, {
+//       headers: {
+//         "Content-Type": "application/json",
+//         "Access-Control-Allow-Origin": "http://localhost:5173",
+//       },
+//       withCredentials: true,
+//     });
+//     console.log("Tutor updated successfully");
+//   } catch (error) {
+//     console.error("Error updating tutor:", error);
+//   }
+// };
+
+export const unAssignTutor = async (studentID) => {
+  try {
+    await axios.put(`http://localhost:7142/allocation/${studentID}`, {
+      headers: {
+        "Access-Control-Allow-Origin": "http://localhost:5173",
+      },
+      withCredentials: true,
+    });
+    console.log("Tutor unassigned successfully");
+  } catch (error) {
+    console.error("Error unassigning tutor:", error);
   }
 };
