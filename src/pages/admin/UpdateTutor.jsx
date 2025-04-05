@@ -87,6 +87,7 @@ const UpdateTutor = () => {
     axios
       .put(
         url,
+        
         {
           headers: {
             "Content-Type": "application/json",

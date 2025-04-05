@@ -13,6 +13,7 @@ import axios from "axios";
 import Lottie from "lottie-react";
 import { IoAddCircle } from "react-icons/io5";
 import GradientButton from "../../../components/buttons/GradientButton";
+import TableSkeleton from "../../../components/TableSkelenton";
 
 const StudentList = () => {
   const navigate = useNavigate();
@@ -99,7 +100,6 @@ const StudentList = () => {
               </div>
             </div> */}
             
-        
             <TableLayout data={studentData} userRole="student" handleDelete={handleDelete} CreateAccount={CreateAccount} loading={loading} />
           </div>
         </div>

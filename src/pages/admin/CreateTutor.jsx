@@ -53,7 +53,8 @@ const CreateTutor = () => {
     })
       .then((response) => {
         console.log(tutorData)    
-        toast.success("Tutor Created Successfully!", {
+        toast.success(`Tutor ${tutorData.name} Created Successfully!`
+          , {
           position: "top-right",
         });
         navigate("/staff/dashboard");

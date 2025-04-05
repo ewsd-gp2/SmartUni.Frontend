@@ -52,7 +52,8 @@ const CreateStaff = () => {
     })
       .then((response) => {
         console.log(staffData)    
-        toast.success("Staff Created Successfully!", {
+        toast.success(`Staff ${staffData.name} Created Successfully!`
+          , {
           position: "top-right",
         });
         navigate("/staff/dashboard/stafflist");

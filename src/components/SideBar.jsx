@@ -1,13 +1,10 @@
 import React from "react";
 import { MdOutlineDashboard } from "react-icons/md";
-import { BsChatRightText } from "react-icons/bs";
-import { ImBlog } from "react-icons/im";
 import { IoIosPeople } from "react-icons/io";
-import { IoIosLogOut } from "react-icons/io";
 import { FaPeopleRoof } from "react-icons/fa6";
 import { CiLogout } from "react-icons/ci";
 import { HiOutlinePencilSquare } from "react-icons/hi2";
-import { PiBaseballCapDuotone } from "react-icons/pi";
+import { MdNotes,MdOutlineSpeakerNotes  } from "react-icons/md";
 import { Link, NavLink } from "react-router-dom";
 import Header from "./Header";
 import { useNavigate } from "react-router-dom";
@@ -22,11 +19,11 @@ const SideBar = () => {
     },
     {
       name: "Chats",
-      icon: BsChatRightText,
+      icon: MdOutlineSpeakerNotes ,
     },
     {
       name: "Blogs",
-      icon: ImBlog,
+      icon: MdNotes,
     },
     {
       name: "Meetings",
@@ -41,11 +38,11 @@ const SideBar = () => {
     },
     {
       name: "Chat",
-      icon: BsChatRightText,
+      icon: MdOutlineSpeakerNotes ,
     },
     {
       name: "Blog",
-      icon: ImBlog,
+      icon: MdNotes,
     },
     {
       name: "Meeting",

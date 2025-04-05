@@ -7,7 +7,7 @@ import toast from "react-hot-toast";
 
 const LoginPage = () => {
   const navigate = useNavigate();
-  const [role, setRole] = useState("tutor");
+  const [role, setRole] = useState("staff");
   const { register, handleSubmit } = useForm();
   const handleLogIn = async (data) => {
     console.log(data);
@@ -76,6 +76,16 @@ const LoginPage = () => {
 
           <div className='flex gap-6 mb-8'>
          <label className='font-semibold'>*Sign in as: </label>
+         <label className='flex items-center gap-2'>
+              <input
+                type='radio'
+                value='staff'
+                checked={role === "staff"}
+                onChange={(e) => setRole(e.target.value)}
+                className='w-4 h-4 text-teal-600 focus:ring-teal-500'
+              />
+              Staff
+            </label>
             <label className='flex items-center gap-2'>
               <input
                 type='radio'
@@ -86,16 +96,7 @@ const LoginPage = () => {
               />
               Tutor
             </label>
-            <label className='flex items-center gap-2'>
-              <input
-                type='radio'
-                value='staff'
-                checked={role === "staff"}
-                onChange={(e) => setRole(e.target.value)}
-                className='w-4 h-4 text-teal-600 focus:ring-teal-500'
-              />
-              Staff
-            </label>
+            
             <label className='flex items-center gap-2'>
               <input
                 type='radio'
