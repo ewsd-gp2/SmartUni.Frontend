@@ -1,19 +1,22 @@
-import React, { useState } from 'react'
-import Calendar from 'react-calendar';
-
+import { useState } from "react";
+import DatePicker from "react-datepicker";
 
 const CalendarComponent = () => {
-  const [date,setDate]= useState(new Date())
+  const [date, setDate] = useState(new Date());
   const dateOnChange = (date) => {
     console.log(date);
-    setDate(date)
-  }
+    setDate(date);
+  };
   return (
-
     <div>
-      <Calendar onChange={dateOnChange} value={date}/>
+      <DatePicker
+        selected={date}
+        onChange={dateOnChange}
+        className="w-full bg-gray-50 border border-gray-300"
+        inline
+      />
     </div>
-  )
-}
+  );
+};
 
-export default CalendarComponent
+export default CalendarComponent;

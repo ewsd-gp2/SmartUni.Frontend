@@ -141,7 +141,7 @@ const AdminDashboard = () => {
                 />
               </div>
             ) : (
-              <TableLayout data={tutorData} handleDelete={handleDelete} />
+              <TableLayout data={tutorData} da handleDelete={handleDelete} />
             )}
           </div>
         </div>
