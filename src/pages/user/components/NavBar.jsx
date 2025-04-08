@@ -1,22 +1,21 @@
 import {Link} from "react-router-dom";
-import logo from '../assets/img.png'
 
 export const NavBar = () => {
-    return(<div>
+    return(<div className="mx-15 mt-5">
         <nav className="flex justify-between items-center">
             <div className="flex items-center">
 
                 <div className="flex items-center">
                     <Link to={"/"}>
-                <img src={logo} alt="logo" className="w-14"/>
+                <img src="" alt="logo" className="w-14"/>
                     </Link>
                     <h1 className="text-teal-600 font-semibold text-3xl">SmartUni</h1>
                 </div>
-                <div className="ml-20 flex items-center space-x-10 mt-1v hidden lg:block">
+                {/* <div className="ml-20 flex items-center space-x-10 mt-1v hidden lg:block">
                     <Link className="text-teal-600 font-semibold underline" to="/">Home</Link>
                     <Link className="font-semibold" to="/">Feature</Link>
                     <Link className="font-semibold" to="/">Blogs</Link>
-                </div>
+                </div> */}
 
             </div>
 

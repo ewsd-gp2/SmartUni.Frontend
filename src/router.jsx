@@ -17,13 +17,19 @@ import AdminAllocation from "./pages/admin/AdminAllocation";
 import BlogPage from "./components/blogs/BlogPage";
 import BlogDetailPage from "./components/blogs/BlogDetailPage";
 import PageNotFound from "./pages/PageNotFound";
+import StudentDashboard from "./pages/user/screens/StudentDashboard/index.jsx";
+import { Landing } from "./pages/user/index.jsx";
 
 const router = createBrowserRouter([
   {
     path: "/",
     children: [
       {
-        path: "/",
+        path: '/',
+        element: <Landing />
+      },
+      {
+        path: "/login",
         element: <LoginPage />,
       },
       {
@@ -54,14 +60,6 @@ const router = createBrowserRouter([
             path: "dashboard/update",
             element: <UpdateTutor />,
           },
-          // {
-          //   path: "dashboard/create/staff",
-          //   element: <CreateStaff />,
-          // },
-          // {
-          //   path: "dashboard/update/staff",
-          //   element: <UpdateTutor />,
-          // },
           {
             path: "allocation",
             element: <AdminAllocation />,
@@ -100,6 +98,10 @@ const router = createBrowserRouter([
             path: "chat",
             element: <Chat />,
           },
+          {
+            path: "dashboard",
+            element: <StudentDashboard />
+          }
         ],
       },
       {

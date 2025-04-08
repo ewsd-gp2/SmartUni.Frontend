@@ -2,7 +2,7 @@ import hero from "../assets/Hero.png"
 
 export const Header = () => {
     return(
-        <div className="mt-20">
+        <div className="mt-20 mx-15">
             <div className="flex">
                 <div className="w-5/10 ml-10">
                     <h1 className="text-teal-600 leading-[50px] font-semibold">Empowering Learning Through Seamless eTutoring</h1>

@@ -92,7 +92,7 @@ const SideBar = () => {
       <header>
         <h1 className=' text-teal-600 text-3xl text-center mt-5 mb-5'>SmartUni</h1>
       </header>
-      {data.map((item, index) => (
+      {staff.map((item, index) => (
         <NavLink
           to={`/${userRole}/${item.name.toLowerCase()}`}
           className={({ isActive }) =>

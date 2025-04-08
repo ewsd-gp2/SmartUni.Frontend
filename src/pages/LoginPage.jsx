@@ -14,16 +14,18 @@ const LoginPage = () => {
     console.log(data);
     // console.log(role)
     const url = `http://localhost:7142/signin/${role}`;
+    console.log('data',data)
     try {
       const response = await axios.post(url, data, {
         headers: {
           "Content-Type": "application/json",
-          "Allow-Control-Allow-Origin": "*",
+           "Access-Control-Allow-Origin": "http://localhost:5175",
           "Access-Control-Expose-Headers": "Set-Cookie",
         },
         withCredentials: true,
+        //validateStatus: (status) => status < 500,
       });
-      if (response.status === 200) {
+      if (response.status === 200 ) {
         toast.success("Login Successfully!");
         localStorage.setItem("user_role", role);
         navigate(`${role}/dashboard`);
