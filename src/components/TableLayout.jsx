@@ -21,17 +21,18 @@ import Lottie from "lottie-react";
 const Major = ["Computing", "Information Systems", "Networking"];
 
 const TableLayout = ({ data, handleDelete, CreateAccount, loading }) => {
+  //console.log('data',data)
   const columns = [
-    {
-      name: "Image",
-      cell: (row) => (
-        <img
-          className=' size-8 rounded-full'
-          src='https://i.pinimg.com/236x/da/c0/8d/dac08dbae85f1e89081126a98568c9e9.jpg'
-          alt=''
-        />
-      ),
-    },
+    // {
+    //   name: "Image",
+    //   cell: (row) => (
+    //     <img
+    //       className=' size-8 rounded-full'
+    //       src='https://i.pinimg.com/236x/da/c0/8d/dac08dbae85f1e89081126a98568c9e9.jpg'
+    //       alt=''
+    //     />
+    //   ),
+    // },
     {
       name: "Full Name",
       selector: (row) => row.name,

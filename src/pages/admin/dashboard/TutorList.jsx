@@ -23,6 +23,11 @@ const TutorList = () => {
   });
   const [loading, setLoading] = useState(false);
   const [tutorData, setTutorData] = useState([]);
+
+  useEffect(() => {
+    fetchTutorData();
+  }, []);
+
   const CreateAccount = () => {
     navigate("/staff/dashboard/create");
   };
@@ -49,9 +54,7 @@ const TutorList = () => {
       });
     setLoading(false);
   };
-  useEffect(() => {
-    fetchTutorData();
-  }, []);
+
   const handleDelete = (id) => {
     setLoading(true);
     const url = `http://localhost:7142/tutor/${id}`;

@@ -12,7 +12,6 @@ const Layout = () => {
 
       <div className='flex-1 p-4 pl-14 ml-72'>
         <Outlet />
-        <Footer />
       </div>
     </div>
   );

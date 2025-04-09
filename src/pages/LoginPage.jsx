@@ -18,10 +18,10 @@ const LoginPage = () => {
       const response = await axios.post(url, data, {
         headers: {
           "Content-Type": "application/json",
-          "Allow-Control-Allow-Origin": "*",
+         "Access-Control-Allow-Origin": "http://localhost:5173",
           "Access-Control-Expose-Headers": "Set-Cookie",
         },
-        withCredentials: true,
+      withCredentials: true,
       });
       if (response.status === 200) {
         toast.success("Login Successfully!");

@@ -1,60 +1,82 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import DropDown from "../../../components/common/DropDown";
 import CreateMeeting2 from "./CreateMeeting2";
+import moment from "moment";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 import "react-datepicker/dist/react-datepicker.css";
 
 const platform = [
   {
-    id: 1,
+    id: "Zoom",
     name: "Zoom",
   },
   {
-    id: 2,
+    id: "GoogleMeet",
     name: "Google Meet",
   },
   {
-    id: 3,
+    id: "MicrosoftTeams",
     name: "Microsoft Teams",
   },
 ];
 
-const repeating = [
-  {
-    id: 1,
-    name: "Weekly",
-  },
-  {
-    id: 2,
-    name: "Monthly",
-  },
-  {
-    id: 3,
-    name: "None",
-  },
-];
-
 const CreateMeeting = ({ isVisible, onClose }) => {
+  const [loading, setLoading] = useState(false);
   const [selectDropDown, setSelectDropDown] = useState({
     platform: 1,
     repeating: 1,
   });
   const [meetingDate, setMeetingDate] = useState(new Date());
-  const [currentPart, setCurrentPart] = useState(1);
+  const [startDate, setStartDate] = useState(new Date());
   const [selectTime, setSelectTime] = useState({
     from: new Date(),
     to: new Date(),
   });
-  const [startDate, setStartDate] = useState(new Date());
+  const [currentPart, setCurrentPart] = useState(1);
+  const startDateTime = moment(startDate).set({
+    hour: moment(selectTime.from).hour(),
+    minute: moment(selectTime.from).minute(),
+    second: moment(selectTime.from).second(),
+    millisecond: moment(selectTime.from).millisecond(),
+  }).toISOString();
+
+  const endDateTime = moment(startDate).set({
+    hour: moment(selectTime.to).hour(),
+    minute: moment(selectTime.to).minute(),
+    second: moment(selectTime.to).second(),
+    millisecond: moment(selectTime.to).millisecond(),
+  }).toISOString();
+
+  console.log('start', startDateTime)
+
+
   const [isOpen, setIsOpen] = useState({
     platform: false,
     repeating: false,
   });
-  console.log(isVisible);
+  const [meetingForm, setMeetingForm] = useState({
+    startTime: startDateTime,
+    endTime: endDateTime,
+    organizerId: "fd9233a2-98bb-4b69-bc8f-18923fd48805",
+    participants: [],
+    title: "",
+    isOnline: true,
+    location: "",
+    linkType: "Zoom",
+    url: "",
+    agenda: "",
+  });
+  console.log('meet',meetingForm)
   const modalClasses = `fixed top-0 right-0 left-0 z-50 justify-center items-center w-full h-full md:inset-0 max-h-full overflow-y-auto overflow-x-hidden ${
     isVisible ? "flex" : "hidden"
-  } bg-black bg-opacity-20`;
+    } bg-black bg-opacity-20`;
+  
+  useEffect(() => {
+    setMeetingForm((prev)=>({...prev,startTime:startDateTime, endTime:endDateTime}))
+  },[startDateTime, endDateTime])
 
   const handleDateChange = (date) => {
     console.log("Date changed:", date);
@@ -64,6 +86,48 @@ const CreateMeeting = ({ isVisible, onClose }) => {
   const handleCloseIcon = () => {
     onClose();
     setCurrentPart(1);
+  };
+
+  const handleChange = (event) => {
+    const { id, value } = event.target;
+    setMeetingForm((prev) => ({ ...prev, [id]: value }));
+  };
+
+  const handleToggleChange = (e) => {
+    setMeetingForm((prev) => ({
+      ...prev,
+      isOnline: e.target.checked,
+    }));
+  };
+
+  const onPressCreate = async (event) => {
+    event.preventDefault();
+    console.log("meetingForm", meetingForm);
+    setLoading(true);
+    const url = "http://localhost:7142/meeting";
+    axios
+      .post(url, JSON.stringify(meetingForm), {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "http://localhost:5173",
+        },
+        withCredentials: true,
+      })
+      .then((response) => {
+        toast.success("Meeting Created Successfully!", {
+          position: "top-right",
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+        toast.error("Sorry, something went wrong.", {
+          position: "top-right",
+        });
+      }) .finally(() => {
+        onClose();
+        setCurrentPart(1);
+        setLoading(false);
+      });
   };
 
   return (
@@ -111,8 +175,9 @@ const CreateMeeting = ({ isVisible, onClose }) => {
                   <div className='col-span-2'>
                     <input
                       type='text'
-                      name='name'
-                      id='name'
+                      value={meetingForm.title}
+                      onChange={handleChange}
+                      id='title'
                       className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 '
                       placeholder='Meeting Heading...'
                       required=''
@@ -176,52 +241,65 @@ const CreateMeeting = ({ isVisible, onClose }) => {
                     />
                   </div>
                 </div>
-                <label class=' col-span-2 mb-4 flex flex-row items-center cursor-pointer'>
-                  <input type='checkbox' value='' class='sr-only peer' />
-                  <div class="relative w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-teal-300 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-teal-600 dark:peer-checked:bg-teal-600"></div>
-                  <span class='ms-3 text-sm font-medium text-gray-900'>
-                    Online
-                  </span>
-                </label>
-                <div class='col-span-2'>
-                  <label
-                    for='platform'
-                    className='block mb-2 text-sm font-medium text-gray-900 w-full'
-                  >
-                    Choose Platform
+                <div className='flex flex-row mb-2 justify-start'>
+                  <label class=' col-span-2 w-1/2 mb-4 flex flex-row items-center cursor-pointer'>
+                    <input
+                      type='checkbox'
+                      onChange={handleToggleChange}
+                      checked={meetingForm.isOnline}
+                      class='sr-only peer'
+                    />
+                    <div class="relative w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-teal-300 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-teal-600 dark:peer-checked:bg-teal-600"></div>
+                    <span class='ms-3 text-sm font-medium text-gray-900'>
+                      Online
+                    </span>
                   </label>
-                  <DropDown
-                    data={platform}
-                    id='platform'
-                    // isOpen={isOpen}
-                    //   setIsOpen={setIsOpen}
-                    setSelectDropDown={setSelectDropDown}
-                    selectDropDown={selectDropDown}
-                  />
+                  <div>
+                    <label
+                      for='platform'
+                      className='block mb-2 text-sm font-medium text-gray-900 w-full'
+                    >
+                      Choose Platform
+                    </label>
+                    {/* <DropDown
+                      data={platform}
+                      id='platform'
+                      onChange={handleChange}
+                      // isOpen={isOpen}
+                      //   setIsOpen={setIsOpen}
+                      setSelectDropDown={setSelectDropDown}
+                      selectDropDown={selectDropDown}
+                    /> */}
+                  </div>
                 </div>
                 <div class='col-span-2 mb-4'>
+                  <label
+                    for='location'
+                    className='block mb-2 text-sm font-medium text-gray-900 w-full'
+                  >
+                    Location
+                  </label>
                   <textarea
-                    id='description'
+                    id='location'
+                    rows='2'
+                    class='block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500'
+                    placeholder='If online is not selected, write the location for in person meeting.'
+                  ></textarea>
+                </div>
+                <div class='col-span-2 mb-4'>
+                  <label
+                    for='meetinglink'
+                    className='block mb-2 text-sm font-medium text-gray-900 w-full'
+                  >
+                    Meeting Link
+                  </label>
+                  <textarea
+                    id='url'
+                    onChange={handleChange}
                     rows='4'
                     class='block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500'
                     placeholder='Paste meeting link here'
                   ></textarea>
-                </div>
-                <div class='col-span-2'>
-                  <label
-                    for='repeating'
-                    className='block mb-2 text-sm font-medium text-gray-900 w-full'
-                  >
-                    Repeating
-                  </label>
-                  <DropDown
-                    data={repeating}
-                    id={"repeating"}
-                    // isOpen={isOpen}
-                    // setIsOpen={setIsOpen}
-                    selectDropDown={selectDropDown}
-                    setSelectDropDown={setSelectDropDown}
-                  />
                 </div>
                 <div className='flex justify-end'>
                   <button
@@ -251,8 +329,11 @@ const CreateMeeting = ({ isVisible, onClose }) => {
             )}
             {currentPart == 2 && (
               <CreateMeeting2
+                data={meetingForm}
+                setData={setMeetingForm}
                 onClose={onClose}
                 setCurrentPart={setCurrentPart}
+                onPressCreate={onPressCreate}
               />
             )}
           </form>
