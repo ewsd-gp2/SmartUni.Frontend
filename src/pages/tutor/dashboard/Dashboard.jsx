@@ -9,15 +9,32 @@ import StudentListforTutorDashboard from "./StudentListforTutorDashboard";
 import CalendarComponent from "./CalendarComponent";
 import { PiNotepadLight } from "react-icons/pi";
 import { PiNoteBlankLight } from "react-icons/pi";
+import Profile from "../../profile/Profile";
 const Dashboard = () => {
   return (
     <Container>
       <div className=" grid grid-cols-5">
         <div className=" col-span-3">
+          <div className=" flex justify-between items-center">
           <HeaderTitle title="Tutor's Dashboard" />
+          <Profile/>
+          </div>
           <SearchInput className=" mt-5" />
           <div>
             <h1 className="text-2xl mt-5">What's New</h1>
+            <div>
+              <h3 className="text-lg mt-5 font-semibold">Schedule</h3>
+              <div className="">
+              <div className=" bg-gray-100 flex p-2.5 mt-2 rounded-lg justify-between items-center m-2">
+              <div className=" flex gap-7 items-center">
+                <IoIosPeople className="text-2xl text-teal-500" />
+                <div>
+                  <p className="text-lg font-semibold">Meeting Title</p>
+                  <span className="text-xs">From 8am to 9am</span>
+                </div>
+              </div>
+              <p className="text-sm">01 Feb 2025</p>
+            </div>
             <div className=" bg-gray-100 flex p-2.5 mt-2 rounded-lg justify-between items-center m-2">
               <div className=" flex gap-7 items-center">
                 <IoIosPeople className="text-2xl text-teal-500" />
@@ -28,6 +45,11 @@ const Dashboard = () => {
               </div>
               <p className="text-sm">01 Feb 2025</p>
             </div>
+              </div>
+            </div>
+           <div>
+            <h3 className="text-lg mt-5 font-semibold">Notifications</h3>
+            <div>
             <div className=" bg-gray-100 flex p-2.5 mt-2 rounded-lg justify-between items-center m-2">
               <div className=" flex gap-7 items-center">
                 <FaBlogger className="text-2xl text-teal-500" />
@@ -56,6 +78,8 @@ const Dashboard = () => {
               </div>
               <p className="text-sm">01 Feb 2025</p>
             </div>
+            </div>
+           </div>
           </div>
           <div>
             

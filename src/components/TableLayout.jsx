@@ -31,11 +31,13 @@ const roleLabels ={
   const columns = [
     {
       name: "Image",
+      selector: (row) => row.image,
+      sortable: true,
       cell: (row) => (
         <img
-          className=" size-8 rounded-full"
-          src="https://i.pinimg.com/236x/da/c0/8d/dac08dbae85f1e89081126a98568c9e9.jpg"
-          alt=""
+          src={row.image}
+          
+          className="size-12 rounded-full object-cover"
         />
       ),
     },

@@ -1,16 +1,20 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Breadcrumb from "../components/Breadcrumb";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import toast from "react-hot-toast";
-
+import { motion } from "framer-motion";
 const LoginPage = () => {
   const navigate = useNavigate();
   const [role, setRole] = useState("staff");
   const { register, handleSubmit } = useForm();
+  const [isFirstLogin, setIsFirstLogin] = useState(null);
+  const [showWelcome, setShowWelcome] = useState(false);
+  
+  
   const handleLogIn = async (data) => {
-    console.log(data);
+    // console.log(data);
     // console.log(role)
     const url = `http://localhost:7142/signin/${role}`;
     try {
@@ -23,19 +27,43 @@ const LoginPage = () => {
         withCredentials: true,
       });
       if (response.status === 200) {
-        toast.success("Login Successfully!");
+        const firstLoginKey = `firstLogin_${data.email}`;
+        const isFirstTime = sessionStorage.getItem(firstLoginKey) === null;
+        
         localStorage.setItem("user_role", role);
-        navigate(`${role}/dashboard`);
-      } else {
-        toast.error("Login failed. Please try again.");
+        sessionStorage.setItem(firstLoginKey, "false");
+        
+        setIsFirstLogin(isFirstTime);
+        setShowWelcome(true);
+        toast.success("Login Successfully!");
       }
     } catch (error) {
-      console.log(error);
-      toast.error("Sorry, something went wrong.", {
-        position: "top-right",
+      toast.error("Login attempt failed!Please try again.", {
+        icon: "✋", 
+        style: {
+          borderRadius: '8px',
+          background: "#ECFDF5", // Teal-50
+          color: "#065F46", // Teal-800
+          borderLeft: '4px solid #047857', // Teal-700
+          boxShadow: '0 2px 10px rgba(5, 150, 105, 0.1)',
+          fontSize: '20px',
+        },
+        iconTheme: {
+          primary: "#047857", // Teal-700
+          secondary: "#D1FAE5" // Teal-100
+        }
       });
+      // toast.error("Oops! That didn't work. Let's try that again.");
     }
   };
+  useEffect(() => {
+    if (showWelcome) {
+      const timer = setTimeout(() => {
+        navigate(`${role}/dashboard`);
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [showWelcome, navigate, role]);
 
   return (
     <div className='flex items-center justify-center h-screen gap-10'>
@@ -51,6 +79,16 @@ const LoginPage = () => {
       </div>
       <div className=' col-span-1 flex flex-col w-[400px]'>
         <form onSubmit={handleSubmit(handleLogIn)} className='max-w-sm '>
+        {showWelcome && (
+  <motion.div
+    className="mb-5 text-center text-teal-600 text-2xl font-semibold"
+    initial={{ opacity: 0, y: 30 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.6, ease: "easeOut" }}
+  >
+    {isFirstLogin ? "Welcome to our system! Let's begin your journey. " : "Welcome back! Great to see you again."}
+  </motion.div>
+)}
           <h3 className='text-2xl text-center mb-5 text-teal-600'>SmartUni</h3>
          
           <div className='my-5'>
@@ -115,6 +153,7 @@ const LoginPage = () => {
           >
             Log In
           </button>
+
         </form>
       </div>
     </div>
