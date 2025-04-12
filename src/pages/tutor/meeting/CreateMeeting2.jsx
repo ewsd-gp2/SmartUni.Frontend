@@ -86,7 +86,7 @@ const CreateMeeting2 = ({ onClose, setCurrentPart, data, setData, onPressCreate,
           Add Participants
         </label>
         <Select
-          // defaultValue={[studentOptions[2], studentOptions[3]]}
+          //defaultValue={[studentOptions[2], studentOptions[3]]}
           isMulti
           name='participants'
           options={studentOptions}

@@ -24,59 +24,63 @@ const platform = [
 ];
 
 const CreateMeeting = ({ isVisible, onClose }) => {
+  const user = JSON.parse(localStorage.getItem("user_profile"));
+  console.log(user);
   const [loading, setLoading] = useState(false);
   const [selectDropDown, setSelectDropDown] = useState({
     platform: 1,
     repeating: 1,
   });
   const [meetingDate, setMeetingDate] = useState(new Date());
+  const [message, setMessage] = useState("");
   const [startDate, setStartDate] = useState(new Date());
   const [selectTime, setSelectTime] = useState({
     from: new Date(),
     to: new Date(),
   });
   const [currentPart, setCurrentPart] = useState(1);
-  const startDateTime = moment(startDate).set({
-    hour: moment(selectTime.from).hour(),
-    minute: moment(selectTime.from).minute(),
-    second: moment(selectTime.from).second(),
-    millisecond: moment(selectTime.from).millisecond(),
-  }).toISOString();
+  const startDateTime = moment(startDate)
+    .set({
+      hour: moment(selectTime.from).hour(),
+      minute: moment(selectTime.from).minute(),
+      second: moment(selectTime.from).second(),
+      millisecond: moment(selectTime.from).millisecond(),
+    })
+    .toISOString();
 
-  const endDateTime = moment(startDate).set({
-    hour: moment(selectTime.to).hour(),
-    minute: moment(selectTime.to).minute(),
-    second: moment(selectTime.to).second(),
-    millisecond: moment(selectTime.to).millisecond(),
-  }).toISOString();
+  const endDateTime = moment(startDate)
+    .set({
+      hour: moment(selectTime.to).hour(),
+      minute: moment(selectTime.to).minute(),
+      second: moment(selectTime.to).second(),
+      millisecond: moment(selectTime.to).millisecond(),
+    })
+    .toISOString();
 
-  console.log('start', startDateTime)
-
-
-  const [isOpen, setIsOpen] = useState({
-    platform: false,
-    repeating: false,
-  });
   const [meetingForm, setMeetingForm] = useState({
     startTime: startDateTime,
     endTime: endDateTime,
-    organizerId: "fd9233a2-98bb-4b69-bc8f-18923fd48805",
+    organizerId: user.id,
     participants: [],
     title: "",
-    isOnline: true,
+    isOnline: false,
     location: "",
     linkType: "Zoom",
     url: "",
     agenda: "",
   });
-  console.log('meet',meetingForm)
+
   const modalClasses = `fixed top-0 right-0 left-0 z-50 justify-center items-center w-full h-full md:inset-0 max-h-full overflow-y-auto overflow-x-hidden ${
     isVisible ? "flex" : "hidden"
-    } bg-black bg-opacity-20`;
-  
+  } bg-black bg-opacity-20`;
+
   useEffect(() => {
-    setMeetingForm((prev)=>({...prev,startTime:startDateTime, endTime:endDateTime}))
-  },[startDateTime, endDateTime])
+    setMeetingForm((prev) => ({
+      ...prev,
+      startTime: startDateTime,
+      endTime: endDateTime,
+    }));
+  }, [startDateTime, endDateTime]);
 
   const handleDateChange = (date) => {
     console.log("Date changed:", date);
@@ -100,8 +104,31 @@ const CreateMeeting = ({ isVisible, onClose }) => {
     }));
   };
 
+  const firstFormNext = () => {
+    console.log("MEETING FORM:", meetingForm);
+    if (!meetingForm.title) {
+      setMessage("Please fill in title");
+      return;
+    }
+    if (!meetingForm.isOnline && !meetingForm.location) {
+      setMessage("Location is required for offline meetings!");
+      return;
+    }
+    if (meetingForm.isOnline && !meetingForm.url) {
+      setMessage("Meeting link is required for online meetings!");
+      return;
+    }
+    setCurrentPart(2);
+    setMessage("");
+  };
+
   const onPressCreate = async (event) => {
     event.preventDefault();
+    if (meetingForm.participants.length === 0) {
+      setMessage("Participant is required");
+      return;
+    }
+    setMessage("");
     console.log("meetingForm", meetingForm);
     setLoading(true);
     const url = "http://localhost:7142/meeting";
@@ -117,17 +144,42 @@ const CreateMeeting = ({ isVisible, onClose }) => {
         toast.success("Meeting Created Successfully!", {
           position: "top-right",
         });
+        onClose();
+        setCurrentPart(1);
       })
       .catch((error) => {
-        console.log(error);
+        setMessage(error?.response?.data[0]?.errorMessage);
         toast.error("Sorry, something went wrong.", {
           position: "top-right",
         });
-      }) .finally(() => {
-        onClose();
-        setCurrentPart(1);
+      })
+      .finally(() => {
         setLoading(false);
       });
+  };
+
+  const RadioList = () => {
+    return (
+      <div className='flex flex-row justify-around mb-4'>
+        {platform.map((item) => (
+          <label className='flex items-center gap-2'>
+            <input
+              type='radio'
+              value={item.id}
+              checked={meetingForm.linkType === item.id}
+              onChange={(e) =>
+                setMeetingForm((prev) => ({
+                  ...prev,
+                  linkType: e.target.value,
+                }))
+              }
+              className='w-4 h-4 text-teal-600 focus:ring-teal-500'
+            />
+            {item.name}
+          </label>
+        ))}
+      </div>
+    );
   };
 
   return (
@@ -169,10 +221,17 @@ const CreateMeeting = ({ isVisible, onClose }) => {
             </button>
           </div>
           <form className='p-4 md:p-5 '>
+            {message && <div className='text-red-600 mb-2'>{message}</div>}
             {currentPart == 1 && (
               <section>
                 <div className='grid gap-4 mb-4 grid-cols-2'>
                   <div className='col-span-2'>
+                    <label
+                      for='price'
+                      className='block mb-2 text-sm font-medium text-gray-900 w-full'
+                    >
+                      Meeting Heading
+                    </label>
                     <input
                       type='text'
                       value={meetingForm.title}
@@ -241,36 +300,27 @@ const CreateMeeting = ({ isVisible, onClose }) => {
                     />
                   </div>
                 </div>
-                <div className='flex flex-row mb-2 justify-start'>
-                  <label class=' col-span-2 w-1/2 mb-4 flex flex-row items-center cursor-pointer'>
-                    <input
-                      type='checkbox'
-                      onChange={handleToggleChange}
-                      checked={meetingForm.isOnline}
-                      class='sr-only peer'
-                    />
-                    <div class="relative w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-teal-300 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-teal-600 dark:peer-checked:bg-teal-600"></div>
-                    <span class='ms-3 text-sm font-medium text-gray-900'>
-                      Online
-                    </span>
+
+                <label class=' col-span-2 w-1/2 mb-4 flex flex-row items-center cursor-pointer'>
+                  <input
+                    type='checkbox'
+                    onChange={handleToggleChange}
+                    checked={meetingForm.isOnline}
+                    class='sr-only peer'
+                  />
+                  <div class="relative w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-teal-300 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-teal-600 dark:peer-checked:bg-teal-600"></div>
+                  <span class='ms-3 text-sm font-medium text-gray-900'>
+                    Online
+                  </span>
+                </label>
+                <div>
+                  <label
+                    for='platform'
+                    className='block mb-2 text-sm font-medium text-gray-900 w-full'
+                  >
+                    Choose Platform {`(Please skip if offline)`}
                   </label>
-                  <div>
-                    <label
-                      for='platform'
-                      className='block mb-2 text-sm font-medium text-gray-900 w-full'
-                    >
-                      Choose Platform
-                    </label>
-                    {/* <DropDown
-                      data={platform}
-                      id='platform'
-                      onChange={handleChange}
-                      // isOpen={isOpen}
-                      //   setIsOpen={setIsOpen}
-                      setSelectDropDown={setSelectDropDown}
-                      selectDropDown={selectDropDown}
-                    /> */}
-                  </div>
+                  <RadioList />
                 </div>
                 <div class='col-span-2 mb-4'>
                   <label
@@ -281,8 +331,10 @@ const CreateMeeting = ({ isVisible, onClose }) => {
                   </label>
                   <textarea
                     id='location'
+                    onChange={handleChange}
+                    value={meetingForm.location}
                     rows='2'
-                    class='block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500'
+                    className='block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500'
                     placeholder='If online is not selected, write the location for in person meeting.'
                   ></textarea>
                 </div>
@@ -295,16 +347,17 @@ const CreateMeeting = ({ isVisible, onClose }) => {
                   </label>
                   <textarea
                     id='url'
+                    value={meetingForm.url}
                     onChange={handleChange}
-                    rows='4'
-                    class='block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500'
+                    rows='2'
+                    className='block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500'
                     placeholder='Paste meeting link here'
                   ></textarea>
                 </div>
                 <div className='flex justify-end'>
                   <button
                     type='button'
-                    onClick={() => setCurrentPart(2)}
+                    onClick={firstFormNext}
                     className='text-white ml-auto bg-teal-500 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center'
                   >
                     Next

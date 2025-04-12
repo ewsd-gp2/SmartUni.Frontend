@@ -70,6 +70,7 @@ const UpdateTutor = () => {
           gender: res.gender,
           major: res.major,
         });
+        setShowImage(`data:image/jpeg;base64,${res.image}`)
       })
       .catch((error) => {
         console.log(error);

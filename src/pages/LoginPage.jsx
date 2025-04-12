@@ -10,23 +10,41 @@ const LoginPage = () => {
   const navigate = useNavigate();
   const [role, setRole] = useState("tutor");
   const { register, handleSubmit } = useForm();
+
+  const getProfile = async () => {
+    const url = `http://localhost:7142/${role}/profile`;
+
+    try {
+      const response = await axios.get(url, {
+        withCredentials: true,
+      });
+      if (response.status === 200) {
+        toast.success("Login Successfully!");
+        localStorage.setItem("user_profile", JSON.stringify(response.data));
+        localStorage.setItem("user_role", role);
+        navigate(`${role}/dashboard`);
+      } else {
+        toast.error("Login failed. Please try again.");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const handleLogIn = async (data) => {
-    console.log(data);
-    // console.log(role)
     const url = `http://localhost:7142/signin/${role}`;
+
     try {
       const response = await axios.post(url, data, {
         headers: {
           "Content-Type": "application/json",
-         "Access-Control-Allow-Origin": "http://localhost:5173",
+          "Access-Control-Allow-Origin": "http://localhost:5173",
           "Access-Control-Expose-Headers": "Set-Cookie",
         },
-      withCredentials: true,
+        withCredentials: true,
       });
       if (response.status === 200) {
-        toast.success("Login Successfully!");
-        localStorage.setItem("user_role", role);
-        navigate(`${role}/dashboard`);
+        getProfile();
       } else {
         toast.error("Login failed. Please try again.");
       }
@@ -53,7 +71,7 @@ const LoginPage = () => {
       <div className=' col-span-1 flex flex-col w-[400px]'>
         <form onSubmit={handleSubmit(handleLogIn)} className='max-w-sm '>
           <h3 className='text-2xl text-center mb-5 text-teal-600'>SmartUni</h3>
-         
+
           <div className='my-5'>
             <input
               type='email'
@@ -76,7 +94,7 @@ const LoginPage = () => {
           </div>
 
           <div className='flex gap-6 mb-8'>
-         <label className='font-semibold'>*Sign in as: </label>
+            <label className='font-semibold'>*Sign in as: </label>
             <label className='flex items-center gap-2'>
               <input
                 type='radio'
