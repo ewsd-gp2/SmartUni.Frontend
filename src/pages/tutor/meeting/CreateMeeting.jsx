@@ -141,6 +141,7 @@ const CreateMeeting = ({ isVisible, onClose }) => {
         withCredentials: true,
       })
       .then((response) => {
+        console.log('res',response)
         toast.success("Meeting Created Successfully!", {
           position: "top-right",
         });

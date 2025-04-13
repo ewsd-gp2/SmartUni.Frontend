@@ -12,11 +12,21 @@ const CustomDateModal = memo(
     });
 
     const handleDateChange = (date, name) => {
+      let updatedDate = moment(date);
+
+      if (name === 'startTime') {
+        updatedDate = updatedDate.utc().startOf('day');
+      } else if (name === 'endTime') {
+        updatedDate = updatedDate.utc().endOf('day'); 
+      }
+
       setSelectDate((prev) => ({
         ...prev,
-        [name]: date,
+        [name]: updatedDate.toISOString(),
       }));
     };
+
+    console.log("hello", selectDate);
 
     const onApply = () => {
       handleSelectedRange(selectDate);
@@ -91,13 +101,13 @@ const CustomDateModal = memo(
             </div>
             <div className='flex flex-row p-5 items-center'>
               <div className='flex flex-row w-sm gap-2 ml-5'>
-                {selectDate.to && (
+                {selectDate.startTime && (
                   <div className='border-1 border-gray-300 px-4 py-2 rounded-md'>
                     {moment(selectDate.startTime).format("YYYY MMM DD")}
                   </div>
                 )}
                 -
-                {selectDate.from && (
+                {selectDate.startTime && (
                   <div className='border-1 border-gray-300 px-4 py-2 rounded-md'>
                     {moment(selectDate.endTime).format("YYYY MMM DD")}
                   </div>

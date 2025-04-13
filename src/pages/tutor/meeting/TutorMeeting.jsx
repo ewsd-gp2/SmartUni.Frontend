@@ -59,10 +59,12 @@ const TutorMeeting = () => {
     }
   };
 
+
+
   const fetchMeetingList = async () => {
     const url = `http://localhost:7142/meeting/tutor/${user.id}`;
     setListLoading(true);
-
+    console.log('SELECTED RANGE',selectedRange)
     axios
       .post(url, selectedRange, {
         headers: {
