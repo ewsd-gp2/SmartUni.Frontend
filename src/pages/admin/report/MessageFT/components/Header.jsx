@@ -1,11 +1,11 @@
-
+import { IoIosArrowForward } from "react-icons/io";
 
 export const Header = () => {
     return(
         <div className="flex justify-between">
 
             <div className="space-y-12">
-                <h1 className="text-[35px]">Report > Messages for Tutors</h1>
+                <h1 className="text-[35px] flex items-center">Report <IoIosArrowForward/> Messages for Tutors</h1>
                     <div className="">
                         <input type={"text"} className="bg-gray-100 rounded-xl text-sm w-80 py-2.5 pl-4 pr-4 focus:border-teal-500 focus:ring-teal-500" placeholder="Search"  />
                     </div>

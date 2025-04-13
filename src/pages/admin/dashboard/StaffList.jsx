@@ -1,20 +1,13 @@
 import React, { useEffect, useState } from "react";
 import Container from "../../../components/Container";
-import SideBar from "../../../components/SideBar";
 import TableLayout from "../../../components/TableLayout";
-import { HiSearch } from "react-icons/hi";
-import { BsSortDown } from "react-icons/bs";
-import { BsFilter } from "react-icons/bs";
-import { AiOutlinePlus } from "react-icons/ai";
 import HeaderTitle from "../../../components/common/HeaderTitle";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import axios from "axios";
-import Lottie from "lottie-react";
-import { IoAddCircle } from "react-icons/io5";
-import GradientButton from "../../../components/buttons/GradientButton";
 
-const TutorList = () => {
+
+const StaffList = () => {
   const navigate = useNavigate();
 
   const [openDelete, setOpenDelete] = useState({
@@ -22,19 +15,14 @@ const TutorList = () => {
     id: "",
   });
   const [loading, setLoading] = useState(false);
-  const [tutorData, setTutorData] = useState([]);
-
-  useEffect(() => {
-    fetchTutorData();
-  }, []);
-
+  const [staffData, setStaffData] = useState([]);
   const CreateAccount = () => {
-    navigate("/staff/dashboard/create");
+    navigate("/staff/dashboard/create/staff");
   };
 
-  const fetchTutorData = async () => {
+  const fetchStaffData = async () => {
     setLoading(true);
-    const url = "http://localhost:7142/tutor";
+    const url = "http://localhost:7142/staff";
     axios
       .get(url, {
         headers: {
@@ -43,8 +31,8 @@ const TutorList = () => {
         withCredentials: "true",
       })
       .then((response) => {
-        console.log("gettutor", response);
-        setTutorData(response.data);
+        console.log("getstaff", response);
+        setStaffData(response.data);
       })
       .catch((error) => {
         console.log(error);
@@ -54,10 +42,12 @@ const TutorList = () => {
       });
     setLoading(false);
   };
-
+  useEffect(() => {
+    fetchStaffData();
+  }, []);
   const handleDelete = (id) => {
     setLoading(true);
-    const url = `http://localhost:7142/tutor/${id}`;
+    const url = `http://localhost:7142/staff/${id}`;
     console.log("deleting...");
     axios
       .delete(url, {
@@ -68,7 +58,7 @@ const TutorList = () => {
       })
       .then((response) => {
         console.log("delete res", response);
-        fetchTutorData();
+        fetchStaffData();
       })
       .catch((error) => {
         console.log(error);
@@ -84,7 +74,7 @@ const TutorList = () => {
       <Container>
         <div className=' flex col-span-4 gap-5'>
           <div className=' mt-5 w-full'>
-            <HeaderTitle title='Tutor List' />
+            <HeaderTitle title='Staff List' />
             <div className='mb-8'/>
             {/* <div className='flex flex-row justify-between'>
               <div className=' flex items-center justify-between mt-5'>
@@ -102,7 +92,7 @@ const TutorList = () => {
               </div>
             </div> */}
    
-              <TableLayout data={tutorData} userRole="tutor" handleDelete={handleDelete} CreateAccount={CreateAccount} loading={loading} />
+              <TableLayout data={staffData} userRole='staff' handleDelete={handleDelete} CreateAccount={CreateAccount} loading={loading} />
           </div>
         </div>
       </Container>
@@ -110,4 +100,4 @@ const TutorList = () => {
   );
 };
 
-export default TutorList;
+export default StaffList;

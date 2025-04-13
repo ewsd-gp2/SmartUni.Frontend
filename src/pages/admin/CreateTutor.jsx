@@ -1,8 +1,13 @@
 import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import HeaderTitle from "../../components/common/HeaderTitle";
 import toast, { Toaster } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { AiOutlineCloudUpload } from "react-icons/ai";
+import { IoCloudUpload, IoAddCircle } from "react-icons/io5";
+import GradientButton from "../../components/buttons/GradientButton";
+import { IoImages } from "react-icons/io5";
 import { AiOutlineCloudUpload } from "react-icons/ai";
 import { IoCloudUpload, IoAddCircle } from "react-icons/io5";
 import GradientButton from "../../components/buttons/GradientButton";
@@ -33,9 +38,9 @@ const CreateTutor = () => {
   };
 
   const handleFileChange = (e) => {
-    setTutorData((prev) => ({ ...prev, image: e.target.files[0] }));
     let file = e.target.files[0];
     if (file && file.type.startsWith("image/")) {
+      setTutorData((prev) => ({ ...prev, image: e.target.files[0] }));
       const imageUrl = URL.createObjectURL(file);
       setShowImage(imageUrl);
     }
@@ -43,6 +48,7 @@ const CreateTutor = () => {
 
   const onPressRegister = async (event) => {
     event.preventDefault();
+
     const isEmptyField = Object.entries(tutorData).some(([key, value]) => {
       if (typeof value === "string") {
         return value.trim() === "";
@@ -75,10 +81,10 @@ const CreateTutor = () => {
         withCredentials: true,
       })
       .then((response) => {
-        toast.success("Tutor Created Successfully!", {
+        toast.success(`Tutor ${tutorData.name} created successfully!`, {
           position: "top-right",
         });
-        navigate("/staff/dashboard");
+        navigate("/staff/dashboard/tutorlist");
       })
       .catch((error) => {
         console.log(error);
@@ -113,9 +119,7 @@ const CreateTutor = () => {
                 />
               </div>
             ) : (
-              <div
-                className='w-xs cursor-pointer aspect-[4/3] border-2 border-dashed border-[#14B8A6] flex flex-col items-center'
-              >
+              <div className='w-xs cursor-pointer aspect-[4/3] border-2 border-dashed border-[#14B8A6] flex flex-col items-center'>
                 <IoCloudUpload size={60} className='mt-5' color='#14B8A6' />
                 <p className='text-xl font-bold'>Upload Picture here</p>
                 <p className='mt-2'>Files supported: JPG, PNG and more</p>
@@ -138,7 +142,7 @@ const CreateTutor = () => {
                 id='name'
                 value={tutorData.name}
                 onChange={handleChange}
-                class='bg-grey-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:teal-500 focus:border-teal-500 block w-full p-2.5 '
+                className='bg-grey-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:teal-500 focus:border-teal-500 block w-full p-2.5 '
                 placeholder='Full Name'
                 required
               />
@@ -195,7 +199,7 @@ const CreateTutor = () => {
                 id='major'
                 value={tutorData.major}
                 onChange={handleChange}
-                class='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 '
+                className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 '
               >
                 <option value='Computing' selected>
                   Computing
@@ -212,11 +216,11 @@ const CreateTutor = () => {
                 Email
               </label>
               <input
-                type='text'
+                type='email'
                 id='email'
                 value={tutorData.email}
                 onChange={handleChange}
-                class='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 '
+                className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 '
                 placeholder='xxx@gmail.com'
                 pattern='[0-9]{3}-[0-9]{2}-[0-9]{3}'
                 required
@@ -234,7 +238,7 @@ const CreateTutor = () => {
                 id='phoneNumber'
                 value={tutorData.phoneNumber}
                 onChange={handleChange}
-                class='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 '
+                className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 '
                 placeholder='+959xxxx'
                 required
               />

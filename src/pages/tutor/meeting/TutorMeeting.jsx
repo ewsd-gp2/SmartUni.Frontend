@@ -23,6 +23,7 @@ const filterOptions = [
   { id: 3, name: "Custom" },
 ];
 const TutorMeeting = () => {
+  const user = JSON.parse(localStorage.getItem("user_profile"));
   const [select, setSelect] = useState(1);
   const [openForm, setOpenForm] = useState(false);
   const [openCustomDate, setOpenCustomDate] = useState(false);
@@ -59,8 +60,7 @@ const TutorMeeting = () => {
   };
 
   const fetchMeetingList = async () => {
-    const organizer_id = "fd9233a2-98bb-4b69-bc8f-18923fd48805";
-    const url = `http://localhost:7142/meeting/tutor/${organizer_id}`;
+    const url = `http://localhost:7142/meeting/tutor/${user.id}`;
     setListLoading(true);
 
     axios
@@ -115,7 +115,7 @@ const TutorMeeting = () => {
   }, []);
 
   return (
-    <div>
+    <div className=''>
       <HeaderTitle title='Meetings' />
       <p className='text-lg text-[#8a8f91] mt-5'>
         View and manage your upcoming meetings with students
@@ -143,9 +143,8 @@ const TutorMeeting = () => {
         </button>
       </div>
       {data.length === 0 ? (
-        <div className='px-2 py-4 my-4'>
-          {/* <img src="/assets/not-found.png" alt="frowning emoji" className="w-32" /> */}
-          <p className='text-xl text-gray-500'>No events found.</p>
+        <div className='px-2 py-4 w-md my-4'>
+          <p className='text-xl text-center text-gray-500'>No events found.</p>
         </div>
       ) : (
         data.map((item, index) => (
@@ -154,9 +153,10 @@ const TutorMeeting = () => {
             animate={{ opacity: 1, x: 0, scale: 1 }}
             exit={{ opacity: 0, x: 200, scale: 1.2 }}
             transition={{ duration: 0.2, type: "spring" }}
-            className='flex flex-row gap-10 border-1 border-gray-300 px-2 py-4 my-4 w-3xl rounded-xl shadow-md transition-transform duration-300'
+            className='flex flex-row bg-white gap-4 border-1 border-gray-300 px-2 py-4 my-4 w-2xl rounded-xl shadow-md transition-transform duration-300'
           >
-            <div className='pl-4 pr-14 flex flex-col border-r-1 border-[#d3d3d3]'>
+
+            <div className='pl-4 pr-14 flex flex-col border-r-1 border-[#d3d3d3] basis-1/7'>
               <span className='text-xl text-center text-[#0D9488]'>
                 {moment(item.startTime).utc().format("ddd")}
               </span>
@@ -164,7 +164,8 @@ const TutorMeeting = () => {
                 {moment(item.startTime).utc().format("D")}
               </span>
             </div>
-            <div className='flex flex-col gap-2 pr-14'>
+
+            <div className='flex flex-col gap-2 pr-14  basis-3/7'>
               <div className='flex flex-row gap-2'>
                 <MdAccessTimeFilled
                   size={16}
@@ -176,7 +177,7 @@ const TutorMeeting = () => {
                   {moment(item.endTime).format("h:mm A")}
                 </span>
               </div>
-              <div className='flex flex-row gap-2'>
+              <div className='flex flex-row gap-2 '>
                 <MdLocationPin
                   size={16}
                   color='#8e9394'
@@ -185,7 +186,8 @@ const TutorMeeting = () => {
                 <span>{item.isOnline ? "online" : item.location}</span>
               </div>
             </div>
-            <div>{item.title}</div>
+
+            <div className = ''>{item.title}</div>
           </motion.div>
         ))
       )}

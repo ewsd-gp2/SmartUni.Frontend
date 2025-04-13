@@ -13,8 +13,9 @@ import axios from "axios";
 import Lottie from "lottie-react";
 import { IoAddCircle } from "react-icons/io5";
 import GradientButton from "../../../components/buttons/GradientButton";
+import TableSkeleton from "../../../components/TableSkelenton";
 
-const TutorList = () => {
+const StudentList = () => {
   const navigate = useNavigate();
 
   const [openDelete, setOpenDelete] = useState({
@@ -22,19 +23,14 @@ const TutorList = () => {
     id: "",
   });
   const [loading, setLoading] = useState(false);
-  const [tutorData, setTutorData] = useState([]);
-
-  useEffect(() => {
-    fetchTutorData();
-  }, []);
-
+  const [studentData, setStudentData] = useState([]);
   const CreateAccount = () => {
-    navigate("/staff/dashboard/create");
+    navigate("/staff/dashboard/create/student");
   };
 
-  const fetchTutorData = async () => {
+  const fetchStudentData = async () => {
     setLoading(true);
-    const url = "http://localhost:7142/tutor";
+    const url = "http://localhost:7142/student";
     axios
       .get(url, {
         headers: {
@@ -43,8 +39,8 @@ const TutorList = () => {
         withCredentials: "true",
       })
       .then((response) => {
-        console.log("gettutor", response);
-        setTutorData(response.data);
+        console.log("getstudent", response.data);
+        setStudentData(response.data);
       })
       .catch((error) => {
         console.log(error);
@@ -54,10 +50,12 @@ const TutorList = () => {
       });
     setLoading(false);
   };
-
+  useEffect(() => {
+    fetchStudentData();
+  }, []);
   const handleDelete = (id) => {
     setLoading(true);
-    const url = `http://localhost:7142/tutor/${id}`;
+    const url = `http://localhost:7142/student/${id}`;
     console.log("deleting...");
     axios
       .delete(url, {
@@ -68,7 +66,7 @@ const TutorList = () => {
       })
       .then((response) => {
         console.log("delete res", response);
-        fetchTutorData();
+        fetchStudentData();
       })
       .catch((error) => {
         console.log(error);
@@ -82,10 +80,10 @@ const TutorList = () => {
   return (
     <main>
       <Container>
-        <div className=' flex col-span-4 gap-5'>
-          <div className=' mt-5 w-full'>
-            <HeaderTitle title='Tutor List' />
-            <div className='mb-8'/>
+        <div className=" flex col-span-4 gap-5">
+          <div className=" mt-5 w-full">
+            <HeaderTitle title="Student List" />
+            <div className="mb-8" />
             {/* <div className='flex flex-row justify-between'>
               <div className=' flex items-center justify-between mt-5'>
                 <button
@@ -101,8 +99,8 @@ const TutorList = () => {
                 </button>
               </div>
             </div> */}
-   
-              <TableLayout data={tutorData} userRole="tutor" handleDelete={handleDelete} CreateAccount={CreateAccount} loading={loading} />
+            
+            <TableLayout data={studentData} userRole="student" handleDelete={handleDelete} CreateAccount={CreateAccount} loading={loading} />
           </div>
         </div>
       </Container>
@@ -110,4 +108,4 @@ const TutorList = () => {
   );
 };
 
-export default TutorList;
+export default StudentList;

@@ -17,6 +17,12 @@ import AdminAllocation from "./pages/admin/AdminAllocation";
 import BlogPage from "./components/blogs/BlogPage";
 import BlogDetailPage from "./components/blogs/BlogDetailPage";
 import PageNotFound from "./pages/PageNotFound";
+import StudentList from "./pages/admin/dashboard/StudentList.jsx";
+import StaffList from "./pages/admin/dashboard/StaffList.jsx";
+import CreateStudent from "./pages/admin/CreateStudent.jsx";
+import UpdateStudent from "./pages/admin/UpdateStudent.jsx";
+import StudentDashboard from "./pages/student/StudentDashboard.jsx";
+import UserProfile from "./pages/profile/UserProfile.jsx";
 
 const router = createBrowserRouter([
   {
@@ -35,39 +41,47 @@ const router = createBrowserRouter([
             element: <TutorList />,
           },
           {
-            path: "dashboard",
+            path: "dashboard/tutorlist",
             element: <TutorList />,
           },
-          // {
-          //   path: "dashboard/stafflist",
-          //   element: <AdminDashboard />,
-          // },
-          // {
-          //   path: "dashboard/studentlist",
-          //   element: <AdminDashboard />,
-          // },
+          {
+            path: "dashboard/stafflist",
+            element: <StaffList />,
+          },
+          {
+            path: "dashboard/studentlist",
+            element: <StudentList />,
+          },
           {
             path: "dashboard/create",
             element: <CreateTutor />,
           },
           {
-            path: "dashboard/update",
+            path: "dashboard/update/:userRole",
             element: <UpdateTutor />,
           },
-          // {
-          //   path: "dashboard/create/staff",
-          //   element: <CreateStaff />,
-          // },
-          // {
-          //   path: "dashboard/update/staff",
-          //   element: <UpdateTutor />,
-          // },
+          {
+            path: "dashboard/create/staff",
+            element: <CreateStaff/>
+          },
+          {
+            path: "dashboard/create/student",
+            element: <CreateStudent/>
+          },
+          {
+            path: "dashboard/update/staff",
+            element: <UpdateTutor />,
+          },
+          {
+            path: "dashboard/update/student",
+            element: <UpdateStudent />,
+          },
           {
             path: "allocation",
             element: <AdminAllocation />,
           },
           {
-            path: "report",
+            path: "report/swi",
             element: <ReportSWI />,
           },
           {
@@ -89,6 +103,10 @@ const router = createBrowserRouter([
         element: <Layout />,
         children: [
           {
+            path:"dashboard",
+            element:<StudentDashboard/>
+          },
+          {
             path: "blog",
             element: <BlogPage />,
           },
@@ -102,6 +120,7 @@ const router = createBrowserRouter([
           },
         ],
       },
+      
       {
         path: "/tutor",
         element: <Layout />,
@@ -126,8 +145,13 @@ const router = createBrowserRouter([
             path: "dashboard",
             element: <TutorDashboard />,
           },
+          {
+            path: "profile",
+            element:<UserProfile/>
+          }
         ],
       },
+      
       {
         path: "*",
         element: <PageNotFound />,

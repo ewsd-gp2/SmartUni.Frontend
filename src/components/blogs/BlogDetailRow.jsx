@@ -15,7 +15,7 @@ const BlogDetailRow = () => {
           <p className=" text-xs text-gray-500 text-end">03,Jan 2025</p>
           </div>
         </div>
-      <div className=" sm:w-[300px] md:w-[400px] lg:w-[700px] xl:w-[800px] bg-white rounded-lg border border-gray-200 shadow-sm dark:bg-gray-800 dark:border-gray-700">
+      <div className=" sm:w-[300px] md:w-[400px] lg:w-[700px] xl:w-[800px] bg-white rounded-lg border border-gray-200 shadow-sm ">
       <div>
           <img
             className="rounded-t-lg sm:h-[100px] md:h-[200px] lg:h-[300px] w-full"
@@ -23,7 +23,7 @@ const BlogDetailRow = () => {
             alt
           />
 
-          <div className="  mb-3">
+          <div className="  my-3">
             <p className="  text-sm text-gray-700 dark:text-gray-400">
               Here are the biggest enterprise technology acquisitions of 2021 so
               far, in reverse chronological order.

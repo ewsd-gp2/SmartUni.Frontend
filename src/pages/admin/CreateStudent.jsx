@@ -8,12 +8,13 @@ import { IoCloudUpload, IoAddCircle } from "react-icons/io5";
 import GradientButton from "../../components/buttons/GradientButton";
 import { IoImages } from "react-icons/io5";
 
-const CreateStaff = () => {
-  const [staffData, setStaffData] = useState({
+const CreateStudent = () => {
+  const [studentData, setStudentData] = useState({
     name: "",
     email: "",
     phoneNumber: "",
     gender: "Female",
+    major: "Computing",
     password: "",
     image: null,
   });
@@ -28,23 +29,21 @@ const CreateStaff = () => {
 
   const handleChange = (event) => {
     const { id, value } = event.target;
-    setStaffData((prev) => ({ ...prev, [id]: value }));
+    setStudentData((prev) => ({ ...prev, [id]: value }));
   };
 
   const handleFileChange = (e) => {
-    setStaffData((prev) => ({ ...prev, image: e.target.files[0] }));
+    setStudentData((prev) => ({ ...prev, image: e.target.files[0] }));
     let file = e.target.files[0];
     if (file && file.type.startsWith("image/")) {
       const imageUrl = URL.createObjectURL(file);
       setShowImage(imageUrl);
-      console.log(imageUrl)
-      
     }
   };
 
   const onPressRegister = async (event) => {
     event.preventDefault();
-    const isEmptyField = Object.entries(staffData).some(([key, value]) => {
+    const isEmptyField = Object.entries(studentData).some(([key, value]) => {
       if (typeof value === "string") {
         return value.trim() === "";
       }
@@ -61,36 +60,36 @@ const CreateStaff = () => {
       return;
     }
 
-    const url = "http://localhost:7142/staff";
+    const url = "http://localhost:7142/student";
     const formData = new FormData();
-    formData.append("name", staffData.name);
-    formData.append("email", staffData.email);
-    formData.append("phoneNumber", staffData.phoneNumber);
-    formData.append("gender", staffData.gender);
-    formData.append("major", staffData.major);
-    formData.append("image", staffData.image);
-    formData.append("password", staffData.password);
+    formData.append("name", studentData.name);
+    formData.append("email", studentData.email);
+    formData.append("phoneNumber", studentData.phoneNumber);
+    formData.append("gender", studentData.gender);
+    formData.append("major", studentData.major);
+    formData.append("image", studentData.image);
+    formData.append("password", studentData.password);
     console.log(formData);
     axios
       .post(url, formData, {
         withCredentials: true,
       })
       .then((response) => {
-        toast.success(`Staff ${staffData.name} created successfully!`, {
+        toast.success(`Student ${studentData.name} created successfully!`, {
           position: "top-right",
         });
-        navigate("/staff/dashboard/stafflist");
+        navigate("/staff/dashboard/studentlist");
       })
       .catch((error) => {
         console.log(error);
-        toast.error(error.response.data.message ||"Sorry, something went wrong.", {
+        toast.error("Sorry, something went wrong.", {
           position: "top-right",
         });
       });
   };
   return (
     <div>
-      <HeaderTitle title='Create Staff Account' />
+      <HeaderTitle title='Create Student Account' />
       <form>
         <div className='mt-8 flex flex-row gap-15'>
           <div className='' onClick={handleClick}>
@@ -137,7 +136,7 @@ const CreateStaff = () => {
               <input
                 type='text'
                 id='name'
-                value={staffData.name}
+                value={studentData.name}
                 onChange={handleChange}
                 className='bg-grey-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:teal-500 focus:border-teal-500 block w-full p-2.5 '
                 placeholder='Full Name'
@@ -157,9 +156,9 @@ const CreateStaff = () => {
                   <input
                     type='radio'
                     value='Male'
-                    checked={staffData.gender === "Male"}
+                    checked={studentData.gender === "Male"}
                     onChange={(e) =>
-                      setStaffData((prev) => ({
+                      setStudentData((prev) => ({
                         ...prev,
                         gender: e.target.value,
                       }))
@@ -172,9 +171,9 @@ const CreateStaff = () => {
                   <input
                     type='radio'
                     value='Female'
-                    checked={staffData.gender === "Female"}
+                    checked={studentData.gender === "Female"}
                     onChange={(e) =>
-                      setStaffData((prev) => ({
+                      setStudentData((prev) => ({
                         ...prev,
                         gender: e.target.value,
                       }))
@@ -185,7 +184,26 @@ const CreateStaff = () => {
                 </label>
               </div>
             </div>
-           
+            <div className='mt-4'>
+              <label
+                htmlFor='major'
+                className='block mb-2 text-sm font-medium text-gray-900'
+              >
+                Major
+              </label>
+              <select
+                id='major'
+                value={studentData.major}
+                onChange={handleChange}
+                className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 '
+              >
+                <option value='Computing' selected>
+                  Computing
+                </option>
+                <option value='InformationSystems'>{`Computing (Information Systems)`}</option>
+                <option value='Networking'>{`Computing (Network Systems)`}</option>
+              </select>
+            </div>
             <div className='mt-4'>
               <label
                 htmlFor='email'
@@ -196,7 +214,7 @@ const CreateStaff = () => {
               <input
                 type='email'
                 id='email'
-                value={staffData.email}
+                value={studentData.email}
                 onChange={handleChange}
                 className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 '
                 placeholder='xxx@gmail.com'
@@ -214,7 +232,7 @@ const CreateStaff = () => {
               <input
                 type='text'
                 id='phoneNumber'
-                value={staffData.phoneNumber}
+                value={studentData.phoneNumber}
                 onChange={handleChange}
                 className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 '
                 placeholder='+959xxxx'
@@ -231,7 +249,7 @@ const CreateStaff = () => {
               <input
                 type='password'
                 id='password'
-                value={staffData.password}
+                value={studentData.password}
                 onChange={handleChange}
                 className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 '
                 placeholder=''
@@ -244,7 +262,7 @@ const CreateStaff = () => {
               Icon={IoAddCircle}
               width={"full"}
               rounded={"xl"}
-             text={"Create Staff"}
+              text={"Create Student"}
             />
           </div>
         </div>
@@ -253,4 +271,4 @@ const CreateStaff = () => {
   );
 };
 
-export default CreateStaff;
+export default CreateStudent;
