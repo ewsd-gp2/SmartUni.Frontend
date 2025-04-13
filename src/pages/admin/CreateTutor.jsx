@@ -1,13 +1,8 @@
 import { useEffect, useState, useRef } from "react";
-import { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import HeaderTitle from "../../components/common/HeaderTitle";
 import toast, { Toaster } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import { AiOutlineCloudUpload } from "react-icons/ai";
-import { IoCloudUpload, IoAddCircle } from "react-icons/io5";
-import GradientButton from "../../components/buttons/GradientButton";
-import { IoImages } from "react-icons/io5";
 import { AiOutlineCloudUpload } from "react-icons/ai";
 import { IoCloudUpload, IoAddCircle } from "react-icons/io5";
 import GradientButton from "../../components/buttons/GradientButton";
