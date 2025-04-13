@@ -26,13 +26,18 @@ const LoginPage = () => {
         },
         withCredentials: true,
       });
+      console.log(response.data)
       if (response.status === 200) {
         const firstLoginKey = `firstLogin_${data.email}`;
         const isFirstTime = sessionStorage.getItem(firstLoginKey) === null;
         
         localStorage.setItem("user_role", role);
         sessionStorage.setItem(firstLoginKey, "false");
-        
+        if (role === "tutor") {
+          const tutorId = response.data.id || response.data.tutorId || response.data.tutor?.id;
+          sessionStorage.setItem("tutorId", tutorId);
+          console.log("Saved tutorId:", tutorId);
+        }
         setIsFirstLogin(isFirstTime);
         setShowWelcome(true);
         toast.success("Login Successfully!");

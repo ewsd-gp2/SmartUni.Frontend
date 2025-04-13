@@ -2,22 +2,25 @@ import axios from "axios";
 import React, { use, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { BsSortDown } from "react-icons/bs";
+import { useParams } from "react-router-dom";
 
 const StudentListforTutorDashboard = () => {
   const [studentList, setStudentList] = useState([]);
   const [loading, setLoading] = useState(false);
-  const fetchStudentData = async () => {
+  const fetchStudentData = async (tutorId) => {
     setLoading(true);
-    const url = "http://localhost:7142/student";
+    const url = `http://localhost:7142/dashboard/tutor/${tutorId}`;
     axios.get(url,
       {
         headers: {
+          "Accept":"application/json, text/plain, */*",
           "Access-Control-Allow-Origin": "http://localhost:5173",
         },
         withCredentials: "true",
       }
     ).then((response) => {
       setStudentList(response.data);
+      console.log(response.data);
       setLoading(false);
     }).catch((error) => {
       console.log(error);
@@ -27,7 +30,15 @@ const StudentListforTutorDashboard = () => {
     });
   };
   useEffect(() => {
-    fetchStudentData();
+    const tutorId = sessionStorage.getItem("tutorId");
+    console.log(tutorId)
+    if (tutorId) {
+      fetchStudentData(tutorId);
+    } else {
+      toast.error("Tutor ID not found in session storage", {
+        position: "top-right",
+      });
+    }
   }, []);
   return (
     <div className="relative overflow-x-auto">
