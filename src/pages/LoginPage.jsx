@@ -11,52 +11,71 @@ const LoginPage = () => {
   const { register, handleSubmit } = useForm();
   const [isFirstLogin, setIsFirstLogin] = useState(null);
   const [showWelcome, setShowWelcome] = useState(false);
-  
-  
+
+  const getProfile = async () => {
+    const url = `http://localhost:7142/${role}/profile`;
+
+    try {
+      const response = await axios.get(url, {
+        withCredentials: true,
+      });
+      if (response.status === 200) {
+        toast.success("Login Successfully!");
+        localStorage.setItem("user_profile", JSON.stringify(response.data));
+        localStorage.setItem("user_role", role);
+        if (role === "staff") {
+          navigate(`${role}/dashboard/tutorlist`);
+        } else {
+          navigate(`${role}/dashboard`);
+        }
+      } else {
+        toast.error("Login failed. Please try again.");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const handleLogIn = async (data) => {
-    // console.log(data);
-    // console.log(role)
     const url = `http://localhost:7142/signin/${role}`;
+
     try {
       const response = await axios.post(url, data, {
         headers: {
           "Content-Type": "application/json",
-          "Allow-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Origin": "http://localhost:5173",
           "Access-Control-Expose-Headers": "Set-Cookie",
         },
         withCredentials: true,
       });
       console.log(response.data)
       if (response.status === 200) {
+        getProfile();
         const firstLoginKey = `firstLogin_${data.email}`;
         const isFirstTime = sessionStorage.getItem(firstLoginKey) === null;
-        
-        localStorage.setItem("user_role", role);
+
         sessionStorage.setItem(firstLoginKey, "false");
-        if (role === "tutor") {
-          const tutorId = response.data.id || response.data.tutorId || response.data.tutor?.id;
-          sessionStorage.setItem("tutorId", tutorId);
-          console.log("Saved tutorId:", tutorId);
-        }
+
         setIsFirstLogin(isFirstTime);
         setShowWelcome(true);
-        toast.success("Login Successfully!");
+      } else {
+        toast.error("Login failed. Please try again.");
       }
     } catch (error) {
       toast.error("Login attempt failed!Please try again.", {
-        icon: "✋", 
+        icon: "✋",
         style: {
-          borderRadius: '8px',
+          borderRadius: "8px",
           background: "#ECFDF5", // Teal-50
           color: "#065F46", // Teal-800
-          borderLeft: '4px solid #047857', // Teal-700
-          boxShadow: '0 2px 10px rgba(5, 150, 105, 0.1)',
-          fontSize: '20px',
+          borderLeft: "4px solid #047857", // Teal-700
+          boxShadow: "0 2px 10px rgba(5, 150, 105, 0.1)",
+          fontSize: "20px",
         },
         iconTheme: {
           primary: "#047857", // Teal-700
-          secondary: "#D1FAE5" // Teal-100
-        }
+          secondary: "#D1FAE5", // Teal-100
+        },
       });
       // toast.error("Oops! That didn't work. Let's try that again.");
     }
@@ -84,18 +103,20 @@ const LoginPage = () => {
       </div>
       <div className=' col-span-1 flex flex-col w-[400px]'>
         <form onSubmit={handleSubmit(handleLogIn)} className='max-w-sm '>
-        {showWelcome && (
-  <motion.div
-    className="mb-5 text-center text-teal-600 text-2xl font-semibold"
-    initial={{ opacity: 0, y: 30 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.6, ease: "easeOut" }}
-  >
-    {isFirstLogin ? "Welcome to our system! Let's begin your journey. " : "Welcome back! Great to see you again."}
-  </motion.div>
-)}
+          {showWelcome && (
+            <motion.div
+              className='mb-5 text-center text-teal-600 text-2xl font-semibold'
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, ease: "easeOut" }}
+            >
+              {isFirstLogin
+                ? "Welcome to our system! Let's begin your journey. "
+                : "Welcome back! Great to see you again."}
+            </motion.div>
+          )}
           <h3 className='text-2xl text-center mb-5 text-teal-600'>SmartUni</h3>
-         
+
           <div className='my-5'>
             <input
               type='email'
@@ -103,7 +124,7 @@ const LoginPage = () => {
               {...register("email")}
               className=' bg-teal-50 border border-teal-300 text-teal-900 text-sm rounded-lg focus:ring-teal-500 focus:border-teal-500 block w-full p-3 '
               placeholder='Username'
-              required     
+              required
             />
           </div>
           <div className='my-5'>
@@ -118,17 +139,7 @@ const LoginPage = () => {
           </div>
 
           <div className='flex gap-6 mb-8'>
-         <label className='font-semibold'>*Sign in as: </label>
-         <label className='flex items-center gap-2'>
-              <input
-                type='radio'
-                value='staff'
-                checked={role === "staff"}
-                onChange={(e) => setRole(e.target.value)}
-                className='w-4 h-4 text-teal-600 focus:ring-teal-500'
-              />
-              Staff
-            </label>
+            <label className='font-semibold'>*Sign in as: </label>
             <label className='flex items-center gap-2'>
               <input
                 type='radio'
@@ -139,7 +150,18 @@ const LoginPage = () => {
               />
               Tutor
             </label>
-            
+
+            <label className='flex items-center gap-2'>
+              <input
+                type='radio'
+                value='staff'
+                checked={role === "staff"}
+                onChange={(e) => setRole(e.target.value)}
+                className='w-4 h-4 text-teal-600 focus:ring-teal-500'
+              />
+              Staff
+            </label>
+
             <label className='flex items-center gap-2'>
               <input
                 type='radio'
@@ -158,7 +180,6 @@ const LoginPage = () => {
           >
             Log In
           </button>
-
         </form>
       </div>
     </div>

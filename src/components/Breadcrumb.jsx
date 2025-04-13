@@ -6,14 +6,14 @@ const Breadcrumb = ({currentPageTitle,links}) => {
   return (
     <div className=" w-full flex gap-3 mb-5">
       <nav
-        className="flex px-5 py-3 text-gray-700 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-800 dark:border-gray-700"
+        className="flex px-5 py-3 text-gray-700 border border-gray-200 rounded-lg bg-gray-50"
         aria-label="Breadcrumb"
       >
         <ol className="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
           <li className="inline-flex items-center">
             <Link
              to={`/dashboard`}
-              className="inline-flex gap-1 items-center text-sm font-medium text-gray-700 hover:text-teal-600 dark:text-gray-400 dark:hover:text-white"
+              className="inline-flex gap-1 items-center text-sm font-medium text-gray-700 hover:text-teal-600 "
             >
               <HiMiniHome/>
               Home

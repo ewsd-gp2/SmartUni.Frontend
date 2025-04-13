@@ -41,7 +41,7 @@ const router = createBrowserRouter([
             element: <TutorList />,
           },
           {
-            path: "dashboard",
+            path: "dashboard/tutorlist",
             element: <TutorList />,
           },
           {
@@ -81,7 +81,7 @@ const router = createBrowserRouter([
             element: <AdminAllocation />,
           },
           {
-            path: "report",
+            path: "report/swi",
             element: <ReportSWI />,
           },
           {

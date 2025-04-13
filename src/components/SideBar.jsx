@@ -1,10 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { MdOutlineDashboard } from "react-icons/md";
 import { IoIosPeople } from "react-icons/io";
 import { FaPeopleRoof } from "react-icons/fa6";
 import { CiLogout } from "react-icons/ci";
 import { HiOutlinePencilSquare } from "react-icons/hi2";
-import { MdNotes,MdOutlineSpeakerNotes  } from "react-icons/md";
+import { MdNotes, MdOutlineSpeakerNotes } from "react-icons/md";
 import { Link, NavLink } from "react-router-dom";
 import Header from "./Header";
 import { useNavigate } from "react-router-dom";
@@ -14,12 +14,12 @@ const SideBar = () => {
   const userRole = localStorage.getItem("user_role");
   const student = [
     {
-      name: "Dashboard",
+      name: "Dashboard/tutorlist",
       icon: MdOutlineDashboard,
     },
     {
       name: "Chats",
-      icon: MdOutlineSpeakerNotes ,
+      icon: MdOutlineSpeakerNotes,
     },
     {
       name: "Blogs",
@@ -38,7 +38,7 @@ const SideBar = () => {
     },
     {
       name: "Chat",
-      icon: MdOutlineSpeakerNotes ,
+      icon: MdOutlineSpeakerNotes,
     },
     {
       name: "Blog",
@@ -55,23 +55,31 @@ const SideBar = () => {
       name: "Dashboard",
       icon: IoIosPeople,
       submenu: [
-        { name: "Tutor List", path: "/staff/dashboard" },
-        { name: "Student List", path: "/staff/dashboard/studentlist" },
-        { name: "Staff List", path: "/staff/dashboard/stafflist" },
+        { id: 1, name: "Tutor List", path: "/staff/dashboard/tutorlist" },
+        { id: 2, name: "Student List", path: "/staff/dashboard/studentlist" },
+        { id: 3, name: "Staff List", path: "/staff/dashboard/stafflist" },
       ],
     },
     {
       name: "Allocation",
-      icon: FaPeopleRoof ,
+      icon: FaPeopleRoof,
     },
     {
       name: "Report",
       icon: HiOutlinePencilSquare,
       submenu: [
-        { name: "Student With Interactions", path: "/staff/report" },
-        { name: "Student Without Interactions", path: "/staff/report/swt" },
-        { name: "Message for Tutors", path: "/staff/report/messagefortutors" },
-        { name: "Most Viewed", path: "/staff/report/mostviewed" },
+        { id: 1, name: "Student With Interact", path: "/staff/report/swi" },
+        {
+          id: 2,
+          name: "Student Without Interact",
+          path: "/staff/report/swt",
+        },
+        {
+          id: 3,
+          name: "Message for Tutors",
+          path: "/staff/report/messagefortutors",
+        },
+        { id: 4, name: "Most Viewed", path: "/staff/report/mostviewed" },
       ],
     },
   ];
@@ -84,56 +92,57 @@ const SideBar = () => {
       : userRole === "tutor"
       ? tutor
       : null;
-//bg-[#F0FDF8]
+
   return (
-    <section className='fixed left-0 top-0 h-screen w-72 p-5 px-6 shadow-sm bg-white custom-scrollbar'>
-      <header>
-        <h1 className=' text-teal-600 text-3xl text-center mt-5 mb-5'>SmartUni</h1>
+    <section className='fixed left-0 top-0 h-screen w-80 border-r-2 border-gray-200 bg-white custom-scrollbar'>
+      <header className=''>
+        <h1 className=' text-teal-600 text-center text-3xl p-3 mt-5 mb-5  '>
+          SmartUni
+        </h1>
       </header>
       {data.map((item, index) => (
         <NavLink
-          to={`/${userRole}/${item.name.toLowerCase()}`}
+          to={item.submenu ? "#" : `/${userRole}/${item.name.toLowerCase()}`}
+        //  className='flex flex-col text-gray-500 mt-2 w-70 '
           className={({ isActive }) =>
-            item.submenu
-          ? "flex flex-col p-3 text-gray-500"
-          : isActive
-          ? "  flex flex-col my-0 bg-teal-500 rounded-xl p-3 text-teal-100 animate-bounceEffect"
-          : " flex flex-col my-4 p-3 text-gray-500 hover:bg-teal-100 hover:rounded-xl hover:text-teal-600"
-          // className={({ isActive }) =>
-          //   isActive
-          //     ? "flex flex-row gap-2 my-7 bg-teal-600 rounded-xl p-3 justify-start text-teal-100 animate-bounceEffect"
-          //     : "flex flex-row gap-2 my-7 p-3 text-gray-500 hover:bg-teal-100 hover:rounded-xl hover:text-teal-600"
-        }
+            `flex flex-col mt-2 w-70 ${
+              isActive && !item.submenu ? 'bg-[#f1f1f1]' : 'bg-hite'
+            }`
+          }
           key={index}
         >
-          <div className='flex flex-row gap-2'>
-            <item.icon
-              size={24}
-              className={({ isActive }) =>
-                isActive ? "text-white text-xl" : "text-teal-600 text-xl"
-              }
-            />
-            <span
-              className={({ isActive }) =>
-                isActive ? "text-white font-bold w-24" : "text-gray-700 w-24"
-              }
-            >
-              {item.name}
-            </span>
+          <div className='flex flex-row p-2 '>
+            <item.icon size={24} className='text-gray-500 text-md basis-2/7' />
+            <span className='text-gray-500 w-24 text-md'>{item.name}</span>
           </div>
           {item.submenu && (
-            <div>
-              {item.submenu.map((subItem, subIndex) => (
+            <div className='w-full'>
+              {/* {item.submenu.map((subItem, subIndex) => (
                 <NavLink
                   key={subIndex}
                   to={subItem.path}
-                  className={({ isActive }) => 
-                    isActive ? 'block text-sm text-left pr-0 text-teal-100 gap-2 w-full mt-2 p-3 bg-teal-500 rounded-xl animate-bounceEffect'
-                      :'block text-sm text-left w-full pr-0 text-gray-500 mt-2  p-3'
+                  className={({ isActive }) =>
+                    isActive
+                      ? "flex text-md mt-2 text-left w-full pr-0 p-2 text-gray-500 bg-[#f1f1f1] rounded-xl font-semibold"
+                      : "flex text-md mt-2 text-left w-full pr-0 p-2  text-gray-500"
                   }
-                 // className='block text-sm text-right w-24 pr-15 text-gray-500 gap-2 w-full p-3'
                 >
-                  {subItem.name}
+                  <div className='basis-2/7'></div>
+                  <span className='basis-5/7'>{subItem.name}</span>
+                </NavLink>
+              ))} */}
+              {item.submenu.map((subItem, subIndex) => (
+                <NavLink key={subIndex} to={subItem.path}>
+                  {({ isActive }) => (
+                    <div
+                      className={`flex text-md mt-2 text-left w-full pr-0 p-2 text-gray-500 ${
+                        isActive ? "bg-[#f1f1f1] font-semibold" : ""
+                      }`}
+                    >
+                      <div className={`basis-2/7`}></div>
+                      <div className={`basis-5/7`}>{subItem.name}</div>
+                    </div>
+                  )}
                 </NavLink>
               ))}
             </div>
@@ -142,43 +151,12 @@ const SideBar = () => {
       ))}
 
       <button
-        className='flex flex-row gap-2 my-7 p-3 text-gray-500 mt-10 hover:text-black'
+        className='flex flex-row w-70  text-gray-500 mt-10'
         onClick={() => navigate("/")}
       >
-        <CiLogout size={32} className='hover:text-black text-xl' />
-        <span>Log Out</span>
+        <CiLogout size={24} className='text-md basis-2/7' />
+        <span className='text-md w-24 text-gray-500'>Log Out</span>
       </button>
-      {/* {admin.map((item, index) => (
-        <Link
-          to={"/dashboard"}
-          className=' flex flex-row gap-2 my-10 '
-          key={index}
-        >
-          <item.icon size={30} className=' text-teal-600' />
-          <span className=' text-gray-500 w-24 text-lg'>{item.name}</span>
-        </Link>
-      ))} */}
-      {/* <Link to={"/dashboard"} className=" flex items-center justify-between my-10 ">
-        <MdOutlineDashboard size={24} className=" text-teal-600 text-xl" />
-        <span className=" text-gray-500 w-24">Dashboard</span>
-      </Link>
-      <Link to={""} className=" flex items-center justify-between  gap-5 mb-10">
-        <BsChatRightText  size={24} className=" text-teal-600" />
-        <span className=" text-gray-500 w-24">Chat</span>
-      </Link>
-      <Link to={""} className=" flex items-center justify-between gap-5 mb-10">
-        <ImBlog  size={24} className=" text-teal-600 " />
-        <span className=" text-gray-500 w-24">Blogs</span>
-      </Link>
-      <Link to={""} className=" flex items-center justify-between gap-5 mb-10">
-        <IoIosPeople  size={24} className=" text-teal-600 " />
-        <span className=" text-gray-500 w-24">Meetings</span>
-      </Link>
-      <hr className=" w-[150px] text-teal-600"/>
-      <Link to={""} className=" flex items-center gap-5 justify-between mt-10">
-        <IoIosLogOut  size={24} className=" text-teal-600 " />
-        <span className=" text-gray-500 w-24">Log Out</span>
-      </Link> */}
     </section>
   );
 };

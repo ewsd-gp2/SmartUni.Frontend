@@ -33,13 +33,11 @@ const CreateTutor = () => {
   };
 
   const handleFileChange = (e) => {
-    setTutorData((prev) => ({ ...prev, image: e.target.files[0] }));
     let file = e.target.files[0];
     if (file && file.type.startsWith("image/")) {
+      setTutorData((prev) => ({ ...prev, image: e.target.files[0] }));
       const imageUrl = URL.createObjectURL(file);
       setShowImage(imageUrl);
-      console.log(imageUrl)
-      
     }
   };
 
@@ -80,7 +78,7 @@ const CreateTutor = () => {
         toast.success(`Tutor ${tutorData.name} created successfully!`, {
           position: "top-right",
         });
-        navigate("/staff/dashboard");
+        navigate("/staff/dashboard/tutorlist");
       })
       .catch((error) => {
         console.log(error);
@@ -115,9 +113,7 @@ const CreateTutor = () => {
                 />
               </div>
             ) : (
-              <div
-                className='w-xs cursor-pointer aspect-[4/3] border-2 border-dashed border-[#14B8A6] flex flex-col items-center'
-              >
+              <div className='w-xs cursor-pointer aspect-[4/3] border-2 border-dashed border-[#14B8A6] flex flex-col items-center'>
                 <IoCloudUpload size={60} className='mt-5' color='#14B8A6' />
                 <p className='text-xl font-bold'>Upload Picture here</p>
                 <p className='mt-2'>Files supported: JPG, PNG and more</p>
@@ -130,8 +126,8 @@ const CreateTutor = () => {
           <div className=''>
             <div>
               <label
-                htmlFor='name'
-                className=' block mb-2 w-xs text-sm font-medium text-gray-900 '
+                for='name'
+                class=' block mb-2 w-xs text-sm font-medium text-gray-900 '
               >
                 Full Name
               </label>
@@ -148,8 +144,8 @@ const CreateTutor = () => {
 
             <div className='mt-4'>
               <label
-                htmlFor='gender'
-                className='block mb-2 text-sm font-medium text-gray-900 '
+                for='gender'
+                class='block mb-2 text-sm font-medium text-gray-900 '
               >
                 Gender
               </label>
@@ -188,7 +184,7 @@ const CreateTutor = () => {
             </div>
             <div className='mt-4'>
               <label
-                htmlFor='major'
+                for='major'
                 className='block mb-2 text-sm font-medium text-gray-900'
               >
                 Major
@@ -208,7 +204,7 @@ const CreateTutor = () => {
             </div>
             <div className='mt-4'>
               <label
-                htmlFor='email'
+                for='email'
                 className='block mb-2 text-sm font-medium text-gray-900'
               >
                 Email
@@ -226,8 +222,8 @@ const CreateTutor = () => {
             </div>
             <div className='mt-4'>
               <label
-                htmlFor='phoneNumber'
-                className='block mb-2 text-sm font-medium text-gray-900 '
+                for='phoneNumber'
+                class='block mb-2 text-sm font-medium text-gray-900 '
               >
                 Phone Number
               </label>
@@ -243,17 +239,17 @@ const CreateTutor = () => {
             </div>
             <div className='mt-4'>
               <label
-                htmlFor='password'
+                for='password'
                 className='block mb-2 text-sm font-medium text-gray-900'
               >
                 Password
               </label>
               <input
-                type='password'
+                type='text'
                 id='password'
                 value={tutorData.password}
                 onChange={handleChange}
-                className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 '
+                class='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 '
                 placeholder=''
                 required
               />
@@ -264,7 +260,6 @@ const CreateTutor = () => {
               Icon={IoAddCircle}
               width={"full"}
               rounded={"xl"}
-             text={"Create Tutor"}
             />
           </div>
         </div>

@@ -29,18 +29,18 @@ const roleLabels ={
 }
 
   const columns = [
-    {
-      name: "Image",
-      selector: (row) => row.image,
-      sortable: true,
-      cell: (row) => (
-        <img
-          src={row.image}
+    // {
+    //   name: "Image",
+    //   selector: (row) => row.image,
+    //   sortable: true,
+    //   cell: (row) => (
+    //     <img
+    //       src={row.image}
           
-          className="size-12 rounded-full object-cover"
-        />
-      ),
-    },
+    //       className="size-12 rounded-full object-cover"
+    //     />
+    //   ),
+    // },
     {
       name: "Full Name",
       selector: (row) => row.name,

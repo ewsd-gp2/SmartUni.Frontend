@@ -7,12 +7,11 @@ import Footer from "./common/Footer";
 
 const Layout = () => {
   return (
-    <div className='flex min-h-screen bg-white'>
+    <div className='flex min-h-screen bg-white p-4'>
       <SideBar />
 
       <div className='flex-1 p-4 pl-14 ml-72'>
         <Outlet />
-        <Footer />
       </div>
     </div>
   );
