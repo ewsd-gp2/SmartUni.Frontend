@@ -70,7 +70,7 @@ const UpdateTutor = () => {
           gender: res.gender,
           major: res.major,
         });
-        setShowImage(`data:image/jpeg;base64,${res.image}`)
+        setShowImage(`data:image/jpeg;base64,${res.image}`);
       })
       .catch((error) => {
         console.log(error);
@@ -88,22 +88,28 @@ const UpdateTutor = () => {
 
   const onPressUpdate = async (event) => {
     event.preventDefault();
-    const isEmptyField = Object.values(tutorData).some(
-      (value) => value.trim() === ""
-    );
+    const isEmptyField = Object.entries(tutorData).some(([key, value]) => {
+      if (typeof value === "string") {
+        return value.trim() === "";
+      }
+      if (value instanceof File) {
+        return value.size === 0;
+      }
+      return value == null;
+    });
     if (isEmptyField) {
       toast.error("Please fill in all fields before submitting.", {
         position: "top-right",
       });
       return;
     }
-     console.log(tutorData)
+    console.log(tutorData);
     const url = `http://localhost:7142/tutor/${detailsId}`;
     axios
-      .put(url, tutorData,{
+      .put(url, tutorData, {
         headers: {
-          "Content-Type": "application/json", 
-           "Access-Control-Allow-Origin": "http://localhost:5173"
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "http://localhost:5173",
         },
         withCredentials: true,
       })
@@ -111,7 +117,7 @@ const UpdateTutor = () => {
         toast.success("Tutor Updated Successfully!", {
           position: "top-right",
         });
-        navigate("/staff/dashboard");
+        navigate("/staff/dashboard/tutorlist");
       })
       .catch((error) => {
         console.log(error);

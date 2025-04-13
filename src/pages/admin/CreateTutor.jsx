@@ -43,7 +43,6 @@ const CreateTutor = () => {
 
   const onPressRegister = async (event) => {
     event.preventDefault();
-
     const isEmptyField = Object.entries(tutorData).some(([key, value]) => {
       if (typeof value === "string") {
         return value.trim() === "";
