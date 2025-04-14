@@ -93,9 +93,9 @@ export const assignTutor = async (tutorID, studentID) => {
 //   }
 // };
 
-export const unAssignTutor = async (studentID) => {
+export const unAssignTutor = async (allocationId) => {
   try {
-    await axios.put(`http://localhost:7142/allocation/${studentID}`, {
+    await axios.put(`${BASE_URL}/allocation/${allocationId}`, {}, {
       headers: {
         "Access-Control-Allow-Origin": "http://localhost:5173",
       },
@@ -104,5 +104,19 @@ export const unAssignTutor = async (studentID) => {
     console.log("Tutor unassigned successfully");
   } catch (error) {
     console.error("Error unassigning tutor:", error);
+  }
+};
+
+export const sendEmail = async (emailData) => {
+  try {
+    await axios.post(`${BASE_URL}/email`, { data: emailData }, {
+      headers: {
+        "Access-Control-Allow-Origin": "http://localhost:5173",
+      },
+      withCredentials: true,
+    });
+    console.log("Email sent successfully");
+  } catch (error) {
+    console.error("Error sending email:", error);
   }
 };

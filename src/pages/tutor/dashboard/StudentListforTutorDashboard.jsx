@@ -7,38 +7,36 @@ import { useParams } from "react-router-dom";
 const StudentListforTutorDashboard = () => {
   const [studentList, setStudentList] = useState([]);
   const [loading, setLoading] = useState(false);
-  const fetchStudentData = async (tutorId) => {
+  const user = JSON.parse(localStorage.getItem("user_profile"));
+
+  const fetchStudentData = async () => {
     setLoading(true);
-    const url = `http://localhost:7142/dashboard/tutor/${tutorId}`;
-    axios.get(url,
-      {
+    const url = `http://localhost:7142/dashboard/tutor/${user.id}`;
+    axios
+      .get(url, {
         headers: {
-          "Accept":"application/json, text/plain, */*",
+          Accept: "application/json, text/plain, */*",
           "Access-Control-Allow-Origin": "http://localhost:5173",
         },
         withCredentials: "true",
-      }
-    ).then((response) => {
-      setStudentList(response.data);
-      console.log(response.data);
-      setLoading(false);
-    }).catch((error) => {
-      console.log(error);
-      toast.error(error.message, {
-        position: "top-right",
+      })
+      .then((response) => {
+        const data = Array.isArray(response.data)
+          ? response.data
+          : response.data?.students || [];
+        setStudentList(data);
+        console.log(response.data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        toast.error(error.message, {
+          position: "top-right",
+        });
       });
-    });
   };
   useEffect(() => {
-    const tutorId = sessionStorage.getItem("tutorId");
-    console.log(tutorId)
-    if (tutorId) {
-      fetchStudentData(tutorId);
-    } else {
-      toast.error("Tutor ID not found in session storage", {
-        position: "top-right",
-      });
-    }
+    fetchStudentData(user.id);
   }, []);
   return (
     <div className="relative overflow-x-auto">
@@ -51,35 +49,36 @@ const StudentListforTutorDashboard = () => {
             <th scope="col" className="px-6 py-3">
               Student Names
             </th>
-            <th scope="col" className="px-6 py-3">
-              <div className="flex items-center gap-2">Sorting</div>
-            </th>
+           
           </tr>
         </thead>
         <tbody>
-          {studentList.map((student,index) => (
-            <tr key={student.id} className="bg-white border-b">
-              <td className="px-6 py-4 font-medium text-gray-900">
-                {index+1}
-              </td>
-              <td className="px-6 py-4">
-                <div className="flex gap-5 items-center">
-                  <img
-                    className=" size-10 rounded-full"
-                    src="https://i.pinimg.com/736x/0e/d7/e8/0ed7e8509f71c4161e7443a86ce517a8.jpg"
-                    alt=""
-                  />
-                  <span>{student.name}</span>
-                </div>
-              </td>
-              <td className="px-6 py-4 flex items-center gap-3">
-                <p className=" bg-teal-300 rounded-full text-slate-700 px-5 py-2">
-                  Present
-                </p>
+          {Array.isArray(studentList) && studentList.length > 0 ? (
+            studentList.map((student, index) => (
+              <tr key={student.id || index} className="bg-white border-b">
+                <td className="px-6 py-4 font-medium text-gray-900">
+                  {index + 1}
+                </td>
+                <td className="px-6 py-4">
+                  <div className="flex gap-5 items-center">
+                    <img
+                      className="size-10 rounded-full"
+                      src={student.avatar || "https://via.placeholder.com/150"}
+                      alt=""
+                    />
+                    <span>{student.name}</span>
+                  </div>
+                </td>
+               
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan="3" className="text-center py-4 text-gray-500">
+                {loading ? "Loading students..." : "No students found."}
               </td>
             </tr>
-          ))}
-        
+          )}
         </tbody>
       </table>
     </div>

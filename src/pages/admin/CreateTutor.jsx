@@ -260,6 +260,7 @@ const CreateTutor = () => {
               Icon={IoAddCircle}
               width={"full"}
               rounded={"xl"}
+              text={"Create Tutor"}
             />
           </div>
         </div>

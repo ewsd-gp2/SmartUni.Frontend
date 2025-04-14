@@ -12,6 +12,7 @@ const UserProfile = () => {
     const url=`http://localhost:7142/${userRole}/profile`
     await axios.get(url,{
       headers: {
+        
         "Access-Control-Allow-Origin": "http://localhost:5173",
       },
       withCredentials: "true",

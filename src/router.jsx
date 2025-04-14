@@ -23,6 +23,7 @@ import CreateStudent from "./pages/admin/CreateStudent.jsx";
 import UpdateStudent from "./pages/admin/UpdateStudent.jsx";
 import StudentDashboard from "./pages/student/StudentDashboard.jsx";
 import UserProfile from "./pages/profile/UserProfile.jsx";
+import UpdateStaff from "./pages/admin/UpdateStudent.jsx";
 
 const router = createBrowserRouter([
   {
@@ -36,10 +37,7 @@ const router = createBrowserRouter([
         path: "/staff",
         element: <Layout />,
         children: [
-          {
-            path: "dashboard/tutorlist",
-            element: <TutorList />,
-          },
+          
           {
             path: "dashboard/tutorlist",
             element: <TutorList />,
@@ -57,8 +55,16 @@ const router = createBrowserRouter([
             element: <CreateTutor />,
           },
           {
-            path: "dashboard/update/:userRole",
+            path: "dashboard/update/tutor",
             element: <UpdateTutor />,
+          },
+          {
+            path: "dashboard/update/student",
+            element: <UpdateStudent />,
+          },
+          {
+            path: "dashboard/update/staff",
+            element: <UpdateStaff />,
           },
           {
             path: "dashboard/create/staff",
@@ -68,14 +74,7 @@ const router = createBrowserRouter([
             path: "dashboard/create/student",
             element: <CreateStudent/>
           },
-          {
-            path: "dashboard/update/staff",
-            element: <UpdateTutor />,
-          },
-          {
-            path: "dashboard/update/student",
-            element: <UpdateStudent />,
-          },
+          
           {
             path: "allocation",
             element: <AdminAllocation />,

@@ -48,7 +48,6 @@ const LoginPage = () => {
         },
         withCredentials: true,
       });
-      console.log(response.data)
       if (response.status === 200) {
         getProfile();
         const firstLoginKey = `firstLogin_${data.email}`;
