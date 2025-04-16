@@ -99,17 +99,7 @@ const Dashboard = () => {
     });
   };
 
-  const getImageSrc = (base64) => {
-    if (!base64) return "fallback.jpg";
-  
-    if (base64.startsWith("/9j/")) {
-      return `data:image/jpeg;base64,${base64}`;
-    } else if (base64.startsWith("iVBORw0KGgo")) {
-      return `data:image/png;base64,${base64}`;
-    } else {
-      return `data:image/*;base64,${base64}`; // fallback
-    }
-  };
+
   return (
     <Container>
       <div className=" grid grid-cols-5">
@@ -198,11 +188,11 @@ const Dashboard = () => {
           {/* <CalendarComponent className=" m-3" /> */}
           {data.map((item) => (
             <div key={item.id} >
-              <div className=" flex gap-5 items-center mb-3">
+              <div className=" flex items-center mb-3">
               {item.participants.map((participant) => (
                     <img key={participant.id}
                       className=" size-8 rounded-full inline-block"
-                      src={getImageSrc(participant.avatar)}
+                      src={`data:image/jpeg;base64,${participant.avatar}`}
                       alt={participant.name}
                     />                      
               ))}

@@ -145,8 +145,9 @@ const AdminAllocation = () => {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-teal-500"></div>
+      <div className="flex justify-center items-center h-screen gap-2">
+        <p>Please Wait a moment...</p>
+        <p className="animate-spin rounded-full size-8 border-t-2 border-b-2 border-teal-500"></p>
       </div>
     );
   }

@@ -63,7 +63,7 @@ const StudentListforTutorDashboard = () => {
                   <div className="flex gap-5 items-center">
                     <img
                       className="size-10 rounded-full"
-                      src={student.avatar || "https://via.placeholder.com/150"}
+                      src={`data:image/jpeg;base64,${student.avatar}`}
                       alt=""
                     />
                     <span>{student.name}</span>
