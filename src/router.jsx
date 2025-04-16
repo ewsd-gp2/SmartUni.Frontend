@@ -23,6 +23,7 @@ import CreateStudent from "./pages/admin/CreateStudent.jsx";
 import UpdateStudent from "./pages/admin/UpdateStudent.jsx";
 import StudentDashboard from "./pages/student/StudentDashboard.jsx";
 import UserProfile from "./pages/profile/UserProfile.jsx";
+import { LandingPage } from "./pages/landing/LandingPage.jsx";
 
 const router = createBrowserRouter([
   {
@@ -30,6 +31,10 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
+        element: <LandingPage />,
+      },
+      {
+        path: "/login",
         element: <LoginPage />,
       },
       {

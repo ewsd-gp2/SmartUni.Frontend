@@ -160,7 +160,7 @@ const AdminAllocation = () => {
           onChange={(e) => setSelectedTutor(e.target.value)}
         >
           <option value="">Select Tutor</option>
-          {tutorData.map((tutor) => (
+          {tutorData && tutorData?.map((tutor) => (
             <option key={tutor.id} value={tutor.id}>
               {tutor.name}
             </option>
@@ -183,7 +183,7 @@ const AdminAllocation = () => {
             </tr>
           </thead>
           <tbody>
-            {studentData.map((student, index) => {
+            {studentData?.map((student, index) => {
               const isAssigned = allocation.some(a => String(a.studentID) === String(student.id));
               return (
                 <tr key={student.id} className="bg-white border-b hover:bg-gray-50">

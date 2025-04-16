@@ -24,9 +24,9 @@ const LoginPage = () => {
         localStorage.setItem("user_profile", JSON.stringify(response.data));
         localStorage.setItem("user_role", role);
         if (role === "staff") {
-          navigate(`${role}/dashboard/tutorlist`);
+          navigate(`/${role}/dashboard/tutorlist`);
         } else {
-          navigate(`${role}/dashboard`);
+          navigate(`/${role}/dashboard`);
         }
       } else {
         toast.error("Login failed. Please try again.");
