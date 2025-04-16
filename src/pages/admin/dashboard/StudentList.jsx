@@ -42,12 +42,7 @@ const StudentList = () => {
         console.log("getstudent", response.data);
         setStudentData(response.data);
       })
-      .catch((error) => {
-        console.log(error);
-        toast.error("Sorry, something went wrong.", {
-          position: "top-right",
-        });
-      });
+      
     setLoading(false);
   };
   useEffect(() => {

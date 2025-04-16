@@ -31,7 +31,7 @@ const StaffList = () => {
         withCredentials: "true",
       })
       .then((response) => {
-        console.log("getstaff", response);
+        console.log("getstaff", response.data);
         setStaffData(response.data);
       })
       .catch((error) => {

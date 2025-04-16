@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { BsSortDown } from "react-icons/bs";
-import { assignTutor, fetchAllocations, fetchStudents, fetchTutors, unAssignTutor } from "./api/api";
+import { assignTutor, fetchAllocations, fetchStudents, fetchTutors, sendEmail, unAssignTutor } from "./api/api";
 import toast from "react-hot-toast";
 
 const AdminAllocation = () => {
@@ -11,7 +11,6 @@ const AdminAllocation = () => {
   const [selectedStudents, setSelectedStudents] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  // Load all data on component mount
   useEffect(() => {
     const loadData = async () => {
       setLoading(true);
@@ -33,7 +32,6 @@ const AdminAllocation = () => {
     loadData();
   }, []);
 
-  // Handle student selection
   const handleSelectStudent = (studentId) => {
     setSelectedStudents((prevSelected) =>
       prevSelected.includes(studentId)
@@ -41,66 +39,41 @@ const AdminAllocation = () => {
         : [...prevSelected, studentId]
     );
   };
-
-  // Assign tutor to selected students
+ 
   const handleAssign = async () => {
-    if (!selectedTutor) {
-      toast.error("Please select a tutor first!");
+    if (!selectedTutor || selectedStudents.length === 0) {
+      toast.error("Select tutor and students first");
       return;
     }
-    if (selectedStudents.length === 0) {
-      toast.error("Please select at least one student!");
-      return;
-    }
-
+  
     try {
       setLoading(true);
+  
       await Promise.all(
-        selectedStudents.map((studentID) =>
-          assignTutor(selectedTutor, studentID)
-        )
+        selectedStudents.map(async (studentID) => {
+          await assignTutor(selectedTutor, studentID);
+  
+          const student = studentData.find(s => s.id === studentID);
+          const tutor = tutorData.find(t => t.id === selectedTutor);
+  
+          const emailData = {
+            studentEmail: student.email,
+            studentName: student.name,
+            tutorEmail: tutor.email,
+            tutorName: tutor.name,
+            subject: "Tutor Assignment Notification",
+            // helpCenterUrl: "https://your-help-center.com",
+            senderName: "Admin",
+            // websiteUrl: "https://your-website.com"
+          };
+  
+          await sendEmail(emailData);
+        })
       );
-      
-      // Refresh data after assignment
+  
       const updatedAllocations = await fetchAllocations();
       setAllocation(updatedAllocations);
-      
       toast.success("Tutor assigned successfully", {
-        icon: "👨‍🏫",
-        style: {
-          background: "#ECFDF5",
-          color: "#065F46",
-          borderLeft: "4px solid #059669"
-        }
-      });
-      setSelectedStudents([]);
-    } catch (error) {
-      toast.error("Failed to assign tutor", {
-        icon: "⚠️",
-        style: {
-          background: "#FEF2F2",
-          color: "#B45309"
-        }
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Unassign tutor from selected students
-  const handleUnassign = async () => {
-    try {
-      setLoading(true);
-  
-      // Make API calls
-      await Promise.all(
-        selectedStudents.map((studentID) => unAssignTutor(studentID))
-      );
-  
-      const updatedAllocations = await fetchAllocations();
-      setAllocation(updatedAllocations);
-  
-      toast.success("Tutor unassigned successfully", {
         icon: "✅",
         style: {
           background: "#ECFDF5",
@@ -108,6 +81,37 @@ const AdminAllocation = () => {
           borderLeft: "4px solid #059669"
         }
       });
+  
+      setSelectedStudents([]);
+    } catch (error) {
+      toast.error("Assignment failed");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleUnassign = async () => {
+    try {
+      setLoading(true);
+      const allocationsToUnassign = allocation.filter((a) =>
+        selectedStudents.includes(a.studentID)
+      );
+
+      await Promise.all(
+        allocationsToUnassign.map((a) => unAssignTutor(a.id))
+      );
+  
+      const updatedAllocations = await fetchAllocations();
+      setAllocation(updatedAllocations);
+  
+      // toast.success("Tutor unassigned successfully", {
+      //   icon: "✅",
+      //   style: {
+      //     background: "#ECFDF5",
+      //     color: "#065F46",
+      //     borderLeft: "4px solid #059669"
+      //   }
+      // });
   
       setSelectedStudents([]);
   //   } catch (error) {
@@ -122,10 +126,10 @@ const AdminAllocation = () => {
   //     setLoading(false);
   //   }
   // };catch (error) {
-    console.error("Unassign failed:", error);
+    console.error("Unassign failed:");
     toast.error("Failed to unassign tutor. Please check the network.");
     
-    // Revert to the latest valid state
+    
     const currentAllocations = await fetchAllocations();
     setAllocation(currentAllocations);
   } finally {
@@ -134,7 +138,7 @@ const AdminAllocation = () => {
 };
   
 
-  // Check if any selected students are assigned
+
   const isAnyStudentAssigned = selectedStudents.some((studentID) =>
     allocation.some((assign) => assign.studentID === studentID)
   );
@@ -146,7 +150,13 @@ const AdminAllocation = () => {
       </div>
     );
   }
-
+  if (studentData.length === 0 || tutorData.length === 0) {
+    return (
+      <div className="flex justify-center items-center h-screen text-gray-500 text-lg">
+        No student or tutor data available.
+      </div>
+    );
+  }
   return (
     <div className="p-4">
       <form className="max-w-sm my-5">

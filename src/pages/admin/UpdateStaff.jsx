@@ -1,9 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import HeaderTitle from "../../components/common/HeaderTitle";
 import toast, { Toaster } from "react-hot-toast";
 import { useNavigate, useLocation } from "react-router-dom";
-import { create } from "zustand";
+import { IoCloudUpload, IoAddCircle } from "react-icons/io5";
+import GradientButton from "../../components/buttons/GradientButton";
+import { IoImages } from "react-icons/io5";
 
 const Gender = {
   Male: 0,
@@ -14,31 +16,55 @@ const UpdateStaff = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-  const [staffDetails, setStaffDetails] = useState({
+  const [showImage, setShowImage] = useState();
+
+  const [staffData, setStaffData] = useState({
     name: "",
     email: "",
     phoneNumber: "",
     gender: "",
   });
   const detailsId = location.state.detailsId || {};
+  const fileInputRef = useRef();
+
   useEffect(() => {
     fetchDetails();
   }, []);
 
+  const handleClick = () => {
+    fileInputRef.current.click();
+  };
+
+  const handleFileChange = (e) => {
+    setStaffData((prev) => ({ ...prev, image: e.target.files[0] }));
+    let file = e.target.files[0];
+    if (file && file.type.startsWith("image/")) {
+      const imageUrl = URL.createObjectURL(file);
+      setShowImage(imageUrl);
+    }
+  };
+
   const fetchDetails = async () => {
-    const url = `http://localhost:7142/staff/%7Bid%7D/${detailsId}`;
+    const url = `http://localhost:7142/staff/${detailsId}`;
     setLoading(true);
     axios
-      .get(url)
+      .get(url, {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "http://localhost:5173",
+        },
+        withCredentials: true,
+      })
       .then((response) => {
         console.log("FETCHDETAILS", response);
         const res = response.data;
-        setStaffDetails({
+        setStaffData({
           name: res.name,
           email: res.email,
           phoneNumber: res.phoneNumber,
           gender: res.gender,
         });
+        setShowImage(`data:image/jpeg;base64,${res.image}`);
       })
       .catch((error) => {
         console.log(error);
@@ -51,32 +77,41 @@ const UpdateStaff = () => {
 
   const handleChange = (event) => {
     const { id, value } = event.target;
-    setStaffDetails((prev) => ({ ...prev, [id]: value }));
+    setStaffData((prev) => ({ ...prev, [id]: value }));
   };
 
   const onPressUpdate = async (event) => {
     event.preventDefault();
-    const isEmptyField = Object.values(staffDetails).some(
-      (value) => value.trim() === ""
-    );
+    const isEmptyField = Object.entries(staffData).some(([key, value]) => {
+      if (typeof value === "string") {
+        return value.trim() === "";
+      }
+      if (value instanceof File) {
+        return value.size === 0;
+      }
+      return value == null;
+    });
     if (isEmptyField) {
       toast.error("Please fill in all fields before submitting.", {
         position: "top-right",
       });
       return;
     }
-    const updatedStaffDetails = {
-      ...staffDetails, 
-      gender: Gender[staffDetails.gender],
-    };
-    const url = `http://localhost:7142/tutor/${detailsId}`;
+    console.log(staffData);
+    const url = `http://localhost:7142/staff/${detailsId}`;
     axios
-      .put(url, updatedStaffDetails)
+      .put(url, staffData, {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "http://localhost:5173",
+        },
+        withCredentials: true,
+      })
       .then((response) => {
-        toast.success("Staff Edited Successfully!", {
+        toast.success("Tutor Updated Successfully!", {
           position: "top-right",
         });
-        navigate("/admin/dashboard");
+        navigate("/staff/dashboard/stafflist");
       })
       .catch((error) => {
         console.log(error);
@@ -90,110 +125,140 @@ const UpdateStaff = () => {
     <div>
       <HeaderTitle title='Update Staff Account' />
       <form>
-        <div className='grid gap-6 mb-6 md:grid-cols-2 w-5xl mt-10'>
-          <div>
-            <label
-              htmlFor='name'
-              className='block mb-2 text-sm font-medium text-gray-900 dark:text-white'
-            >
-              Full Name
-            </label>
+        <div className='mt-8 flex flex-row gap-15'>
+          <div className='' onClick={handleClick}>
             <input
-              type='text'
-              id='name'
-              value={staffDetails.name}
-              onChange={handleChange}
-              className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
-              placeholder='Full Name'
-              required
+              ref={fileInputRef}
+              type='file'
+              accept='image/*'
+              onChange={handleFileChange}
+              className='hidden'
             />
+            {showImage ? (
+              <div className='mt-4 w-xs cursor-pointer relative aspect-[4/3] flex justify-center'>
+                <div className='absolute flex flex-row gap-2 bottom-2 bg-[#216ce7] font-bold text-white text-sm shadow-2xl px-4 py-2 rounded'>
+                  <IoImages size={20} />
+                  <p>Change Picture</p>
+                </div>
+                <img
+                  src={showImage}
+                  alt='Preview'
+                  className='max-w-full h-auto rounded-lg border border-gray-300'
+                />
+              </div>
+            ) : (
+              <div className='w-xs cursor-pointer aspect-[4/3] border-2 border-dashed border-[#14B8A6] flex flex-col items-center'>
+                <IoCloudUpload size={60} className='mt-5' color='#14B8A6' />
+                <p className='text-xl font-bold'>Upload Picture here</p>
+                <p className='mt-2'>Files supported: JPG, PNG and more</p>
+                <div className='aspect-[4/1] mt-4 h-9 border-2 rounded-lg bg-[#14b8a6] text-white font-bold border-[#14B8A6] text-center flex justify-center items-center'>
+                  BROWSE
+                </div>
+              </div>
+            )}
           </div>
-          <div>
-            <label
-              htmlFor='gender'
-              className='block mb-2 text-sm font-medium text-gray-900 dark:text-white'
-            >
-              Gender
-            </label>
-            <select
-              id='gender'
-              value={staffDetails.gender}
-              onChange={handleChange}
-              className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
-            >
-              <option value='Male'>Male</option>
-              <option value='Female' selected>
-                Female
-              </option>
-            </select>
-          </div>
-          <div>
-            <label
-              htmlFor='email'
-              className='block mb-2 text-sm font-medium text-gray-900 dark:text-white'
-            >
-              Email Address
-            </label>
-            <input
-              type='text'
-              id='email'
-              value={staffDetails.email}
-              onChange={handleChange}
-              className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
-              placeholder='xxx@gmail.com'
-              pattern='[0-9]{3}-[0-9]{2}-[0-9]{3}'
-              required
+          <div className=''>
+            <div>
+              <label
+                htmlFor='name'
+                className=' block mb-2 w-xs text-sm font-medium text-gray-900 '
+              >
+                Full Name
+              </label>
+              <input
+                type='text'
+                id='name'
+                value={staffData.name}
+                onChange={handleChange}
+                className='bg-grey-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:teal-500 focus:border-teal-500 block w-full p-2.5 '
+                placeholder='Full Name'
+                required
+              />
+            </div>
+
+            <div className='mt-4'>
+              <label
+                htmlFor='gender'
+                className='block mb-2 text-sm font-medium text-gray-900 '
+              >
+                Gender
+              </label>
+              <div className='flex flex-row gap-5'>
+                <label className='flex items-center gap-2'>
+                  <input
+                    type='radio'
+                    value='Male'
+                    checked={staffData.gender === "Male"}
+                    onChange={(e) =>
+                      setStaffData((prev) => ({
+                        ...prev,
+                        gender: e.target.value,
+                      }))
+                    }
+                    className='w-4 h-4 text-teal-600 focus:ring-teal-500'
+                  />
+                  Male
+                </label>
+                <label className='flex items-center gap-2'>
+                  <input
+                    type='radio'
+                    value='Female'
+                    checked={staffData.gender === "Female"}
+                    onChange={(e) =>
+                      setStaffData((prev) => ({
+                        ...prev,
+                        gender: e.target.value,
+                      }))
+                    }
+                    className='w-4 h-4 text-teal-600 focus:ring-teal-500'
+                  />
+                  Female
+                </label>
+              </div>
+            </div>
+           
+            <div className='mt-4'>
+              <label
+                htmlFor='email'
+                className='block mb-2 text-sm font-medium text-gray-900'
+              >
+                Email
+              </label>
+              <input
+                type='email'
+                id='email'
+                value={staffData.email}
+                onChange={handleChange}
+                className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 '
+                placeholder='xxx@gmail.com'
+                pattern='[0-9]{3}-[0-9]{2}-[0-9]{3}'
+              />
+            </div>
+            <div className='mt-4'>
+              <label
+                htmlFor='phoneNumber'
+                className='block mb-2 text-sm font-medium text-gray-900 '
+              >
+                Phone Number
+              </label>
+              <input
+                type='text'
+                id='phoneNumber'
+                value={staffData.phoneNumber}
+                onChange={handleChange}
+                className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 '
+                placeholder='+959xxxx'
+                required
+              />
+            </div>
+            <div className='mt-8' />
+            <GradientButton
+              handleAction={onPressUpdate}
+              Icon={IoAddCircle}
+              width={"full"}
+              rounded={"xl"}
+              text={"Update Account"}
             />
-          </div>
-          <div>
-            <label
-              htmlFor='phoneNumber'
-              className='block mb-2 text-sm font-medium text-gray-900 dark:text-white'
-            >
-              Phone Number
-            </label>
-            <input
-              type='text'
-              id='phoneNumber'
-              value={staffDetails.phoneNumber}
-              onChange={handleChange}
-              className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
-              placeholder='+959xxxx'
-              required
-            />
-          </div>
-          <div>
-            <label
-              htmlFor='visitors'
-              className='block mb-2 text-sm font-medium text-gray-900 dark:text-white'
-            >
-              Password
-            </label>
-            <input
-              type='text'
-              id='password'
-              value={staffDetails.password}
-              onChange={handleChange}
-              className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
-              placeholder=''
-              required
-            />
-          </div>
-         
-          <div className='md:col-start-2 flex justify-end gap-5 mt-10'>
-            <button
-              onClick={onPressUpdate}
-              type='submit'
-              className='text-white w-68 bg-[#11a186] hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
-            >
-              Update
-            </button>
-            <button
-              type='cancel'
-              className=' bg-gray-200 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
-            >
-              Cancel
-            </button>
           </div>
         </div>
       </form>
