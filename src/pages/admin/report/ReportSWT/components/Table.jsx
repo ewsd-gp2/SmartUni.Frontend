@@ -1,24 +1,67 @@
 import { IoFilterSharp } from "react-icons/io5";
 import { GoSortAsc } from "react-icons/go";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 
 export const StudentsTable = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [selected, setSelected] = useState("Status Bar");
+    const [data, setData] = useState([])
 
     const options = [
         { name: "A-Z", enabled: false},
         { name: "Date", enabled: false },
     ];
 
+    
+    const [loading, setLoading] = useState(false)
+    const [error, setError] = useState(null)
+
+    const url = `http://localhost:7142/studentsWithoutTutor`;
+    
+
+    useEffect(() => {
+
+        setLoading(true)
+        const fetchData = async () => {
+            try {
+                const response = await fetch(url, {
+                    method: 'GET',
+                    headers: {
+                    "Access-Control-Allow-Origin": "http://localhost:5173",
+                    'Content-Type': 'application/json',
+                    },
+                    withCredentials: true,
+                })
+                if(!response.ok){
+                    throw Error('Something went wrong')
+                } else {
+                    const data = await response.json()
+                    console.log(data)
+                    setData(data)
+                }
+            } catch (e) {
+                setError(e.message)
+            } finally {
+                setLoading(false)
+            }
+        }
+        fetchData();
+        
+    }, [])
+
+
+
+
+
+    
     return (
         <div className="mt-8">
                 <h2 className="text-4xl mb-10">Students Without Tutors</h2>
             <table className="w-7/9 border-none">
                 <thead>
                 <tr className="bg-teal-300">
-                    <th className="rounded-l-2xl w-23 text-center py-2 font-normal text-xl w-10">No.</th>
-                    <th className="py-2 w-full text-start font-normal text-xl px-15 w-80 flex justify-between">
+                    <th className="rounded-l-2xl text-center py-2 font-normal text-xl w-10">No.</th>
+                    <th className="py-2 text-start font-normal text-xl px-15 w-80 flex justify-between">
                         <h1>Student Names</h1>
                         <button onClick={() => setIsOpen(!isOpen)} className="hover:text-gray-600 flex items-center cursor-pointer"><GoSortAsc className="mr-1 mt-1 text-2xl"/>Sorting</button>
                     </th>

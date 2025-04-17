@@ -23,7 +23,7 @@ import CreateStudent from "./pages/admin/CreateStudent.jsx";
 import UpdateStudent from "./pages/admin/UpdateStudent.jsx";
 import StudentDashboard from "./pages/student/StudentDashboard.jsx";
 import UserProfile from "./pages/profile/UserProfile.jsx";
-import UpdateStaff from "./pages/admin/UpdateStudent.jsx";
+import UpdateStaff from "./pages/admin/UpdateStaff.jsx";
 import { LandingPage } from "./pages/landing/LandingPage.jsx";
 
 const router = createBrowserRouter([

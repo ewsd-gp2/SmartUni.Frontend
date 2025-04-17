@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import { RiArrowDropDownLine } from "react-icons/ri";
 
 export const StudentsTable = () => {
@@ -10,6 +10,45 @@ export const StudentsTable = () => {
         { name: "Ascending", enabled: false},
         { name: "Descending", enabled: false },
     ];
+    const [loading, setLoading] = useState(false)
+    const [error, setError] = useState(null)
+
+
+    let today = new Date();
+    let sevenDaysAgo = new Date(today);
+
+    const [url, setUrl] = useState(`http://localhost:7142/student/StudentsWithoutInteraction?dateBefore=${sevenDaysAgo.setDate(today.getDate() - 7)}`)
+
+
+    useEffect(() => {
+
+        setLoading(true)
+        const fetchData = async () => {
+            try {
+                
+                const response = await fetch(url, {
+                    method: 'GET',
+                    headers: {
+                    'Content-Type': 'application/json',
+                    },
+                    withCredentials: true,
+                })
+                if(!response.ok){
+                    throw Error('Something went wrong')
+                } else {
+                    const data = await response.json()
+                    console.log(data)
+                    setData(data)
+                }
+            } catch (e) {
+                setError(e.message)
+            } finally {
+                setLoading(false)
+            }
+        }
+        fetchData();
+    }, [url])
+
 
 
 
@@ -26,7 +65,7 @@ export const StudentsTable = () => {
                 <table className="w-6/9 border-none">
                 <thead>
                 <tr className="bg-teal-300">
-                    <th className="rounded-l-2xl w-23 text-center py-2 font-normal text-xl w-10">No.</th>
+                    <th className="rounded-l-2xl w-23 text-center py-2 font-normal text-xl">No.</th>
                     <th className="py-2 text-start font-normal text-xl pl-6  w-80">Student Names</th>
                     <th className="p-2 w-40 font-normal text-lg rounded-r-2xl">
                         <button
