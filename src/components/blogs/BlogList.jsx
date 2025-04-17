@@ -1,63 +1,67 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { RiArrowRightDoubleFill } from "react-icons/ri";
 import { HiSearch } from "react-icons/hi";
 import { getBlogs } from "./api";
+import { formatDate } from "../../formatdatetime/FormatDateTime";
+import { set } from "date-fns";
 const BlogList = () => {
-  const [blogList,setBlogList] = useState([]);
-  const formatDate = (dateStr) => {
-    return new Date(dateStr).toLocaleDateString("en-GB", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
-  };
-
-
+  const [blogList, setBlogList] = useState([]);
+  const userRole = localStorage.getItem("user_role");
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     const getBlogList = async () => {
+      setLoading(true);
       const [blogList] = await Promise.all([getBlogs()]);
       setBlogList(blogList);
     };
     getBlogList();
+    setLoading(false);
   }, []);
 
   if (blogList.length === 0) {
-      return (
-        <div className=" flex justify-center items-center h-screen">
-          <p>Loading...</p>
-        </div>
-      );
-    }
-  return (
-    <section className=" xl:flex lg:flex md:flex gap-5 sm:flex sm:flex-wrap">
-      <div className="  sm:w-[150px] md:w-[200px] lg:w-[250px] xl:w-[250px] bg-white border border-gray-200 rounded-lg shadow-sm">
-        <div>
-          {blogList.map((blog) => (
-            <div key={blog.id}>
-               <img
-            className="rounded-t-lg w-full h-[180px]"
-            src={`data:image/jpeg;base64,${blog.coverImage}`}
-            alt
-          />
-          <div className="mb-3 px-1 m-1">
-           <p className="text-xl font-semibold mb-2">{blog.title}</p>
-           <Link to={"/student/blog/details/1"} className=" flex items-center text-teal-600">
-             <p className=" text-sm">See the articles</p> <RiArrowRightDoubleFill />
-           </Link>
-         </div>
-            <hr />
-          <div className=" flex justify-between my-3 px-1 m-1">
-            <p className=" text-xs">
-              By <span>{blog.authorName}</span>{" "}
-            </p>
-            <p className="text-xs">{formatDate(blog.createdOn)}</p>
-          </div>
-            </div>
-          ))}
-        </div>
+    return (
+      <div className=" flex justify-center items-center h-screen">
+        <p>Loading...</p>
       </div>
-     
+    );
+  }
+ 
+  return (
+    <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-5">
+      {blogList.map((blog) => (
+        <div
+          key={blog.id}
+          className="bg-white border border-gray-200 rounded-lg shadow-sm"
+        >
+          <img
+            className="rounded-t-lg w-full h-[180px] object-cover"
+            src={`data:image/jpeg;base64,${blog.coverImage}`}
+            alt={blog.title}
+          />
+          <div className="mb-3 px-3 mt-2">
+            <div className=" mb-2">
+           <p className="text-lg font-semibold">{blog.title}  </p>
+               
+            {/* <span className="text-xs">({blog.type})</span> */}
+            </div>
+            <Link
+              to={`/${userRole}/blog/details/${blog.id}`}
+              className="flex items-center text-teal-600"
+            >
+              <p className="text-sm">See the articles</p>
+              <RiArrowRightDoubleFill className="ml-1" />
+            </Link>
+          </div>
+          <hr />
+          <div className="flex justify-between text-xs text-gray-500 px-3 py-2">
+            <p>
+              By <span>{blog.authorName}</span>
+            </p>
+            <p>{formatDate(blog.createdOn)}</p>
+          </div>
+        </div>
+      ))}
     </section>
   );
 };

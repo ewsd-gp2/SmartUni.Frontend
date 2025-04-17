@@ -24,6 +24,7 @@ import UpdateStudent from "./pages/admin/UpdateStudent.jsx";
 import StudentDashboard from "./pages/student/StudentDashboard.jsx";
 import UserProfile from "./pages/profile/UserProfile.jsx";
 import UpdateStaff from "./pages/admin/UpdateStudent.jsx";
+import BlogCreatePage from "./components/blogs/BlogCreatePage.jsx";
 
 const router = createBrowserRouter([
   {
@@ -109,6 +110,7 @@ const router = createBrowserRouter([
             path: "blog",
             element: <BlogPage />,
           },
+          
           {
             path: "blog/details/:id",
             element: <BlogDetailPage />,
@@ -127,6 +129,10 @@ const router = createBrowserRouter([
           {
             path: "blog",
             element: <BlogPage />,
+          },
+          {
+            path: "blog/create",
+            element: <BlogCreatePage />,
           },
           {
             path: "blog/details/:id",

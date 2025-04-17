@@ -94,16 +94,25 @@ export const assignTutor = async (tutorID, studentID) => {
 // };
 
 export const unAssignTutor = async (allocationId) => {
+  const options = {
+    method: 'PUT',
+    url: `${BASE_URL}/allocation`,
+    headers: {
+      'Content-Type': 'application/json',
+      "Access-Control-Allow-Origin": "http://localhost:5173",
+    },
+    data: {
+      allocationIds: [allocationId] 
+    },
+    withCredentials: true
+  };
+
   try {
-    await axios.put(`${BASE_URL}/allocation/${allocationId}`, {}, {
-      headers: {
-        "Access-Control-Allow-Origin": "http://localhost:5173",
-      },
-      withCredentials: true,
-    });
+    await axios.request(options);
     console.log("Tutor unassigned successfully");
   } catch (error) {
     console.error("Error unassigning tutor:", error);
+    throw error;
   }
 };
 

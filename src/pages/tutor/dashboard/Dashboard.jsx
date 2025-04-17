@@ -17,6 +17,7 @@ import {
   thisWeekEnd,
 } from "../../../utility/DateRange";
 import toast from "react-hot-toast";
+import { formatDate, formatTime } from "../../../formatdatetime/FormatDateTime";
 const Dashboard = () => {
   const user = JSON.parse(localStorage.getItem("user_profile"));
   const [listLoading, setListLoading] = useState(false);
@@ -73,6 +74,7 @@ const Dashboard = () => {
       .then((response) => {
         console.log("getMeetingList", response.data);
         setData(response.data);
+        console.log(response.data);
       })
       .catch((error) => {
         console.log(error);
@@ -83,22 +85,10 @@ const Dashboard = () => {
     setListLoading(false);
   };
 
-  const formatDate = (dateStr) => {
-    return new Date(dateStr).toLocaleDateString("en-GB", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
-  };
-
-  const formatTime = (dateStr) => {
-    return new Date(dateStr).toLocaleTimeString("en-GB", {
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: true,
-    });
-  };
-
+  const userName = user.name && user.name
+    .split(" ")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(" ");
 
   return (
     <Container>
@@ -107,7 +97,7 @@ const Dashboard = () => {
           <div className=" flex justify-between items-center">
             <p className=" text-2xl">
               {user.isFirstLoggedIn ? (
-                `Welcome ${user.name}`
+                `Welcome ${userName}`
               ) : (
                 <div className="flex flex-col gap-3">
                   {" "}
@@ -127,23 +117,28 @@ const Dashboard = () => {
             <div>
               <h3 className="text-lg mt-5 font-semibold">Schedule</h3>
             </div>
-            {data.map((item) => (
-              <>
-                <div key={item.id} className=" bg-gray-100 flex p-2.5 mt-2 rounded-lg justify-between items-center m-2">
-                  <div className=" flex gap-7 items-center">
-                    <IoIosPeople className="text-2xl text-teal-500" />
-                    <div>
-                      <p className="text-lg font-semibold">{item.title}</p>
-                      <span className="text-xs">
-                        From {formatTime(item.startTime)} to{" "}
-                        {formatTime(item.endTime)}
-                      </span>
-                    </div>
-                  </div>
-                  <p className="text-sm"> {formatDate(item.startTime)}</p>
-                </div>
-              </>
-            ))}
+            {data.length > 0 ? (
+  data.map((item) => (
+    <div
+      key={item.id}
+      className="bg-gray-100 flex p-2.5 mt-2 rounded-lg justify-between items-center m-2"
+    >
+      <div className="flex gap-7 items-center">
+        <IoIosPeople className="text-2xl text-teal-500" />
+        <div>
+          <p className="text-lg font-semibold">{item.title}</p>
+          <span className="text-xs">
+            From {formatTime(item.startTime)} to {formatTime(item.endTime)}
+          </span>
+        </div>
+      </div>
+      <p className="text-sm">{formatDate(item.startTime)}</p>
+    </div>
+  ))
+) : (
+  <p className="text-center text-gray-500 italic mt-4">There are no schedules.</p>
+)}
+
             <div>
               <h3 className="text-lg mt-5 font-semibold">Notifications</h3>
               <div>
@@ -185,32 +180,42 @@ const Dashboard = () => {
         <div className=" col-span-2 m-5">
           <h1 className=" mb-5 text-3xl">My Schedules</h1>
           <h3 className="text-2xl my-5">For Today</h3>
-          {/* <CalendarComponent className=" m-3" /> */}
-          {data.map((item) => (
-            <div key={item.id} >
-              <div className=" flex items-center mb-3">
-              {item.participants.map((participant) => (
-                    <img key={participant.id}
-                      className=" size-8 rounded-full inline-block"
-                      src={`data:image/jpeg;base64,${participant.avatar}`}
-                      alt={participant.name}
-                    />                      
-              ))}
-              </div>
-              <div className=" flex gap-5 items-center mb-3">
-                <PiNotepadLight className="text-2xl text-teal-500" />
-                <span>{item.title}</span>
-              </div>
-              <div className=" flex gap-5 items-center mb-3">
-                <PiNoteBlankLight className="text-2xl text-teal-500" />
-                <span className="text-sm">
-                  {formatDate(item.startTime)} {formatTime(item.startTime)} -{" "}
-                  {formatTime(item.endTime)}
-                </span>
-              </div>
-              <hr className="my-4 border-t-1 border-teal-500" />
-            </div>
-          ))}
+          {data.length > 0 ? (
+  data.map((item) => (
+    <div key={item.id}>
+      <div className="flex items-center mb-3">
+        {item.participants.map((participant, index) => (
+          <img
+          key={participant.id}
+          className="size-8 rounded-full inline-block border-2 border-white"
+          style={{
+            transform: `translateX(${-index * 10}px)`, 
+            zIndex: item.participants.length - index 
+          }}
+            // src={`data:image/jpeg;base64,${participant.avatar}`}
+            src="https://i.pinimg.com/736x/69/8e/34/698e34d4501ab531775c23fb2fbe351c.jpg"
+            alt={participant.name}
+          />
+        ))}
+      </div>
+      <div className="flex gap-5 items-center mb-3">
+        <PiNotepadLight className="text-2xl text-teal-500" />
+        <span>{item.title}</span>
+      </div>
+      <div className="flex gap-5 items-center mb-3">
+        <PiNoteBlankLight className="text-2xl text-teal-500" />
+        <span className="text-sm">
+          {formatDate(item.startTime)} {formatTime(item.startTime)} -{" "}
+          {formatTime(item.endTime)}
+        </span>
+      </div>
+      <hr className="my-4 border-t-1 border-teal-500" />
+    </div>
+  ))
+) : (
+  <p className="text-center text-gray-500 italic">There are no schedules.</p>
+)}
+
         </div>
       </div>
     </Container>

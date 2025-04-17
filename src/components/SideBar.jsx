@@ -14,19 +14,19 @@ const SideBar = () => {
   const userRole = localStorage.getItem("user_role");
   const student = [
     {
-      name: "Dashboard/tutorlist",
+      name: "Dashboard",
       icon: MdOutlineDashboard,
     },
     {
-      name: "Chats",
+      name: "Chat",
       icon: MdOutlineSpeakerNotes,
     },
     {
-      name: "Blogs",
+      name: "Blog",
       icon: MdNotes,
     },
     {
-      name: "Meetings",
+      name: "Meeting",
       icon: IoIosPeople,
     },
   ];

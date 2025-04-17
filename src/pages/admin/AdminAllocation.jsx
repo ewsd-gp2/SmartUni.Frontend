@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { BsSortDown } from "react-icons/bs";
-import { assignTutor, fetchAllocations, fetchStudents, fetchTutors, sendEmail, unAssignTutor } from "./api/api";
+import {
+  assignTutor,
+  fetchAllocations,
+  fetchStudents,
+  fetchTutors,
+  sendEmail,
+  unAssignTutor,
+} from "./api/api";
 import toast from "react-hot-toast";
 
 const AdminAllocation = () => {
@@ -18,7 +25,7 @@ const AdminAllocation = () => {
         const [students, tutors, allocations] = await Promise.all([
           fetchStudents(),
           fetchTutors(),
-          fetchAllocations()
+          fetchAllocations(),
         ]);
         setStudentData(students);
         setTutorData(tutors);
@@ -39,23 +46,23 @@ const AdminAllocation = () => {
         : [...prevSelected, studentId]
     );
   };
- 
+
   const handleAssign = async () => {
     if (!selectedTutor || selectedStudents.length === 0) {
       toast.error("Select tutor and students first");
       return;
     }
-  
+
     try {
       setLoading(true);
-  
+
       await Promise.all(
         selectedStudents.map(async (studentID) => {
           await assignTutor(selectedTutor, studentID);
-  
-          const student = studentData.find(s => s.id === studentID);
-          const tutor = tutorData.find(t => t.id === selectedTutor);
-  
+
+          const student = studentData.find((s) => s.id === studentID);
+          const tutor = tutorData.find((t) => t.id === selectedTutor);
+
           const emailData = {
             studentEmail: student.email,
             studentName: student.name,
@@ -66,22 +73,22 @@ const AdminAllocation = () => {
             senderName: "Admin",
             // websiteUrl: "https://your-website.com"
           };
-  
+
           await sendEmail(emailData);
         })
       );
-  
+
       const updatedAllocations = await fetchAllocations();
       setAllocation(updatedAllocations);
-      toast.success("Tutor assigned successfully", {
+      toast.success("Tutor assigned successfully and email sent", {
         icon: "✅",
         style: {
           background: "#ECFDF5",
           color: "#065F46",
-          borderLeft: "4px solid #059669"
-        }
+          borderLeft: "4px solid #059669",
+        },
       });
-  
+
       setSelectedStudents([]);
     } catch (error) {
       toast.error("Assignment failed");
@@ -91,53 +98,65 @@ const AdminAllocation = () => {
   };
 
   const handleUnassign = async () => {
+    if (!selectedStudents.length) {
+      toast.error("Please select students to unassign");
+      return;
+    }
+
     try {
       setLoading(true);
-      const allocationsToUnassign = allocation.filter((a) =>
-        selectedStudents.includes(a.studentID)
-      );
+      const allocationsToUnassign = allocation
+        .filter((a) => selectedStudents.includes(a.studentID))
+        .map((a) => ({
+          id: a.id,
+          student: studentData.find((s) => s.id === a.studentID),
+          tutor: tutorData.find((t) => t.id === a.tutorID),
+        }));
+
+      if (allocationsToUnassign.length === 0) {
+        toast.error("No assignments found for selected students");
+        return;
+      }
 
       await Promise.all(
-        allocationsToUnassign.map((a) => unAssignTutor(a.id))
+        allocationsToUnassign.map(async ({ id, student, tutor }) => {
+          await unAssignTutor(id);
+
+          if (student && tutor) {
+            const emailData = {
+              studentEmail: student.email,
+              studentName: student.name,
+              tutorEmail: tutor.email,
+              tutorName: tutor.name,
+              subject: "Tutor Unassignment Notification",
+              senderName: "Admin",
+            };
+
+            await sendEmail(emailData);
+          }
+        })
       );
-  
+
       const updatedAllocations = await fetchAllocations();
       setAllocation(updatedAllocations);
-  
-      // toast.success("Tutor unassigned successfully", {
-      //   icon: "✅",
-      //   style: {
-      //     background: "#ECFDF5",
-      //     color: "#065F46",
-      //     borderLeft: "4px solid #059669"
-      //   }
-      // });
-  
-      setSelectedStudents([]);
-  //   } catch (error) {
-  //     toast.error("Failed to unassign tutor", {
-  //       icon: "❌",
-  //       style: {
-  //         background: "#FEF2F2",
-  //         color: "#B45309"
-  //       }
-  //     });
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };catch (error) {
-    console.error("Unassign failed:");
-    toast.error("Failed to unassign tutor. Please check the network.");
-    
-    
-    const currentAllocations = await fetchAllocations();
-    setAllocation(currentAllocations);
-  } finally {
-    setLoading(false);
-  }
-};
-  
 
+      toast.success("Tutor unassigned successfully and email sent", {
+        icon: "✅",
+        style: {
+          background: "#ECFDF5",
+          color: "#065F46",
+          borderLeft: "4px solid #059669",
+        },
+      });
+
+      setSelectedStudents([]);
+    } catch (error) {
+      console.error("Unassign failed:", error);
+      toast.error(`Failed to complete unassignment: ${error.message}`);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const isAnyStudentAssigned = selectedStudents.some((studentID) =>
     allocation.some((assign) => assign.studentID === studentID)
@@ -161,7 +180,10 @@ const AdminAllocation = () => {
   return (
     <div className="p-4">
       <form className="max-w-sm my-5">
-        <label htmlFor="tutors" className="block mb-2 text-2xl font-medium text-gray-900">
+        <label
+          htmlFor="tutors"
+          className="block mb-2 text-2xl font-medium text-gray-900"
+        >
           Choose Tutor
         </label>
         <select
@@ -183,22 +205,35 @@ const AdminAllocation = () => {
         <table className="w-full text-sm text-left rtl:text-right text-gray-500">
           <thead className="text-xs text-gray-700 uppercase bg-blue-100">
             <tr>
-              <th scope="col" className="px-6 py-3">No</th>
-              <th scope="col" className="px-6 py-3">Students Name</th>
+              <th scope="col" className="px-6 py-3">
+                No
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Students Name
+              </th>
               <th scope="col" className="px-6 py-3">
                 <div className="flex items-center gap-2">
                   <BsSortDown /> Sorting
                 </div>
               </th>
-              <th scope="col" className="px-6 py-3">Status</th>
+              <th scope="col" className="px-6 py-3">
+                Status
+              </th>
             </tr>
           </thead>
           <tbody>
             {studentData.map((student, index) => {
-              const isAssigned = allocation.some(a => String(a.studentID) === String(student.id));
+              const isAssigned = allocation.some(
+                (a) => String(a.studentID) === String(student.id)
+              );
               return (
-                <tr key={student.id} className="bg-white border-b hover:bg-gray-50">
-                  <td className="px-6 py-4 font-medium text-gray-900">{index + 1}</td>
+                <tr
+                  key={student.id}
+                  className="bg-white border-b hover:bg-gray-50"
+                >
+                  <td className="px-6 py-4 font-medium text-gray-900">
+                    {index + 1}
+                  </td>
                   <td className="px-6 py-4">
                     <div className="flex gap-3 items-center">
                       <input
@@ -217,9 +252,11 @@ const AdminAllocation = () => {
                   </td>
                   <td className="px-6 py-4"></td>
                   <td className="px-6 py-4">
-                    <span className={`px-2.5 py-2 text-white rounded text-sm ${
-                      isAssigned ? "bg-teal-500" : "bg-red-400"
-                    }`}>
+                    <span
+                      className={`px-2.5 py-2 text-white rounded text-sm ${
+                        isAssigned ? "bg-teal-500" : "bg-red-400"
+                      }`}
+                    >
                       {isAssigned ? "Assigned" : "Unassigned"}
                     </span>
                   </td>
@@ -233,7 +270,9 @@ const AdminAllocation = () => {
       <div className="flex justify-end gap-3 mt-4">
         <button
           className={`border border-teal-500 text-slate-900 px-6 py-2 rounded-lg transition ${
-            !isAnyStudentAssigned ? "opacity-50 cursor-not-allowed" : "hover:bg-teal-50"
+            !isAnyStudentAssigned
+              ? "opacity-50 cursor-not-allowed"
+              : "hover:bg-teal-50"
           }`}
           onClick={handleUnassign}
           disabled={!isAnyStudentAssigned || loading}
@@ -243,11 +282,18 @@ const AdminAllocation = () => {
         <button
           onClick={handleAssign}
           className={`bg-teal-500 text-white px-6 py-2 rounded-lg transition ${
-            isAnyStudentAssigned || !selectedTutor || selectedStudents.length === 0 
-              ? "opacity-50 cursor-not-allowed" 
+            isAnyStudentAssigned ||
+            !selectedTutor ||
+            selectedStudents.length === 0
+              ? "opacity-50 cursor-not-allowed"
               : "hover:bg-teal-600"
           }`}
-          disabled={isAnyStudentAssigned || !selectedTutor || selectedStudents.length === 0 || loading}
+          disabled={
+            isAnyStudentAssigned ||
+            !selectedTutor ||
+            selectedStudents.length === 0 ||
+            loading
+          }
         >
           {loading ? "Processing..." : "Assign +"}
         </button>

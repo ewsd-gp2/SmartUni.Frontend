@@ -1,24 +1,29 @@
 import React from "react";
 import Breadcrumb from "../Breadcrumb";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { HiSearch } from "react-icons/hi";
 import BlogList from "./BlogList";
+import GradientButton from "../buttons/GradientButton";
+import { IoAddCircle } from "react-icons/io5";
 const BlogPage = () => {
+  const userRole = localStorage.getItem("user_role");
+
+  const navigate = useNavigate();
+  const handleCreateBlog = () => {
+    navigate(`/${userRole}/blog/create`);
+  }
   return (
     <main>
         <div className=" flex col-span-4 gap-5">
-          <div className=" col-span-3 mt-5">
-            <Breadcrumb currentPageTitle={"Knowledge Sharing"} />
-            <div className="relative mb-5">
-              <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                <HiSearch className=" text-gray-400 text-xl" />
-              </div>
-              <input
-                type="search"
-                className="block w-96 p-3 ps-8 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-teal-500 focus:border-teal-500 "
-                placeholder="Search"
-              />
-            </div>
+          <div className=" col-span-3">
+            <Breadcrumb currentPageTitle={"Blogs List"} />
+            <div className="flex justify-end mb-4">
+  <GradientButton
+    handleAction={handleCreateBlog}
+    Icon={IoAddCircle}
+    text={"Create Blog"}
+  />
+</div>
             <BlogList />
           </div>
         </div>

@@ -30,78 +30,70 @@ const UserProfile = () => {
   useEffect(() => {
     fetchProfileData();
   }, []);
-  return (
-    <div>
-      <Link to={`/${userRole}/dashboard`} className=" flex items-center mb-5">
-        <IoIosArrowBack className=" size-8 text-teal-500" />
-        <h1 className=" text-2xl font-semibold text-teal-500">Smart Uni</h1>
-      </Link>
-      <div className="mb-4 grid gap-4 sm:grid-cols-2  sm:gap-8 lg:gap-16 border w-full border-gray-100 shadow rounded-lg p-5">
-        <div className="space-y-4 mx-auto">
-          <div className="flex space-x-6 items-end">
-            <div className=" relative">
-              <img
-                className="size-32 rounded-lg object-cover"
-                src={userProfile.image}
-                alt="uer profile"
-              />
-              <p className=" absolute -right-2 bottom-0 bg-gray-100 size-6 text-gray-700 rounded-full flex items-center justify-center">
-                <HiOutlineCamera className=" text-teal-400" />
-              </p>
-            </div>
-            <div className=" flex items-start gap-x-15">
-              <div>
-                <h2 className="flex items-center text-xl font-bold leading-none text-gray-900 dark:text-white">
-                 {userProfile.name}
-                </h2>
-                <p className="text-gray-500 font-semibold font-serif mt-2 text-sm">
-                  {userProfile.userCode}
-                </p>
-              </div>
-              <div>
-                <button className=" w-[130px] flex gap-2 items-center justify-center text-slate-200 bg-teal-500 px-3 py-2.5 text-sm font-medium rounded-lg hover:bg-teal-600 focus:outline-none focus:ring-4 focus:ring-teal-300">
-                  <HiLockOpen /> Edit Profile
-                </button>
-              </div>
-            </div>
-          </div>
+  const userName = userProfile.name
+    ? userProfile.name
+        .split(" ")
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+        .join(" ")
+    : "";
 
-          <div className=" grid grid-cols-6">
-            <div className=" col-span-3">
-              <div className=" mb-3">
-                <p className="font-semibold text-gray-900 ">Name</p>
-                <p className="text-gray-500">{userProfile.name}</p>
-              </div>
-              <div className=" mb-3">
-                <p className="font-semibold text-gray-900 ">Major</p>
-                <p className="text-gray-500">{userProfile.major}</p>
-              </div>
-              <div className=" mb-3">
-                <p className="font-semibold text-gray-900 ">Phone Number</p>
-                <p className="text-gray-500">{userProfile.phoneNumber}</p>
-              </div>
-            </div>
-            <div className=" col-span-3">
-              <div className=" mb-3">
-                <p className="font-semibold text-gray-900 ">Id</p>
-                <p className="text-gray-500">{userProfile.userCode}</p>
-              </div>
-              <div className=" mb-3">
-                <p className="font-semibold text-gray-900 ">Gender</p>
-                <p className="text-gray-500">{userProfile.gender}</p>
-              </div>
-              <div className=" mb-3">
-                <p className="font-semibold text-gray-900 ">Email Address</p>
-                <p className="text-gray-500">{userProfile.email}</p>
-              </div>
-            </div>
-          </div>
-        </div>
+  return (
+    <div className="p-4 sm:p-6 lg:p-8">
+  <Link to={`/${userRole}/dashboard`} className="flex items-center mb-6 hover:underline">
+    <IoIosArrowBack className="text-2xl text-teal-500" />
+    <h1 className="text-2xl font-semibold text-teal-500 ml-2">Smart Uni</h1>
+  </Link>
+
+  <div className="bg-white border border-gray-100 shadow-md rounded-xl p-6 grid sm:grid-cols-1 lg:grid-cols-2 gap-6">
+    <div className="flex flex-col items-center lg:items-start space-y-4">
+      <div className="relative">
+        <img
+          className="w-32 h-32 object-cover rounded-lg border"
+          src={`data:image/jpeg;base64,${userProfile.image}`}
+          alt="user profile"
+        />
+        <span className="absolute -right-2 bottom-0 bg-gray-100 w-7 h-7 text-gray-700 rounded-full flex items-center justify-center shadow">
+          <HiOutlineCamera className="text-teal-500" />
+        </span>
+      </div>
+      <div className="text-center lg:text-left">
+        <h2 className="text-xl font-bold text-gray-900">{userName}</h2>
+        <p className="text-sm text-gray-500 mt-1">{userProfile.userCode}</p>
+      </div>
+      <button className="mt-2 flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-teal-500 hover:bg-teal-600 rounded-lg focus:outline-none focus:ring-4 focus:ring-teal-300">
+        <HiLockOpen /> Edit Profile
+      </button>
+    </div>
+
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+      <div>
+        <p className="text-sm font-semibold text-gray-800 mb-1">Name</p>
+        <p className="text-gray-600">{userName}</p>
       </div>
       <div>
-        
+        <p className="text-sm font-semibold text-gray-800 mb-1">ID</p>
+        <p className="text-gray-600">{userProfile.userCode}</p>
+      </div>
+      <div>
+        <p className="text-sm font-semibold text-gray-800 mb-1">Major</p>
+        <p className="text-gray-600">{userProfile.major}</p>
+      </div>
+      <div>
+        <p className="text-sm font-semibold text-gray-800 mb-1">Gender</p>
+        <p className="text-gray-600">{userProfile.gender}</p>
+      </div>
+      <div>
+        <p className="text-sm font-semibold text-gray-800 mb-1">Phone Number</p>
+        <p className="text-gray-600">{userProfile.phoneNumber}</p>
+      </div>
+      <div>
+        <p className="text-sm font-semibold text-gray-800 mb-1">Email Address</p>
+        <p className="text-gray-600">{userProfile.email}</p>
       </div>
     </div>
+  </div>
+</div>
+
   );
 };
 

@@ -3,6 +3,7 @@ import { HiChevronRight, HiHome, HiMiniHome } from "react-icons/hi2";
 import { Link } from "react-router-dom";
 
 const Breadcrumb = ({currentPageTitle,links}) => {
+  const userRole = localStorage.getItem("user_role");
   return (
     <div className=" w-full flex gap-3 mb-5">
       <nav
@@ -12,7 +13,7 @@ const Breadcrumb = ({currentPageTitle,links}) => {
         <ol className="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
           <li className="inline-flex items-center">
             <Link
-             to={`/dashboard`}
+             to={`/${userRole}/dashboard`}
               className="inline-flex gap-1 items-center text-sm font-medium text-gray-700 hover:text-teal-600 "
             >
               <HiMiniHome/>

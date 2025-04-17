@@ -6,6 +6,7 @@ import { useParams } from "react-router-dom";
 
 const StudentListforTutorDashboard = () => {
   const [studentList, setStudentList] = useState([]);
+  console.log(studentList)
   const [loading, setLoading] = useState(false);
   const user = JSON.parse(localStorage.getItem("user_profile"));
 

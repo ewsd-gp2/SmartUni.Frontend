@@ -35,7 +35,7 @@ const Profile = () => {
         <img
           data-popover-target="popover-user-profile"
           className="size-14 rounded-full border-2 border-gray-600 m-2 shadow-2xl"
-          src={userProfile.image}
+          src={`data:image/jpeg;base64,${userProfile.image}`}
           alt=""
         />
         <div

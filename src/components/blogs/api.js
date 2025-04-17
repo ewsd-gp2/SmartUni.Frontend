@@ -13,3 +13,4 @@ export const getBlogs = async () => {
     console.log("Fetching blog error", error)
  }
 }
+

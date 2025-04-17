@@ -1,41 +1,136 @@
-import React from "react";
-import { AiOutlineLike } from "react-icons/ai";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { AiFillLike, AiOutlineLike } from "react-icons/ai";
 import { AiOutlineDislike } from "react-icons/ai";
 import { FaRegImage } from "react-icons/fa6";
-import { IoMdSend } from "react-icons/io"
+import { IoMdSend } from "react-icons/io";
+import { useParams } from "react-router-dom";
+import { formatDate } from "../../formatdatetime/FormatDateTime";
+const BASE_URL = "http://localhost:7142";
+
 const BlogDetailRow = () => {
+  const { id } = useParams();
+  // console.log(id)
+  const [blogDetail, setBlogDetail] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [newComment, setNewComment] = useState("");
+  const [liked, setLiked] = useState(false);
+  const [reactionCount, setReactionCount] = useState(0);
+  useEffect(() => {
+    getBlogDetail(id);
+  }, []);
+
+  const getBlogDetail = async (id) => {
+    setLoading(true);
+    try {
+      const response = await axios.get(`${BASE_URL}/blog/${id}`, {
+        headers: {
+          "Access-Control-Allow-Origin": "http://localhost:5173",
+        },
+        withCredentials: true,
+      });
+      const res = response.data;
+      console.log(res)
+      setBlogDetail(res);
+      setLiked(res.isLiked);
+      setReactionCount(res.reactionCount);
+      setLoading(false);
+    } catch (error) {
+      console.log("Fetching blog error", error);
+    }
+  };
+
+  const handleCommentSubmit = async (e, id) => {
+    e.preventDefault();
+    if (!newComment.trim()) return;
+
+    try {
+      await axios.put(
+        `${BASE_URL}/blog/${id}/comment`,
+        { comment: newComment },
+        {
+          headers: {
+            "Access-Control-Allow-Origin": "http://localhost:5173",
+          },
+          withCredentials: true,
+        }
+      );
+
+      await getBlogDetail(id);
+
+      setNewComment("");
+    } catch (error) {
+      console.log("Comment submission error:", error);
+    }
+  };
+
+  const handleLikeToggle = async (e, id) => {
+    e.preventDefault();
+    e.stopPropagation();
+    try {
+      const method = liked ? "DELETE" : "PUT";
+      const respose = await axios({
+        method: method,
+        url: `${BASE_URL}/blog/${id}/like`,
+        headers: {
+          "Access-Control-Allow-Origin": "http://localhost:5173",
+        },
+        withCredentials: true,
+      });
+
+      setLiked(!liked);
+      setReactionCount((prevCount) => (liked ? prevCount - 1 : prevCount + 1));
+      await getBlogDetail(id);
+    } catch (error) {
+      console.log("Like toggle error:", error);
+    }
+  };
+
   return (
     <div className=" h-screen">
-       <div className=" w-96 flex gap-4 mb-5
-        ">
-          <img className=" size-10 rounded-full" src="https://i.pinimg.com/474x/f4/c7/1c/f4c71c4050c8b01d4ec39ab4185bd23a.jpg" alt="" />
-          <div>
-            <p className="">Grace</p>
-            
-          <p className=" text-xs text-gray-500 text-end">03,Jan 2025</p>
-          </div>
+      <div
+        className=" w-96 flex gap-4 mb-5
+        "
+      >
+        <img
+          className=" size-10 rounded-full"
+          src={`data:image/jpeg;base64,${blogDetail.authorAvatar}`}
+          alt=""
+        />
+        <div>
+          <p className="">{blogDetail.authorName}</p>
+
+          <p className=" text-xs text-gray-500 text-end">{formatDate(blogDetail.createdOn)}</p>
         </div>
-      <div className=" sm:w-[300px] md:w-[400px] lg:w-[700px] xl:w-[800px] bg-white rounded-lg border border-gray-200 shadow-sm ">
-      <div>
+      </div>
+      <div className=" sm:w-[300px] md:w-[400px] lg:w-[600px] xl:w-[700px] bg-white rounded-lg border border-gray-200 shadow-sm ">
+        <div>
           <img
             className="rounded-t-lg sm:h-[100px] md:h-[200px] lg:h-[300px] w-full"
-            src="https://i.pinimg.com/736x/69/25/a8/6925a8fb2c5f8dbeb84f13ca94e310d3.jpg"
+            src={`data:image/jpeg;base64,${blogDetail.coverImage}`}
             alt
           />
 
           <div className="  my-3">
             <p className="  text-sm text-gray-700 dark:text-gray-400">
-              Here are the biggest enterprise technology acquisitions of 2021 so
-              far, in reverse chronological order.
+              {blogDetail.content}
             </p>
             <div className="mt-3 flex gap-3">
-              
-                <AiOutlineLike />
-                <span className=" text-sm">10</span>
-              
+              <button
+                type="button"
+                onClick={(e) => handleLikeToggle(e, id)}
+                className="focus:outline-none"
+              >
+                {liked ? <AiFillLike /> : <AiOutlineLike />}
+              </button>
+              <span className=" text-sm">{reactionCount}</span>
+
               <div>
                 <p className=" text-sm text-gray-500">
-                  Comments <span className=" text-gray-800">(2)</span>
+                  Comments{" "}
+                  <span className=" text-gray-800">
+                    ({blogDetail.comments ? blogDetail.comments.length : 0})
+                  </span>
                 </p>
               </div>
             </div>
@@ -45,57 +140,57 @@ const BlogDetailRow = () => {
       <div>
         <p className=" mt-5">Comments</p>
 
-        <form className=" w-[400px]">
+        <form
+          className=" w-[400px]"
+          onSubmit={(e) => handleCommentSubmit(e, id)}
+        >
           <label htmlFor="chat" className="sr-only">
             Your message
           </label>
-          <div className="flex items-center px-3 py-2 rounded-lg bg-gray-50 dark:bg-gray-700">
-            <button
-              type="button"
-              className="inline-flex justify-center p-2 text-gray-500 rounded-lg cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600"
-            >
-          
-             <FaRegImage className=" size-5"/>
-              <span className="sr-only">Upload image</span>
-            </button>
-            
+          <div className="flex items-center  py-2 rounded-lg bg-gray-50 dark:bg-gray-700">
             <textarea
               id="chat"
               rows={1}
+              value={newComment}
+              onChange={(e) => setNewComment(e.target.value)}
               className="block p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               placeholder="Add a comment..."
-              defaultValue={""}
+              // defaultValue={newComment}
             />
             <button
               type="submit"
               className="inline-flex justify-center p-2 text-blue-600 rounded-full cursor-pointer hover:bg-blue-100 dark:text-blue-500 dark:hover:bg-gray-600"
             >
-              
-              <IoMdSend className=" size-5"/>
+              <IoMdSend className=" size-5" />
               <span className="sr-only">Send message</span>
             </button>
           </div>
         </form>
-        <div className=" w-96 flex gap-4 mt-5
-        ">
-          <img className=" size-12 rounded-full" src="https://i.pinimg.com/736x/da/8f/6f/da8f6f587a9c94a93998f2b932acb440.jpg" alt="" />
-          <div>
-            <p className=" mb-3">Olivia</p>
-            <p className=" text-sm mb-2">Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellat error eos,  reprehenderit reiciendis?
-            </p>
-          <p className=" text-xs text-gray-500 text-end">03,Jan 2025</p>
-          </div>
-        </div>
-        <div className=" w-96 flex gap-4 mt-5
-        ">
-          <img className=" size-10 rounded-full" src="https://i.pinimg.com/236x/da/c0/8d/dac08dbae85f1e89081126a98568c9e9.jpg" alt="" />
-          <div>
-            <p className=" mb-3">Taylor</p>
-            <p className=" text-sm mb-2">Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellat error eos,  reprehenderit reiciendis?
-            </p>
-          <p className=" text-xs text-gray-500 text-end">03,Jan 2025</p>
-          </div>
-        </div>
+        {blogDetail.comments &&
+          [...blogDetail.comments]
+            .sort((a, b) => new Date(b.commentedOn) - new Date(a.commentedOn))
+            .map((comment) => (
+              <div key={comment.id} className="w-full max-w-2xl px-4 mt-4">
+                <div className="flex items-start gap-3">
+                  <img
+                    className="w-9 h-9 rounded-full object-cover"
+                    src={`data:image/jpeg;base64,${comment.commenterAvatar}`}
+                    alt="avatar"
+                  />
+                  <div className="bg-gray-100 hover:bg-gray-200 transition rounded-xl px-4 py-2 w-[350px]">
+                    <p className="text-sm font-semibold text-gray-800">
+                      {comment.commenterName}
+                    </p>
+                    <p className="text-sm text-gray-700 mt-1 break-words">
+                      {comment.comment}
+                    </p>
+                    <p className="text-xs text-gray-500 mt-1 text-end">
+                      {formatDate(comment.commentedOn)}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ))}
       </div>
     </div>
   );
