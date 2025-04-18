@@ -222,8 +222,12 @@ const AdminAllocation = () => {
             </tr>
           </thead>
           <tbody>
-            {studentData.map((student, index) => {
+            {studentData?.map((student, index) => {
               const isAssigned = allocation.some(a => String(a.studentID) === String(student.id));
+            {studentData.map((student, index) => {
+              const isAssigned = allocation.some(
+                (a) => String(a.studentID) === String(student.id)
+              );
               return (
                 <tr
                   key={student.id}
