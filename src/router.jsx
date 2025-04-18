@@ -25,6 +25,7 @@ import StudentDashboard from "./pages/student/StudentDashboard.jsx";
 import UserProfile from "./pages/profile/UserProfile.jsx";
 import UpdateStaff from "./pages/admin/UpdateStudent.jsx";
 import BlogCreatePage from "./components/blogs/BlogCreatePage.jsx";
+import { LandingPage } from "./pages/landing/LandingPage.jsx";
 
 const router = createBrowserRouter([
   {
