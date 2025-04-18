@@ -21,8 +21,8 @@ const BlogList = () => {
 
   if (blogList.length === 0) {
     return (
-      <div className=" flex justify-center items-center h-screen">
-        <p>Loading...</p>
+      <div className=" flex justify-center items-center h-screen text-2xl">
+        <p>There is no blog list.You can create one.</p>
       </div>
     );
   }

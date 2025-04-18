@@ -101,7 +101,7 @@ const Dashboard = () => {
               ) : (
                 <div className="flex flex-col gap-3">
                   {" "}
-                  <p>Welcome Back {user.name}</p>{" "}
+                  <p>Welcome Back {userName}</p>{" "}
                   <p className="text-sm">
                     {" "}
                     Your Last Login was {formattedDate}
