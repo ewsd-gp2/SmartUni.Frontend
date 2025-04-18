@@ -1,7 +1,12 @@
+import axios from "axios";
+import { format } from "date-fns";
 import {useEffect, useState} from "react";
 import { RiArrowDropDownLine } from "react-icons/ri";
 
 export const StudentsTable = () => {
+
+    
+    const token = localStorage.getItem('token');
 
     const [isOpen, setIsOpen] = useState(false);
     const [selected, setSelected] = useState("Status Bar");
@@ -10,44 +15,61 @@ export const StudentsTable = () => {
         { name: "Ascending", enabled: false},
         { name: "Descending", enabled: false },
     ];
+
+    const [data, setData] = useState([])
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(null)
 
+    const get7DaysAgo = () => {
+        const date = new Date();
+        date.setDate(date.getDate() - 7);
+      
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+      
+        return `${year}-${month}-${day}`;
+      };
 
-    let today = new Date();
-    let sevenDaysAgo = new Date(today);
+      const get28DaysAgo = () => {
+        const date = new Date();
+        date.setDate(date.getDate() - 28);
+      
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+      
+        return `${year}-${month}-${day}`;
+      };
+      
+     
+      
+      const sevenDaysAgo = get7DaysAgo();
+      const twentyEightDaysAgo = get28DaysAgo();
 
-    const [url, setUrl] = useState(`http://localhost:7142/student/StudentsWithoutInteraction?dateBefore=${sevenDaysAgo.setDate(today.getDate() - 7)}`)
+      const [url, setUrl] = useState(`http://localhost:7142/StudentsWithoutInteraction?dateBefore=${sevenDaysAgo}`);
 
-
-    useEffect(() => {
-
-        setLoading(true)
-        const fetchData = async () => {
-            try {
-                
-                const response = await fetch(url, {
-                    method: 'GET',
-                    headers: {
-                    'Content-Type': 'application/json',
-                    },
-                    withCredentials: true,
-                })
-                if(!response.ok){
-                    throw Error('Something went wrong')
-                } else {
-                    const data = await response.json()
-                    console.log(data)
-                    setData(data)
-                }
-            } catch (e) {
-                setError(e.message)
-            } finally {
-                setLoading(false)
-            }
-        }
+    const fetchData = async () => {
+        setLoading(true);
+        
+        axios
+          .get(url, {
+            headers: {
+              "Access-Control-Allow-Origin": "http://localhost:5173",
+            },
+            withCredentials: "true",
+          })
+          .then((response) => {
+            console.log(response.data);
+            setData(response.data);
+          })
+          
+        setLoading(false);
+      };
+      useEffect(() => {
         fetchData();
-    }, [url])
+      }, []);
+    
 
 
 
@@ -57,8 +79,12 @@ export const StudentsTable = () => {
             <div className="w-65/100">
                 <h2 className="text-4xl mb-4">Students Without Interactions</h2>
                 <div className="flex justify-end mt-8 mb-5 space-x-3">
-                     <button className="border-3 border-teal-400 rounded-xl py-[3px] px-3">Last 7 Days</button>
-                    <button className="border-3 border-teal-400 rounded-xl py-[3px] px-3 bg-teal-400">Last 28 Days</button>
+                     <button className="cursor-pointer border-3 border-teal-400 rounded-xl py-[3px] px-3" onClick={() => {setUrl(`http://localhost:7142/StudentsWithoutInteraction?dateBefore=${sevenDaysAgo}`)
+                     }}>Last 7 Days</button>
+                    <button className="border-3 border-teal-400 rounded-xl py-[3px] px-3 cursor-pointer bg-teal-400" onClick={() => {setUrl(`http://localhost:7142/StudentsWithoutInteraction?dateBefore=${twentyEightDaysAgo}`)
+                    }
+                        
+                    }>Last 28 Days</button>
                 </div>
             </div>
 
@@ -72,7 +98,7 @@ export const StudentsTable = () => {
                             onClick={() => setIsOpen(!isOpen)}
                             className="px-4 py-2 text-black cursor-pointer flex items-center justify-center ml-8"
                         >
-                            Open <RiArrowDropDownLine className="mt-1 text-2xl"/>
+                            Date <RiArrowDropDownLine className="mt-1 text-2xl"/>
                         </button>
                     </th>
                 </tr>
@@ -99,71 +125,24 @@ export const StudentsTable = () => {
                         </div>
                     )}
 
-                    <tr className="border-b-2 border-teal-500">
+{!!data && data.map((data) => ( 
+    <tr className="border-b-2 border-teal-500" key={data.id}>
                         <td className="text-center border-teal-500 border-r-2 text-xl">1</td>
                         <td className="py-4 ml-8 flex items-center">
                             <img
                                 src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT36VHh-mjL_Rc8IL60D77dMDPL_fNhosHuag&s"
                                 alt="ProfileImage" className="w-13 h-13 rounded-full"/>
                             <div className="ml-4">
-                                <p className="text-xl">John Doe</p>
-                                <p className="text-xs text-gray-700">Uni Level</p>
+                                <p className="text-xl">{data.name}</p>
+                                <p className="text-xs text-gray-700">{data.major}</p>
                             </div>
                         </td>
-                        <td className="text-center border-teal-500 border-l-2">Since 01 Jan, 2025</td>
-                    </tr>
-                    <tr className="border-b-2 border-teal-500">
-                        <td className="text-center border-teal-500 border-r-2 text-xl">1</td>
-                        <td className="py-4 ml-8 flex items-center">
-                            <img
-                                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT36VHh-mjL_Rc8IL60D77dMDPL_fNhosHuag&s"
-                                alt="ProfileImage" className="w-13 h-13 rounded-full"/>
-                            <div className="ml-4">
-                                <p className="text-xl">John Doe</p>
-                                <p className="text-xs text-gray-700">Uni Level</p>
-                            </div>
-                        </td>
-                        <td className="text-center border-teal-500 border-l-2">Since 01 Jan, 2025</td>
-                    </tr>
-                    <tr className="border-b-2 border-teal-500">
-                        <td className="text-center border-teal-500 border-r-2 text-xl">1</td>
-                        <td className="py-4 ml-8 flex items-center">
-                            <img
-                                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT36VHh-mjL_Rc8IL60D77dMDPL_fNhosHuag&s"
-                                alt="ProfileImage" className="w-13 h-13 rounded-full"/>
-                            <div className="ml-4">
-                                <p className="text-xl">John Doe</p>
-                                <p className="text-xs text-gray-700">Uni Level</p>
-                            </div>
-                        </td>
-                        <td className="text-center border-teal-500 border-l-2">Since 01 Jan, 2025</td>
-                    </tr>
-                    <tr className="border-b-2 border-teal-500">
-                        <td className="text-center border-teal-500 border-r-2 text-xl">1</td>
-                        <td className="py-4 ml-8 flex items-center">
-                            <img
-                                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT36VHh-mjL_Rc8IL60D77dMDPL_fNhosHuag&s"
-                                alt="ProfileImage" className="w-13 h-13 rounded-full"/>
-                            <div className="ml-4">
-                                <p className="text-xl">John Doe</p>
-                                <p className="text-xs text-gray-700">Uni Level</p>
-                            </div>
-                        </td>
-                        <td className="text-center border-teal-500 border-l-2">Since 01 Jan, 2025</td>
-                    </tr>
-                    <tr className="border-b-2 border-teal-500">
-                        <td className="text-center border-teal-500 border-r-2 text-xl">1</td>
-                        <td className="py-4 ml-8 flex items-center">
-                            <img
-                                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT36VHh-mjL_Rc8IL60D77dMDPL_fNhosHuag&s"
-                                alt="ProfileImage" className="w-13 h-13 rounded-full"/>
-                            <div className="ml-4">
-                                <p className="text-xl">John Doe</p>
-                                <p className="text-xs text-gray-700">Uni Level</p>
-                            </div>
-                        </td>
-                        <td className="text-center border-teal-500 border-l-2">Since 01 Jan, 2025</td>
-                    </tr>
+                        <td className="text-center border-teal-500 border-l-2">Since {format(data.lastLoginDate, 'yyyy-MM-dd')}</td>
+                    </tr>)
+
+)}
+                   
+            
 
                     </tbody>
                 </table>

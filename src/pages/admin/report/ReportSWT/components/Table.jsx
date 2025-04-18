@@ -1,11 +1,11 @@
 import { IoFilterSharp } from "react-icons/io5";
 import { GoSortAsc } from "react-icons/go";
 import {useEffect, useState} from "react";
+import axios from "axios";
 
 export const StudentsTable = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [selected, setSelected] = useState("Status Bar");
-    const [data, setData] = useState([])
 
     const options = [
         { name: "A-Z", enabled: false},
@@ -13,42 +13,35 @@ export const StudentsTable = () => {
     ];
 
     
+    const [data, setData] = useState([])
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(null)
 
     const url = `http://localhost:7142/studentsWithoutTutor`;
     
 
-    useEffect(() => {
+    const fetchData = async () => {
 
-        setLoading(true)
-        const fetchData = async () => {
-            try {
-                const response = await fetch(url, {
-                    method: 'GET',
-                    headers: {
-                    "Access-Control-Allow-Origin": "http://localhost:5173",
-                    'Content-Type': 'application/json',
-                    },
-                    withCredentials: true,
-                })
-                if(!response.ok){
-                    throw Error('Something went wrong')
-                } else {
-                    const data = await response.json()
-                    console.log(data)
-                    setData(data)
-                }
-            } catch (e) {
-                setError(e.message)
-            } finally {
-                setLoading(false)
-            }
-        }
+        setLoading(true);
+        axios
+          .get(url, {
+            headers: {
+              "Access-Control-Allow-Origin": "http://localhost:5173",
+            },
+            withCredentials: "true",
+          })
+          .then((response) => {
+            console.log(response.data);
+            setData(response.data);
+          })
+          
+        setLoading(false);
+      };
+      useEffect(() => {
         fetchData();
-        
-    }, [])
+      }, []);
 
+    //   [...names].sort((a, b) => a.localeCompare(b))
 
 
 
@@ -90,58 +83,22 @@ export const StudentsTable = () => {
                             ))}
                         </div>
                     </div> )}
-                <tr className="border-b-2 border-teal-500">
-                    <td className="text-center border-teal-500 border-r-2 text-xl">1</td>
-                    <td className="py-4 ml-8 flex items-center">
-                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT36VHh-mjL_Rc8IL60D77dMDPL_fNhosHuag&s" alt="ProfileImage" className="w-13 h-13 rounded-full" />
-                        <div className="ml-4">
-                            <p className="text-xl">John Doe</p>
-                            <p className="text-xs text-gray-700">Uni Level</p>
-                        </div>
-                    </td>
-                    <td className="text-center border-teal-500 border-l-2">
-                        <p className="bg-red-200 mx-4 py-1.5 rounded-xl">Unassigned</p>
-                    </td>
-                </tr>
-                <tr className="border-b-2 border-teal-500">
-                    <td className="text-center border-teal-500 border-r-2 text-xl">1</td>
-                    <td className="py-4 ml-8 flex items-center">
-                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT36VHh-mjL_Rc8IL60D77dMDPL_fNhosHuag&s" alt="ProfileImage" className="w-13 h-13 rounded-full" />
-                        <div className="ml-4">
-                            <p className="text-xl">John Doe</p>
-                            <p className="text-xs text-gray-700">Uni Level</p>
-                        </div>
-                    </td>
-                    <td className="text-center border-teal-500 border-l-2">
-                        <p className="bg-red-200 mx-4 py-1.5 rounded-xl">Unassigned</p>
-                    </td>
-                </tr>
-                <tr className="border-b-2 border-teal-500">
-                    <td className="text-center border-teal-500 border-r-2 text-xl">1</td>
-                    <td className="py-4 ml-8 flex items-center">
-                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT36VHh-mjL_Rc8IL60D77dMDPL_fNhosHuag&s" alt="ProfileImage" className="w-13 h-13 rounded-full" />
-                        <div className="ml-4">
-                            <p className="text-xl">John Doe</p>
-                            <p className="text-xs text-gray-700">Uni Level</p>
-                        </div>
-                    </td>
-                    <td className="text-center border-teal-500 border-l-2">
-                        <p className="bg-red-200 mx-4 py-1.5 rounded-xl">Unassigned</p>
-                    </td>
-                </tr>
-                <tr className="border-b-2 border-teal-500">
-                    <td className="text-center border-teal-500 border-r-2 text-xl">1</td>
-                    <td className="py-4 ml-8 flex items-center">
-                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT36VHh-mjL_Rc8IL60D77dMDPL_fNhosHuag&s" alt="ProfileImage" className="w-13 h-13 rounded-full" />
-                        <div className="ml-4">
-                            <p className="text-xl">John Doe</p>
-                            <p className="text-xs text-gray-700">Uni Level</p>
-                        </div>
-                    </td>
-                    <td className="text-center border-teal-500 border-l-2">
-                        <p className="bg-red-200 mx-4 py-1.5 rounded-xl">Unassigned</p>
-                    </td>
-                </tr>
+                    {!!data && data.map((data) => (
+                        <tr className="border-b-2 border-teal-500" key={data.id}>
+                        <td className="text-center border-teal-500 border-r-2 text-xl">1</td>
+                        <td className="py-4 ml-8 flex items-center">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT36VHh-mjL_Rc8IL60D77dMDPL_fNhosHuag&s" alt="ProfileImage" className="w-13 h-13 rounded-full" />
+                            <div className="ml-4">
+                                <p className="text-xl">{data.name}</p>
+                                <p className="text-xs text-gray-700">{data.major}</p>
+                            </div>
+                        </td>
+                        <td className="text-center border-teal-500 border-l-2">
+                            <p className="bg-red-200 mx-4 py-1.5 rounded-xl">Unassigned</p>
+                        </td>
+                    </tr>
+                    ))}
+                
 
                 </tbody>
             </table>

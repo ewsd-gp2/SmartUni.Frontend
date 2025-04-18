@@ -1,8 +1,35 @@
-import {useState} from "react";
+import axios from "axios";
+import {useEffect, useState} from "react";
 import { RiArrowDropDownLine } from "react-icons/ri";
 
 export const StudentsTable = () => {
 
+    const [data, setData] = useState([])
+    const [loading, setLoading] = useState(false)
+    const [error, setError] = useState(null)
+
+    const url = useState(`http://localhost:7142/message`)
+
+    const fetchData = async () => {
+        setLoading(true);
+        
+        axios
+          .get(url, {
+            headers: {
+              "Access-Control-Allow-Origin": "http://localhost:5173",
+            },
+            withCredentials: "true",
+          })
+          .then((response) => {
+            console.log(response.data);
+            setData(response.data);
+          })
+          
+        setLoading(false);
+      };
+      useEffect(() => {
+        fetchData();
+      }, []);
 
 
     return (
@@ -18,7 +45,7 @@ export const StudentsTable = () => {
                 <table className="w-6/13 border-none">
                 <thead>
                 <tr className="bg-teal-300">
-                    <th className="rounded-l-2xl w-23 text-center py-2 font-normal text-xl w-10">No.</th>
+                    <th className="rounded-l-2xl w-23 text-center py-2 font-normal text-xl">No.</th>
                     <th className="py-2 text-start font-normal text-xl pl-6  w-80">Student Names</th>
                     <th className="p-2 w-40 font-normal text-lg rounded-r-2xl">
                         No. of Msg
@@ -27,65 +54,30 @@ export const StudentsTable = () => {
 
                 </thead>
                     <tbody>
-                    <tr className="border-b-2 border-teal-500">
+                    {!!data && data.filter((data) => data.SenderType == 'student' ).map((studentMessage) => {
+                        <tr className="border-b-2 border-teal-500" key={studentMessage.SenderId}>
                         <td className="text-center border-teal-500 border-r-2 text-xl">1</td>
                         <td className="py-4 ml-8 flex items-center">
                             <img
                                 src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT36VHh-mjL_Rc8IL60D77dMDPL_fNhosHuag&s"
                                 alt="ProfileImage" className="w-13 h-13 rounded-full"/>
                             <div className="ml-4">
-                                <p className="text-xl">John Doe</p>
-                                <p className="text-xs text-gray-700">Uni Level</p>
+                                <p className="text-xl">{studentMessage.senderName}</p>
+                                <p className="text-xs text-gray-700">{studentMessage.senderMajor}</p>
                             </div>
                         </td>
-                        <td className="text-center text-xl border-teal-500 border-l-2">10</td>
+                        <td className="text-center text-xl border-teal-500 border-l-2">{studentMessage.MessageCount}</td>
                     </tr>
-                    <tr className="border-b-2 border-teal-500">
-                        <td className="text-center border-teal-500 border-r-2 text-xl">1</td>
-                        <td className="py-4 ml-8 flex items-center">
-                            <img
-                                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT36VHh-mjL_Rc8IL60D77dMDPL_fNhosHuag&s"
-                                alt="ProfileImage" className="w-13 h-13 rounded-full"/>
-                            <div className="ml-4">
-                                <p className="text-xl">John Doe</p>
-                                <p className="text-xs text-gray-700">Uni Level</p>
-                            </div>
-                        </td>
-                        <td className="text-center text-xl border-teal-500 border-l-2">10</td>
-                    </tr>
-                    <tr className="border-b-2 border-teal-500">
-                        <td className="text-center border-teal-500 border-r-2 text-xl">1</td>
-                        <td className="py-4 ml-8 flex items-center">
-                            <img
-                                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT36VHh-mjL_Rc8IL60D77dMDPL_fNhosHuag&s"
-                                alt="ProfileImage" className="w-13 h-13 rounded-full"/>
-                            <div className="ml-4">
-                                <p className="text-xl">John Doe</p>
-                                <p className="text-xs text-gray-700">Uni Level</p>
-                            </div>
-                        </td>
-                        <td className="text-center text-xl border-teal-500 border-l-2">10</td>
-                    </tr>
-                    <tr className="border-b-2 border-teal-500">
-                        <td className="text-center border-teal-500 border-r-2 text-xl">1</td>
-                        <td className="py-4 ml-8 flex items-center">
-                            <img
-                                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT36VHh-mjL_Rc8IL60D77dMDPL_fNhosHuag&s"
-                                alt="ProfileImage" className="w-13 h-13 rounded-full"/>
-                            <div className="ml-4">
-                                <p className="text-xl">John Doe</p>
-                                <p className="text-xs text-gray-700">Uni Level</p>
-                            </div>
-                        </td>
-                        <td className="text-center text-xl border-teal-500 border-l-2">10</td>
-                    </tr>
+                    })} 
 
                     </tbody>
                 </table>
+
+
                 <table className="w-6/13 border-none">
                 <thead>
                 <tr className="bg-teal-300">
-                    <th className="rounded-l-2xl w-23 text-center py-2 font-normal text-xl w-10">No.</th>
+                    <th className="rounded-l-2xl w-23 text-center py-2 font-normal text-xl">No.</th>
                     <th className="py-2 text-start font-normal text-xl pl-6  w-80">Student Names</th>
                     <th className="p-2 w-40 font-normal text-lg rounded-r-2xl">
                         No. of Msg
@@ -93,58 +85,20 @@ export const StudentsTable = () => {
                 </tr>
                 </thead>
                 <tbody>
-                <tr className="border-b-2 border-teal-500">
-                    <td className="text-center border-teal-500 border-r-2 text-xl">1</td>
-                    <td className="py-4 ml-8 flex items-center">
-                        <img
-                            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT36VHh-mjL_Rc8IL60D77dMDPL_fNhosHuag&s"
-                            alt="ProfileImage" className="w-13 h-13 rounded-full"/>
-                        <div className="ml-4">
-                            <p className="text-xl">John Doe</p>
-                            <p className="text-xs text-gray-700">Uni Level</p>
-                        </div>
-                    </td>
-                    <td className="text-center text-xl border-teal-500 border-l-2">10</td>
-                </tr>
-                <tr className="border-b-2 border-teal-500">
-                    <td className="text-center border-teal-500 border-r-2 text-xl">1</td>
-                    <td className="py-4 ml-8 flex items-center">
-                        <img
-                            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT36VHh-mjL_Rc8IL60D77dMDPL_fNhosHuag&s"
-                            alt="ProfileImage" className="w-13 h-13 rounded-full"/>
-                        <div className="ml-4">
-                            <p className="text-xl">John Doe</p>
-                            <p className="text-xs text-gray-700">Uni Level</p>
-                        </div>
-                    </td>
-                    <td className="text-center text-xl border-teal-500 border-l-2">10</td>
-                </tr>
-                <tr className="border-b-2 border-teal-500">
-                    <td className="text-center border-teal-500 border-r-2 text-xl">1</td>
-                    <td className="py-4 ml-8 flex items-center">
-                        <img
-                            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT36VHh-mjL_Rc8IL60D77dMDPL_fNhosHuag&s"
-                            alt="ProfileImage" className="w-13 h-13 rounded-full"/>
-                        <div className="ml-4">
-                            <p className="text-xl">John Doe</p>
-                            <p className="text-xs text-gray-700">Uni Level</p>
-                        </div>
-                    </td>
-                    <td className="text-center text-xl border-teal-500 border-l-2">10</td>
-                </tr>
-                <tr className="border-b-2 border-teal-500">
-                    <td className="text-center border-teal-500 border-r-2 text-xl">1</td>
-                    <td className="py-4 ml-8 flex items-center">
-                        <img
-                            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT36VHh-mjL_Rc8IL60D77dMDPL_fNhosHuag&s"
-                            alt="ProfileImage" className="w-13 h-13 rounded-full"/>
-                        <div className="ml-4">
-                            <p className="text-xl">John Doe</p>
-                            <p className="text-xs text-gray-700">Uni Level</p>
-                        </div>
-                    </td>
-                    <td className="text-center text-xl border-teal-500 border-l-2">10</td>
-                </tr>
+                {!!data && data.filter((data) => data.SenderType == 'tutor' ).map((tutorMessage) => {
+                        <tr className="border-b-2 border-teal-500" key={tutorMessage.SenderId}>
+                        <td className="text-center border-teal-500 border-r-2 text-xl">1</td>
+                        <td className="py-4 ml-8 flex items-center">
+                            <img
+                                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT36VHh-mjL_Rc8IL60D77dMDPL_fNhosHuag&s"
+                                alt="ProfileImage" className="w-13 h-13 rounded-full"/>
+                            <div className="ml-4">
+                                <p className="text-xl">{tutorMessage.senderName}</p>
+                            </div>
+                        </td>
+                        <td className="text-center text-xl border-teal-500 border-l-2">{tutorMessage.MessageCount}</td>
+                    </tr>
+                    })} 
 
                 </tbody>
             </table>
@@ -155,7 +109,7 @@ export const StudentsTable = () => {
                 <table className="w-6/13 border-none">
                     <thead>
                     <tr className="bg-teal-300">
-                        <th className="rounded-l-2xl w-23 text-center py-2 font-normal text-xl w-10">No.</th>
+                        <th className="rounded-l-2xl w-23 text-center py-2 font-normal text-xl">No.</th>
                         <th className="py-2 text-start font-normal text-xl pl-6  w-80">Tutors</th>
                         <th className="p-2 w-40 font-normal text-lg rounded-r-2xl">
                             Average Msg
@@ -163,59 +117,20 @@ export const StudentsTable = () => {
                     </tr>
                     </thead>
                     <tbody>
-                    <tr className="border-b-2 border-teal-500">
+                    {!!data && data.filter((data) => data.SenderType == 'student' ).map((studentMessage) => {
+                        <tr className="border-b-2 border-teal-500" key={studentMessage.SenderId}>
                         <td className="text-center border-teal-500 border-r-2 text-xl">1</td>
                         <td className="py-4 ml-8 flex items-center">
                             <img
                                 src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT36VHh-mjL_Rc8IL60D77dMDPL_fNhosHuag&s"
                                 alt="ProfileImage" className="w-13 h-13 rounded-full"/>
                             <div className="ml-4">
-                                <p className="text-xl">John Doe</p>
-                                <p className="text-xs text-gray-700">Uni Level</p>
+                                <p className="text-xl">{studentMessage.senderName}</p>
                             </div>
                         </td>
-                        <td className="text-center text-xl border-teal-500 border-l-2">10</td>
+                        <td className="text-center text-xl border-teal-500 border-l-2">{studentMessage.MessageCount}</td>
                     </tr>
-                    <tr className="border-b-2 border-teal-500">
-                        <td className="text-center border-teal-500 border-r-2 text-xl">1</td>
-                        <td className="py-4 ml-8 flex items-center">
-                            <img
-                                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT36VHh-mjL_Rc8IL60D77dMDPL_fNhosHuag&s"
-                                alt="ProfileImage" className="w-13 h-13 rounded-full"/>
-                            <div className="ml-4">
-                                <p className="text-xl">John Doe</p>
-                                <p className="text-xs text-gray-700">Uni Level</p>
-                            </div>
-                        </td>
-                        <td className="text-center text-xl border-teal-500 border-l-2">10</td>
-                    </tr>
-                    <tr className="border-b-2 border-teal-500">
-                        <td className="text-center border-teal-500 border-r-2 text-xl">1</td>
-                        <td className="py-4 ml-8 flex items-center">
-                            <img
-                                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT36VHh-mjL_Rc8IL60D77dMDPL_fNhosHuag&s"
-                                alt="ProfileImage" className="w-13 h-13 rounded-full"/>
-                            <div className="ml-4">
-                                <p className="text-xl">John Doe</p>
-                                <p className="text-xs text-gray-700">Uni Level</p>
-                            </div>
-                        </td>
-                        <td className="text-center text-xl border-teal-500 border-l-2">10</td>
-                    </tr>
-                    <tr className="border-b-2 border-teal-500">
-                        <td className="text-center border-teal-500 border-r-2 text-xl">1</td>
-                        <td className="py-4 ml-8 flex items-center">
-                            <img
-                                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT36VHh-mjL_Rc8IL60D77dMDPL_fNhosHuag&s"
-                                alt="ProfileImage" className="w-13 h-13 rounded-full"/>
-                            <div className="ml-4">
-                                <p className="text-xl">John Doe</p>
-                                <p className="text-xs text-gray-700">Uni Level</p>
-                            </div>
-                        </td>
-                        <td className="text-center text-xl border-teal-500 border-l-2">10</td>
-                    </tr>
-
+                    })} 
                     </tbody>
                 </table>
             </div>

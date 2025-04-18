@@ -1,4 +1,5 @@
-import {useState} from "react";
+import axios from "axios";
+import {useEffect, useState} from "react";
 import { RiArrowDropDownLine } from "react-icons/ri";
 
 export const StudentsTable = () => {
@@ -10,6 +11,37 @@ export const StudentsTable = () => {
         { name: "Ascending", enabled: false},
         { name: "Descending", enabled: false },
     ];
+
+    const [data, setData] = useState([])
+    const [loading, setLoading] = useState(false)
+    const [error, setError] = useState(null)
+
+    const url = `http://localhost:7142/pageview/top`;
+    
+
+    const fetchData = async () => {
+
+        setLoading(true);
+        axios
+          .get(url, {
+            headers: {
+              "Access-Control-Allow-Origin": "http://localhost:5173",
+            },
+            withCredentials: "true",
+          })
+          .then((response) => {
+            console.log(response.data);
+            setData(response.data);
+          })
+          
+        setLoading(false);
+      };
+      useEffect(() => {
+        fetchData();
+      }, []);
+
+
+    
 
 
 
@@ -25,42 +57,21 @@ export const StudentsTable = () => {
                 <table className="w-4/9 border-none">
                 <thead>
                 <tr className="bg-teal-300">
-                    <th className="rounded-l-2xl w-23 text-center py-2 font-normal text-xl w-10">No.</th>
-                    <th className="py-2 text-start font-normal text-xl pl-6  w-80">Pages</th>
+                    <th className="rounded-l-2xl w-23 text-center py-2 font-normal text-xl">No.</th>
+                    <th className="py-2 text-start font-normal text-xl pl-6 w-110">Pages</th>
                     <th className="p-2 w-40 font-normal text-lg rounded-r-2xl">
                         Views
                     </th>
                 </tr>
                 </thead>
                     <tbody>
-                    <tr className="border-b-2 border-teal-500">
+                    {!!data && data.map((data, index) => (<tr className="border-b-2 border-teal-500" key={index}>
                         <td className="text-center border-teal-500 border-r-2 text-xl">1</td>
                         <td className="py-5 ml-8 flex items-center text-xl">
-                            Knowledge Sharing
+                            {data.pageName}
                         </td>
-                        <td className="text-center border-teal-500 border-l-2 text-xl">10 K</td>
-                    </tr>
-                    <tr className="border-b-2 border-teal-500">
-                        <td className="text-center border-teal-500 border-r-2 text-xl">1</td>
-                        <td className="py-5 ml-8 flex items-center text-xl">
-                            Knowledge Sharing
-                        </td>
-                        <td className="text-center border-teal-500 border-l-2 text-xl">10 K</td>
-                    </tr>
-                    <tr className="border-b-2 border-teal-500">
-                        <td className="text-center border-teal-500 border-r-2 text-xl">1</td>
-                        <td className="py-5 ml-8 flex items-center text-xl">
-                            Knowledge Sharing
-                        </td>
-                        <td className="text-center border-teal-500 border-l-2 text-xl">10 K</td>
-                    </tr>
-                    <tr className="border-b-2 border-teal-500">
-                        <td className="text-center border-teal-500 border-r-2 text-xl">1</td>
-                        <td className="py-5 ml-8 flex items-center text-xl">
-                            Knowledge Sharing
-                        </td>
-                        <td className="text-center border-teal-500 border-l-2 text-xl">10 K</td>
-                    </tr>
+                        <td className="text-center border-teal-500 border-l-2 text-xl">{data.viewCount}</td>
+                    </tr>))}
 
                     </tbody>
                 </table>

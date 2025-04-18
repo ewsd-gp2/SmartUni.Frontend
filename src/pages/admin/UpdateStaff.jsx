@@ -7,11 +7,6 @@ import { IoCloudUpload, IoAddCircle } from "react-icons/io5";
 import GradientButton from "../../components/buttons/GradientButton";
 import { IoImages } from "react-icons/io5";
 
-const Gender = {
-  Male: 0,
-  Female: 1,
-};
-
 
 const UpdateStaff = () => {
   const [loading, setLoading] = useState(false);
