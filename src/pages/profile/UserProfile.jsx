@@ -44,8 +44,8 @@ const UserProfile = () => {
     <h1 className="text-2xl font-semibold text-teal-500 ml-2">Smart Uni</h1>
   </Link>
 
-  <div className="bg-white border border-gray-100 shadow-md rounded-xl p-6 grid sm:grid-cols-1 lg:grid-cols-2 gap-6">
-    <div className="flex flex-col items-center lg:items-start space-y-4">
+  <div className="bg-white border border-gray-100 shadow-md rounded-xl p-6 space-y-8">
+    <div className="flex items-center gap-6">
       <div className="relative">
         <img
           className="w-32 h-32 object-cover rounded-lg border"
@@ -56,44 +56,45 @@ const UserProfile = () => {
           <HiOutlineCamera className="text-teal-500" />
         </span>
       </div>
-      <div className="text-center lg:text-left">
-        <h2 className="text-xl font-bold text-gray-900">{userName}</h2>
+      <div>
+        <h2 className="text-2xl font-bold text-gray-900">{userName}</h2>
         <p className="text-sm text-gray-500 mt-1">{userProfile.userCode}</p>
       </div>
-      <button className="mt-2 flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-teal-500 hover:bg-teal-600 rounded-lg focus:outline-none focus:ring-4 focus:ring-teal-300">
-        <HiLockOpen /> Edit Profile
-      </button>
     </div>
 
-    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-      <div>
-        <p className="text-sm font-semibold text-gray-800 mb-1">Name</p>
-        <p className="text-gray-600">{userName}</p>
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="space-y-4">
+        <div>
+          <p className="text-sm font-semibold text-gray-800 mb-1">Name</p>
+          <p className="text-gray-600">{userName}</p>
+        </div>
+        <div>
+          <p className="text-sm font-semibold text-gray-800 mb-1">ID</p>
+          <p className="text-gray-600">{userProfile.userCode}</p>
+        </div>
+        <div>
+          <p className="text-sm font-semibold text-gray-800 mb-1">Major</p>
+          <p className="text-gray-600">{userProfile.major}</p>
+        </div>
       </div>
-      <div>
-        <p className="text-sm font-semibold text-gray-800 mb-1">ID</p>
-        <p className="text-gray-600">{userProfile.userCode}</p>
-      </div>
-      <div>
-        <p className="text-sm font-semibold text-gray-800 mb-1">Major</p>
-        <p className="text-gray-600">{userProfile.major}</p>
-      </div>
-      <div>
-        <p className="text-sm font-semibold text-gray-800 mb-1">Gender</p>
-        <p className="text-gray-600">{userProfile.gender}</p>
-      </div>
-      <div>
-        <p className="text-sm font-semibold text-gray-800 mb-1">Phone Number</p>
-        <p className="text-gray-600">{userProfile.phoneNumber}</p>
-      </div>
-      <div>
-        <p className="text-sm font-semibold text-gray-800 mb-1">Email Address</p>
-        <p className="text-gray-600">{userProfile.email}</p>
+
+      <div className="space-y-4">
+        <div>
+          <p className="text-sm font-semibold text-gray-800 mb-1">Gender</p>
+          <p className="text-gray-600">{userProfile.gender}</p>
+        </div>
+        <div>
+          <p className="text-sm font-semibold text-gray-800 mb-1">Phone Number</p>
+          <p className="text-gray-600">{userProfile.phoneNumber}</p>
+        </div>
+        <div>
+          <p className="text-sm font-semibold text-gray-800 mb-1">Email Address</p>
+          <p className="text-gray-600">{userProfile.email}</p>
+        </div>
       </div>
     </div>
   </div>
 </div>
-
   );
 };
 

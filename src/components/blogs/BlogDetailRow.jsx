@@ -85,7 +85,11 @@ const BlogDetailRow = () => {
       console.log("Like toggle error:", error);
     }
   };
-
+ const handleEnter = (e) => {
+    if (e.key === "Enter") {
+      handleCommentSubmit(e, id);
+    }
+  };
   return (
     <div className=" h-screen">
       <div
@@ -153,6 +157,7 @@ const BlogDetailRow = () => {
               rows={1}
               value={newComment}
               onChange={(e) => setNewComment(e.target.value)}
+              onKeyUp={handleEnter}
               className="block p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               placeholder="Add a comment..."
               // defaultValue={newComment}
