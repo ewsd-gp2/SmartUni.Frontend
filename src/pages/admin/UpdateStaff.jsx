@@ -7,10 +7,6 @@ import { IoCloudUpload, IoAddCircle } from "react-icons/io5";
 import GradientButton from "../../components/buttons/GradientButton";
 import { IoImages } from "react-icons/io5";
 
-const Gender = {
-  Male: 0,
-  Female: 1,
-};
 
 const UpdateStaff = () => {
   const [loading, setLoading] = useState(false);
@@ -43,7 +39,10 @@ const UpdateStaff = () => {
       setShowImage(imageUrl);
     }
   };
-
+  const handleChange = (event) => {
+    const { id, value } = event.target;
+    setStaffData((prev) => ({ ...prev, [id]: value }));
+  };
   const fetchDetails = async () => {
     const url = `http://localhost:7142/staff/${detailsId}`;
     setLoading(true);
@@ -62,8 +61,8 @@ const UpdateStaff = () => {
           name: res.name,
           email: res.email,
           phoneNumber: res.phoneNumber,
-          gender: res.gender,
-        });
+          gender: res.gender === 0 ? "Male" : "Female",
+      });
         setShowImage(`data:image/jpeg;base64,${res.image}`);
       })
       .catch((error) => {
@@ -73,11 +72,6 @@ const UpdateStaff = () => {
         });
       });
     setLoading(false);
-  };
-
-  const handleChange = (event) => {
-    const { id, value } = event.target;
-    setStaffData((prev) => ({ ...prev, [id]: value }));
   };
 
   const onPressUpdate = async (event) => {
@@ -98,6 +92,7 @@ const UpdateStaff = () => {
       return;
     }
     console.log(staffData);
+   
     const url = `http://localhost:7142/staff/${detailsId}`;
     axios
       .put(url, staffData, {
@@ -108,7 +103,7 @@ const UpdateStaff = () => {
         withCredentials: true,
       })
       .then((response) => {
-        toast.success("Tutor Updated Successfully!", {
+        toast.success("Staff Updated Successfully!", {
           position: "top-right",
         });
         navigate("/staff/dashboard/stafflist");
@@ -120,7 +115,7 @@ const UpdateStaff = () => {
         });
       });
   };
-
+  
   return (
     <div>
       <HeaderTitle title='Update Staff Account' />
@@ -160,8 +155,8 @@ const UpdateStaff = () => {
           <div className=''>
             <div>
               <label
-                htmlFor='name'
-                className=' block mb-2 w-xs text-sm font-medium text-gray-900 '
+                for='name'
+                class=' block mb-2 w-xs text-sm font-medium text-gray-900 '
               >
                 Full Name
               </label>
@@ -170,7 +165,7 @@ const UpdateStaff = () => {
                 id='name'
                 value={staffData.name}
                 onChange={handleChange}
-                className='bg-grey-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:teal-500 focus:border-teal-500 block w-full p-2.5 '
+                class='bg-grey-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:teal-500 focus:border-teal-500 block w-full p-2.5 '
                 placeholder='Full Name'
                 required
               />
@@ -178,8 +173,8 @@ const UpdateStaff = () => {
 
             <div className='mt-4'>
               <label
-                htmlFor='gender'
-                className='block mb-2 text-sm font-medium text-gray-900 '
+                for='gender'
+                class='block mb-2 text-sm font-medium text-gray-900 '
               >
                 Gender
               </label>
@@ -216,28 +211,28 @@ const UpdateStaff = () => {
                 </label>
               </div>
             </div>
-           
             <div className='mt-4'>
               <label
-                htmlFor='email'
+                for='email'
                 className='block mb-2 text-sm font-medium text-gray-900'
               >
                 Email
               </label>
               <input
-                type='email'
+                type='text'
                 id='email'
                 value={staffData.email}
                 onChange={handleChange}
-                className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 '
+                class='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 '
                 placeholder='xxx@gmail.com'
                 pattern='[0-9]{3}-[0-9]{2}-[0-9]{3}'
+                required
               />
             </div>
             <div className='mt-4'>
               <label
-                htmlFor='phoneNumber'
-                className='block mb-2 text-sm font-medium text-gray-900 '
+                for='phoneNumber'
+                class='block mb-2 text-sm font-medium text-gray-900 '
               >
                 Phone Number
               </label>
@@ -246,7 +241,7 @@ const UpdateStaff = () => {
                 id='phoneNumber'
                 value={staffData.phoneNumber}
                 onChange={handleChange}
-                className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 '
+                class='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 '
                 placeholder='+959xxxx'
                 required
               />
@@ -267,3 +262,4 @@ const UpdateStaff = () => {
 };
 
 export default UpdateStaff;
+
