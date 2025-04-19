@@ -19,7 +19,7 @@ const BlogList = () => {
     setLoading(false);
   }, []);
 
-  if (blogList.length === 0) {
+  if (blogList?.length === 0) {
     return (
       <div className=" flex justify-center items-center h-screen text-2xl">
         <p>There is no blog list.You can create one.</p>
@@ -29,7 +29,7 @@ const BlogList = () => {
  
   return (
     <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-5">
-      {blogList.map((blog) => (
+      {blogList?.map((blog) => (
         <div
           key={blog.id}
           className="bg-white border border-gray-200 rounded-lg shadow-sm"
