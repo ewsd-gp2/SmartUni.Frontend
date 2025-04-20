@@ -102,7 +102,7 @@ const LoginPage = () => {
       </div>
       <div className=' col-span-1 flex flex-col w-[400px]'>
         <form onSubmit={handleSubmit(handleLogIn)} className='max-w-sm '>
-          {showWelcome && (
+          {/* {showWelcome && (
             <motion.div
               className='mb-5 text-center text-teal-600 text-2xl font-semibold'
               initial={{ opacity: 0, y: 30 }}
@@ -113,7 +113,7 @@ const LoginPage = () => {
                 ? "Welcome to our system! Let's begin your journey. "
                 : "Welcome back! Great to see you again."}
             </motion.div>
-          )}
+          )} */}
           <h3 className='text-2xl text-center mb-5 text-teal-600'>SmartUni</h3>
 
           <div className='my-5'>

@@ -84,6 +84,7 @@ export const StudentsTable = () => {
                     </th>
                 </tr>
                 </thead>
+                
                 <tbody>
                 {!!data && data.filter((data) => data.SenderType == 'tutor' ).map((tutorMessage) => {
                         <tr className="border-b-2 border-teal-500" key={tutorMessage.SenderId}>
