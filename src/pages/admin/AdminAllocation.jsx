@@ -17,7 +17,7 @@ const AdminAllocation = () => {
   const [selectedTutor, setSelectedTutor] = useState("");
   const [selectedStudents, setSelectedStudents] = useState([]);
   const [loading, setLoading] = useState(false);
-
+console.log(allocation);
   useEffect(() => {
     const loadData = async () => {
       setLoading(true);

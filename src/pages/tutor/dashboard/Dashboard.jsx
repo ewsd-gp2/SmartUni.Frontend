@@ -22,7 +22,7 @@ const Dashboard = () => {
   const user = JSON.parse(localStorage.getItem("user_profile"));
   const [listLoading, setListLoading] = useState(false);
   const [select, setSelect] = useState(1);
-  const [notifications, setNotifications] = useState([]);
+  // const [notifications, setNotifications] = useState([]);
   const [selectedRange, setSelectedRange] = useState({
     startTime: todayStart,
     endTime: todayEnd,
@@ -60,6 +60,7 @@ const Dashboard = () => {
     }
   };
 
+ 
   const fetchMeetingList = async () => {
     const url = `http://localhost:7142/meeting/tutor/${user.id}`;
     setListLoading(true);
@@ -144,10 +145,41 @@ const Dashboard = () => {
               <div>
                 <div className=" bg-gray-100 flex p-2.5 mt-2 rounded-lg justify-between items-center m-2">
                   <div className=" flex gap-7 items-center">
+                  <div>
+  {user?.notifications?.length > 0 ? (
+    user.notifications.map((note, index) => (
+      <div
+        key={index}
+        className="bg-gray-100 flex p-2.5 mt-2 rounded-lg justify-between items-center m-2"
+      >
+        <div className="flex gap-7 items-center">
+          <FaBlogger className="text-2xl text-teal-500" />
+          <div>
+            <p className="text-lg font-semibold">
+              {note.senderName || 'Someone'} reacted on your post
+            </p>
+            <span className="text-xs">
+              {note.message || 'No details provided.'}
+            </span>
+          </div>
+        </div>
+        <p className="text-sm">
+          {new Date(note.date || Date.now()).toLocaleDateString('en-GB', {
+            day: '2-digit',
+            month: 'short',
+            year: 'numeric',
+          })}
+        </p>
+      </div>
+    ))
+  ) : (
+    <p className="text-gray-500 m-4">No notifications yet 📭</p>
+  )}
+</div>
                     <FaBlogger className="text-2xl text-teal-500" />
                     <div>
                       <p className="text-lg font-semibold">
-                        David Commented on your post
+                       {user.name} reacted on your post
                       </p>
                       <span className="text-xs">
                         Today I would like to share....

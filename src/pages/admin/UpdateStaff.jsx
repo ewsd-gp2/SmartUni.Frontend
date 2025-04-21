@@ -22,7 +22,7 @@ const UpdateStaff = () => {
   });
   const detailsId = location.state.detailsId || {};
   const fileInputRef = useRef();
-
+  console.log("LOCATION STATE:", location.state);
   useEffect(() => {
     fetchDetails();
   }, []);
