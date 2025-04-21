@@ -24,13 +24,10 @@ import toast from "react-hot-toast";
 
  const Dashboard = () => {
 
-
-    
-
     const user = JSON.parse(localStorage.getItem("user_profile"));
   const [listLoading, setListLoading] = useState(false);
   const [select, setSelect] = useState(1);
-  const [items, setItems] = useState([]);
+  // const [items, setItems] = useState([]);
   const [selectedRange, setSelectedRange] = useState({
     startTime: todayStart,
     endTime: todayEnd,

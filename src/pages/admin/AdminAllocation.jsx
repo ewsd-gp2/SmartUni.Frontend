@@ -17,7 +17,7 @@ const AdminAllocation = () => {
   const [selectedTutor, setSelectedTutor] = useState("");
   const [selectedStudents, setSelectedStudents] = useState([]);
   const [loading, setLoading] = useState(false);
-console.log(allocation);
+console.log(studentData);
   useEffect(() => {
     const loadData = async () => {
       setLoading(true);
@@ -244,7 +244,7 @@ console.log(allocation);
                       />
                       <img
                         className="size-12 rounded-full"
-                        src="https://i.pinimg.com/736x/0e/d7/e8/0ed7e8509f71c4161e7443a86ce517a8.jpg"
+                       src={`data:image/jpeg;base64,${student.image}`}
                         alt={student.name}
                       />
                       <span>{student.name}</span>

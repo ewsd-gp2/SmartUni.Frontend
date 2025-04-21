@@ -30,7 +30,7 @@ const BlogDetailRow = () => {
         withCredentials: true,
       });
       const res = response.data;
-      console.log(res)
+      // console.log(res)
       setBlogDetail(res);
       setLiked(res.isLiked);
       setReactionCount(res.reactionCount);

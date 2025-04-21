@@ -22,12 +22,13 @@ const Dashboard = () => {
   const user = JSON.parse(localStorage.getItem("user_profile"));
   const [listLoading, setListLoading] = useState(false);
   const [select, setSelect] = useState(1);
-  // const [notifications, setNotifications] = useState([]);
   const [selectedRange, setSelectedRange] = useState({
     startTime: todayStart,
     endTime: todayEnd,
   });
   const [data, setData] = useState([]);
+  const [tutorData, setTutorData] = useState([]);
+  console.log(tutorData);
   const date = new Date(user.lastLoggedInDate);
   const formattedDate = date.toLocaleDateString("en-GB", {
     year: "numeric",
@@ -60,7 +61,6 @@ const Dashboard = () => {
     }
   };
 
- 
   const fetchMeetingList = async () => {
     const url = `http://localhost:7142/meeting/tutor/${user.id}`;
     setListLoading(true);
@@ -73,9 +73,9 @@ const Dashboard = () => {
         withCredentials: "true",
       })
       .then((response) => {
-        console.log("getMeetingList", response.data);
+        // console.log("getMeetingList", response.data);
         setData(response.data);
-        console.log(response.data);
+        // console.log(response.data);
       })
       .catch((error) => {
         console.log(error);
@@ -86,10 +86,48 @@ const Dashboard = () => {
     setListLoading(false);
   };
 
-  const userName = user.name && user.name
-    .split(" ")
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-    .join(" ");
+  const fetchTutorData = async () => {
+    setListLoading(true);
+    try {
+      const url = `http://localhost:7142/dashboard/tutor/${user.id}`;
+      const response = await axios.get(url, {
+        headers: {
+          Accept: "application/json",
+          "Access-Control-Allow-Origin": "http://localhost:5173",
+        },
+        withCredentials: true,
+      });
+
+      const responseData = response.data || {};
+      setTutorData({
+        ...responseData,
+        notifications: responseData.notifications || [],
+        students: responseData.students || [],
+      });
+    } catch (error) {
+      console.error("Error fetching tutor data:", error);
+      toast.error(error.message);
+    } finally {
+      setListLoading(false);
+    }
+  };
+  useEffect(() => {
+    if (user?.id) {
+      fetchTutorData();
+    }
+  }, [user?.id]);
+  const userName =
+    user.name &&
+    user.name
+      .split(" ")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(" ");
+
+  if (tutorData?.notifications?.length === 0) {
+    <div className="bg-gray-100 p-4 rounded-lg m-2">
+      <p className="text-gray-500 text-center">No notifications yet 📭</p>
+    </div>;
+  }
 
   return (
     <Container>
@@ -119,76 +157,76 @@ const Dashboard = () => {
               <h3 className="text-lg mt-5 font-semibold">Schedule</h3>
             </div>
             {data.length > 0 ? (
-  data.map((item) => (
-    <div
-      key={item.id}
-      className="bg-gray-100 flex p-2.5 mt-2 rounded-lg justify-between items-center m-2"
-    >
-      <div className="flex gap-7 items-center">
-        <IoIosPeople className="text-2xl text-teal-500" />
-        <div>
-          <p className="text-lg font-semibold">{item.title}</p>
-          <span className="text-xs">
-            From {formatTime(item.startTime)} to {formatTime(item.endTime)}
-          </span>
-        </div>
-      </div>
-      <p className="text-sm">{formatDate(item.startTime)}</p>
-    </div>
-  ))
-) : (
-  <p className="text-center text-gray-500 italic mt-4">There are no schedules.</p>
-)}
+              data.map((item) => (
+                <div
+                  key={item.id}
+                  className="bg-gray-100 flex p-2.5 mt-2 rounded-lg justify-between items-center m-2"
+                >
+                  <div className="flex gap-7 items-center">
+                    <IoIosPeople className="text-2xl text-teal-500" />
+                    <div>
+                      <p className="text-lg font-semibold">{item.title}</p>
+                      <span className="text-xs">
+                        From {formatTime(item.startTime)} to{" "}
+                        {formatTime(item.endTime)}
+                      </span>
+                    </div>
+                  </div>
+                  <p className="text-sm">{formatDate(item.startTime)}</p>
+                </div>
+              ))
+            ) : (
+              <p className="text-center text-gray-500 italic mt-4">
+                There are no schedules.
+              </p>
+            )}
 
             <div>
               <h3 className="text-lg mt-5 font-semibold">Notifications</h3>
-              <div>
-                <div className=" bg-gray-100 flex p-2.5 mt-2 rounded-lg justify-between items-center m-2">
-                  <div className=" flex gap-7 items-center">
-                  <div>
-  {user?.notifications?.length > 0 ? (
-    user.notifications.map((note, index) => (
-      <div
-        key={index}
-        className="bg-gray-100 flex p-2.5 mt-2 rounded-lg justify-between items-center m-2"
-      >
-        <div className="flex gap-7 items-center">
-          <FaBlogger className="text-2xl text-teal-500" />
-          <div>
-            <p className="text-lg font-semibold">
-              {note.senderName || 'Someone'} reacted on your post
-            </p>
-            <span className="text-xs">
-              {note.message || 'No details provided.'}
-            </span>
-          </div>
-        </div>
-        <p className="text-sm">
-          {new Date(note.date || Date.now()).toLocaleDateString('en-GB', {
-            day: '2-digit',
-            month: 'short',
-            year: 'numeric',
-          })}
-        </p>
-      </div>
-    ))
-  ) : (
-    <p className="text-gray-500 m-4">No notifications yet 📭</p>
-  )}
-</div>
-                    <FaBlogger className="text-2xl text-teal-500" />
-                    <div>
+
+              <div className=" bg-gray-100 flex p-2.5 mt-2 rounded-lg justify-between items-center m-2">
+                <div className=" flex gap-7 items-center">
+                  {tutorData?.notifications?.length > 0 ? (
+                    tutorData.notifications.map((note, index) => (
+                      <div
+                        key={index}
+                        className="bg-gray-100 flex p-2.5 mt-2 rounded-lg justify-between items-center m-2"
+                      >
+                        <div className="flex gap-7 items-center">
+                          <FaBlogger className="text-2xl text-teal-500" />
+                          <div>
+                            <p className="text-lg font-semibold">
+                              {note.senderName || "Someone"}{" "}
+                              {note.action || "reacted on your post"}
+                            </p>
+                            <span className="text-xs">
+                              {note.message || "No details provided."}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="bg-gray-100 p-4 rounded-lg m-2">
+                      <p className="text-gray-500 mx-auto mt-4">
+                        No notifications yet 📭
+                      </p>
+                    </div>
+                  )}
+
+                  {/* <FaBlogger className="text-2xl text-teal-500" /> */}
+                  {/* <div>
                       <p className="text-lg font-semibold">
                        {user.name} reacted on your post
                       </p>
                       <span className="text-xs">
                         Today I would like to share....
                       </span>
-                    </div>
-                  </div>
-                  <p className="text-sm">01 Feb 2025</p>
+                    </div> */}
                 </div>
-                <div className=" bg-gray-100 flex p-2.5 mt-2 rounded-lg justify-between items-center m-2">
+                {/* <p className="text-sm">01 Feb 2025</p> */}
+              </div>
+              {/* <div className=" bg-gray-100 flex p-2.5 mt-2 rounded-lg justify-between items-center m-2">
                   <div className=" flex gap-7 items-center">
                     <FaBlogger className="text-2xl text-teal-500" />
                     <div>
@@ -201,8 +239,7 @@ const Dashboard = () => {
                     </div>
                   </div>
                   <p className="text-sm">01 Feb 2025</p>
-                </div>
-              </div>
+                </div> */}
             </div>
           </div>
           <div>
@@ -213,41 +250,42 @@ const Dashboard = () => {
           <h1 className=" mb-5 text-3xl">My Schedules</h1>
           <h3 className="text-2xl my-5">For Today</h3>
           {data.length > 0 ? (
-  data.map((item) => (
-    <div key={item.id}>
-      <div className="flex items-center mb-3">
-        {item.participants.map((participant, index) => (
-          <img
-          key={participant.id}
-          className="size-8 rounded-full inline-block border-2 border-white"
-          style={{
-            transform: `translateX(${-index * 10}px)`, 
-            zIndex: item.participants.length - index 
-          }}
-            src={`data:image/jpeg;base64,${participant.image}`}
-            // src="https://i.pinimg.com/736x/69/8e/34/698e34d4501ab531775c23fb2fbe351c.jpg"
-            alt={participant.name}
-          />
-        ))}
-      </div>
-      <div className="flex gap-5 items-center mb-3">
-        <PiNotepadLight className="text-2xl text-teal-500" />
-        <span>{item.title}</span>
-      </div>
-      <div className="flex gap-5 items-center mb-3">
-        <PiNoteBlankLight className="text-2xl text-teal-500" />
-        <span className="text-sm">
-          {formatDate(item.startTime)} {formatTime(item.startTime)} -{" "}
-          {formatTime(item.endTime)}
-        </span>
-      </div>
-      <hr className="my-4 border-t-1 border-teal-500" />
-    </div>
-  ))
-) : (
-  <p className="text-center text-gray-500 italic">There are no schedules.</p>
-)}
-
+            data.map((item) => (
+              <div key={item.id}>
+                <div className="flex items-center mb-3">
+                  {item.participants.map((participant, index) => (
+                    <img
+                      key={participant.id}
+                      className="size-8 rounded-full inline-block border-2 border-white"
+                      style={{
+                        transform: `translateX(${-index * 10}px)`,
+                        zIndex: item.participants.length - index,
+                      }}
+                      src={`data:image/jpeg;base64,${participant.image}`}
+                      // src="https://i.pinimg.com/736x/69/8e/34/698e34d4501ab531775c23fb2fbe351c.jpg"
+                      alt="Student"
+                    />
+                  ))}
+                </div>
+                <div className="flex gap-5 items-center mb-3">
+                  <PiNotepadLight className="text-2xl text-teal-500" />
+                  <span>{item.title}</span>
+                </div>
+                <div className="flex gap-5 items-center mb-3">
+                  <PiNoteBlankLight className="text-2xl text-teal-500" />
+                  <span className="text-sm">
+                    {formatDate(item.startTime)} {formatTime(item.startTime)} -{" "}
+                    {formatTime(item.endTime)}
+                  </span>
+                </div>
+                <hr className="my-4 border-t-1 border-teal-500" />
+              </div>
+            ))
+          ) : (
+            <p className="text-center text-gray-500 italic">
+              There are no schedules.
+            </p>
+          )}
         </div>
       </div>
     </Container>

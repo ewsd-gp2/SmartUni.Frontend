@@ -25,7 +25,7 @@ const StudentListforTutorDashboard = () => {
           ? response.data
           : response.data?.students || [];
         setStudentList(data);
-        console.log(response.data);
+        // console.log(response.data);
         setLoading(false);
       })
       .catch((error) => {
