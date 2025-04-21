@@ -6,7 +6,9 @@ import { StudentVoice } from "./components/StudentVoice";
 import { Teacher } from "./components/Teacher";
 import Footer from "../../components/common/Footer";
 
+
 export const LandingPage = () => {
+   
     return (
         <>
             <NavBar />

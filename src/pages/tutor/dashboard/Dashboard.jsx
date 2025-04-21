@@ -22,7 +22,7 @@ const Dashboard = () => {
   const user = JSON.parse(localStorage.getItem("user_profile"));
   const [listLoading, setListLoading] = useState(false);
   const [select, setSelect] = useState(1);
-  const [items, setItems] = useState([]);
+  const [notifications, setNotifications] = useState([]);
   const [selectedRange, setSelectedRange] = useState({
     startTime: todayStart,
     endTime: todayEnd,
@@ -192,8 +192,8 @@ const Dashboard = () => {
             transform: `translateX(${-index * 10}px)`, 
             zIndex: item.participants.length - index 
           }}
-            // src={`data:image/jpeg;base64,${participant.avatar}`}
-            src="https://i.pinimg.com/736x/69/8e/34/698e34d4501ab531775c23fb2fbe351c.jpg"
+            src={`data:image/jpeg;base64,${participant.image}`}
+            // src="https://i.pinimg.com/736x/69/8e/34/698e34d4501ab531775c23fb2fbe351c.jpg"
             alt={participant.name}
           />
         ))}

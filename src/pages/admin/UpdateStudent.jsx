@@ -161,8 +161,8 @@ const UpdateStudent = () => {
           <div className=''>
             <div>
               <label
-                for='name'
-                class=' block mb-2 w-xs text-sm font-medium text-gray-900 '
+                htmlFor='name'
+                className=' block mb-2 w-xs text-sm font-medium text-gray-900 '
               >
                 Full Name
               </label>
@@ -171,7 +171,7 @@ const UpdateStudent = () => {
                 id='name'
                 value={studentData.name}
                 onChange={handleChange}
-                class='bg-grey-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:teal-500 focus:border-teal-500 block w-full p-2.5 '
+                className='bg-grey-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:teal-500 focus:border-teal-500 block w-full p-2.5 '
                 placeholder='Full Name'
                 required
               />
@@ -179,8 +179,8 @@ const UpdateStudent = () => {
 
             <div className='mt-4'>
               <label
-                for='gender'
-                class='block mb-2 text-sm font-medium text-gray-900 '
+                htmlFor='gender'
+                className='block mb-2 text-sm font-medium text-gray-900 '
               >
                 Gender
               </label>
@@ -219,7 +219,7 @@ const UpdateStudent = () => {
             </div>
             <div className='mt-4'>
               <label
-                for='major'
+                htmlFor='major'
                 className='block mb-2 text-sm font-medium text-gray-900'
               >
                 Major
@@ -228,7 +228,7 @@ const UpdateStudent = () => {
                 id='major'
                 value={studentData.major}
                 onChange={handleChange}
-                class='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 '
+                className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 '
               >
                 <option value='Computing' selected>
                   Computing
@@ -239,17 +239,17 @@ const UpdateStudent = () => {
             </div>
             <div className='mt-4'>
               <label
-                for='email'
+                htmlFor='email'
                 className='block mb-2 text-sm font-medium text-gray-900'
               >
                 Email
               </label>
               <input
-                type='text'
+                type='email'
                 id='email'
                 value={studentData.email}
                 onChange={handleChange}
-                class='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 '
+                className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 '
                 placeholder='xxx@gmail.com'
                 pattern='[0-9]{3}-[0-9]{2}-[0-9]{3}'
                 required
@@ -257,8 +257,8 @@ const UpdateStudent = () => {
             </div>
             <div className='mt-4'>
               <label
-                for='phoneNumber'
-                class='block mb-2 text-sm font-medium text-gray-900 '
+                htmlFor='phoneNumber'
+                className='block mb-2 text-sm font-medium text-gray-900 '
               >
                 Phone Number
               </label>
@@ -267,7 +267,7 @@ const UpdateStudent = () => {
                 id='phoneNumber'
                 value={studentData.phoneNumber}
                 onChange={handleChange}
-                class='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 '
+                className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 '
                 placeholder='+959xxxx'
                 required
               />

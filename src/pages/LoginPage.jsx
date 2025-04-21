@@ -49,6 +49,7 @@ const LoginPage = () => {
         withCredentials: true,
       });
       if (response.status === 200) {
+        
         getProfile();
         const firstLoginKey = `firstLogin_${data.email}`;
         const isFirstTime = sessionStorage.getItem(firstLoginKey) === null;
