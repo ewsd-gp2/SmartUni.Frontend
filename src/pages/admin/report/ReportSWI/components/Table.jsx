@@ -130,8 +130,7 @@ export const StudentsTable = () => {
                         <td className="text-center border-teal-500 border-r-2 text-xl">1</td>
                         <td className="py-4 ml-8 flex items-center">
                             <img
-                                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT36VHh-mjL_Rc8IL60D77dMDPL_fNhosHuag&s"
-                                alt="ProfileImage" className="w-13 h-13 rounded-full"/>
+                                src={data.image} className="w-13 h-13 rounded-full"/>
                             <div className="ml-4">
                                 <p className="text-xl">{data.name}</p>
                                 <p className="text-xs text-gray-700">{data.major}</p>

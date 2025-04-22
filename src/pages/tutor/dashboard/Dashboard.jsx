@@ -18,7 +18,10 @@ import {
 } from "../../../utility/DateRange";
 import toast from "react-hot-toast";
 import { formatDate, formatTime } from "../../../formatdatetime/FormatDateTime";
+
+
 const Dashboard = () => {
+  
   const user = JSON.parse(localStorage.getItem("user_profile"));
   const [listLoading, setListLoading] = useState(false);
   const [select, setSelect] = useState(1);
