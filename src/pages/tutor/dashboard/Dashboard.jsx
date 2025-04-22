@@ -261,7 +261,7 @@ const Dashboard = () => {
                         transform: `translateX(${-index * 10}px)`,
                         zIndex: item.participants.length - index,
                       }}
-                      src={`data:image/jpeg;base64,${participant.image}`}
+                      src={`data:image/jpeg;base64,${participant.avatar}`}
                       // src="https://i.pinimg.com/736x/69/8e/34/698e34d4501ab531775c23fb2fbe351c.jpg"
                       alt="Student"
                     />
