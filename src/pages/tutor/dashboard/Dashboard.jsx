@@ -186,7 +186,7 @@ const Dashboard = () => {
 
               <div className=" bg-gray-100 flex p-2.5 mt-2 rounded-lg justify-between items-center m-2">
                 <div className=" flex gap-7 items-center">
-                  {tutorData?.notifications?.length > 0 ? (
+                  {/* {tutorData?.notifications?.length > 0 ? (
                     tutorData.notifications.map((note, index) => (
                       <div
                         key={index}
@@ -212,7 +212,7 @@ const Dashboard = () => {
                         No notifications yet 📭
                       </p>
                     </div>
-                  )}
+                  )} */}
 
                   {/* <FaBlogger className="text-2xl text-teal-500" /> */}
                   {/* <div>

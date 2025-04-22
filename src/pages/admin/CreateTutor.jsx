@@ -245,7 +245,7 @@ const CreateTutor = () => {
                 Password
               </label>
               <input
-                type='text'
+                type='password'
                 id='password'
                 value={tutorData.password}
                 onChange={handleChange}
