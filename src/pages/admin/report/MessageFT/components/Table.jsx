@@ -82,7 +82,7 @@ export const StudentsTable = () => {
                         <td className="text-center border-teal-500 border-r-2 text-xl">1</td>
                         <td className="py-4 ml-8 flex items-center">
                             <img
-                                src={data.image} className="w-13 h-13 rounded-full"/>
+                                src={`data:image/jpeg;base64,${data.image}`} className="w-13 h-13 rounded-full"/>
                             <div className="ml-4">
                                 <p className="text-xl">{studentMessage.senderName}</p>
                                 <p className="text-xs text-gray-700">{studentMessage.senderMajor}</p>
@@ -112,7 +112,7 @@ export const StudentsTable = () => {
                         <td className="text-center border-teal-500 border-r-2 text-xl">1</td>
                         <td className="py-4 ml-8 flex items-center">
                             <img
-                                src={data.image} className="w-13 h-13 rounded-full"/>
+                                src={`data:image/jpeg;base64,${data.image}`} className="w-13 h-13 rounded-full"/>
                             <div className="ml-4">
                                 <p className="text-xl">{tutorMessage.senderName}</p>
                             </div>
@@ -143,7 +143,7 @@ export const StudentsTable = () => {
                         <td className="text-center border-teal-500 border-r-2 text-xl">1</td>
                         <td className="py-4 ml-8 flex items-center">
                             <img
-                                src={message.image}
+                                src={`data:image/jpeg;base64,${message.image}`}
                                 alt="ProfileImage" className="w-13 h-13 rounded-full"/>
                             <div className="ml-4">
                                 <p className="text-xl">{message.senderName}</p>

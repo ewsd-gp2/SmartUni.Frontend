@@ -53,10 +53,10 @@ export const StudentsTable = () => {
             <table className="w-7/9 border-none">
                 <thead>
                 <tr className="bg-teal-300">
-                    <th className="rounded-l-2xl text-center py-2 font-normal text-xl w-10">No.</th>
-                    <th className="py-2 text-start font-normal text-xl px-15 w-80 flex justify-between">
+                    <th className="rounded-l-2xl text-center py-2 font-normal text-xl w-20">No.</th>
+                    <th className="py-2 text-start font-normal text-xl px-7 w-full flex justify-between">
                         <h1>Student Names</h1>
-                        <button onClick={() => setIsOpen(!isOpen)} className="hover:text-gray-600 flex items-center cursor-pointer"><GoSortAsc className="mr-1 mt-1 text-2xl"/>Sorting</button>
+                        <button onClick={() => setIsOpen(!isOpen)} className="hover:text-gray-600 flex items-center cursor-pointer mr-5"><GoSortAsc className="mr-1 mt-1 text-2xl"/>Sorting</button>
                     </th>
                     <th className="p-2 w-40 font-normal text-xl rounded-r-2xl">
                         <h1 className="flex justify-center items-center"><IoFilterSharp className="mt-1 mr-1.5 text-md"/>Filter</h1>
@@ -66,7 +66,7 @@ export const StudentsTable = () => {
                 <tbody>
                 {isOpen && (
                     <div
-                        className="absolute w-35 right-112 bg-gray-100 black shadow-lg rounded-md border-1 border-gray-300"
+                        className="absolute w-35 right-105 bg-gray-100 black shadow-lg rounded-md border-1 border-gray-300"
                     >
                         <div className="">
                             {options.map((option) => (
@@ -87,7 +87,7 @@ export const StudentsTable = () => {
                         <tr className="border-b-2 border-teal-500" key={data.id}>
                         <td className="text-center border-teal-500 border-r-2 text-xl">1</td>
                         <td className="py-4 ml-8 flex items-center">
-                            <img src={data.image} alt="ProfileImage" className="w-13 h-13 rounded-full" />
+                            <img src={`data:image/jpeg;base64,${data.image}`} alt="ProfileImage" className="w-13 h-13 rounded-full" />
                             <div className="ml-4">
                                 <p className="text-xl">{data.name}</p>
                                 <p className="text-xs text-gray-700">{data.major}</p>
