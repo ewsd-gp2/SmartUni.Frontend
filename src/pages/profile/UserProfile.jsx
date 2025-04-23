@@ -8,6 +8,28 @@ import toast from "react-hot-toast";
 const UserProfile = () => {
   const userRole = localStorage.getItem("user_role");
   const [userProfile, setUserProfile] = useState({});
+  const pageView = async (pageName) => {
+    try {
+      const formData = new FormData();
+      formData.append("pageName", pageName);
+
+      const response = await axios.post(
+        "http://localhost:7142/pageview",
+        formData,
+        {
+          withCredentials: true,
+        }
+      );
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      console.error("Error:", error.response?.data || error.message);
+      throw error;
+    }
+  };
+  useEffect(() => {
+    pageView("Profile");
+  }, []);
   const fetchProfileData = async () => {
     const url=`http://localhost:7142/${userRole}/profile`
     await axios.get(url,{

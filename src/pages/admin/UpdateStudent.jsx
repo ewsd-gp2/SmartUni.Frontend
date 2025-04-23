@@ -109,7 +109,7 @@ const UpdateStudent = () => {
         withCredentials: true,
       })
       .then((response) => {
-        toast.success("Tutor Updated Successfully!", {
+        toast.success("Student Updated Successfully!", {
           position: "top-right",
         });
         navigate("/staff/dashboard/studentlist");

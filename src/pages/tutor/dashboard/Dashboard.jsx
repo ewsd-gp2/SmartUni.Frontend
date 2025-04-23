@@ -1,13 +1,9 @@
 import React, { useEffect, useState } from "react";
-import SearchInput from "../../../components/common/SearchInput";
 import Container from "../../../components/Container";
-import HeaderTitle from "../../../components/common/HeaderTitle";
 import { IoIosPeople } from "react-icons/io";
-import { FaBlog, FaBook, FaPage4 } from "react-icons/fa";
-import { FaBlogger } from "react-icons/fa6";
+import { FaBell, FaBlogger } from "react-icons/fa6";
 import StudentListforTutorDashboard from "./StudentListforTutorDashboard";
-import { PiNotepadLight } from "react-icons/pi";
-import { PiNoteBlankLight } from "react-icons/pi";
+import { PiNotepadLight, PiNoteBlankLight } from "react-icons/pi";
 import Profile from "../../profile/Profile";
 import axios from "axios";
 import {
@@ -18,8 +14,11 @@ import {
 } from "../../../utility/DateRange";
 import toast from "react-hot-toast";
 import { formatDate, formatTime } from "../../../formatdatetime/FormatDateTime";
+import { Link } from "react-router-dom";
+
 const Dashboard = () => {
   const user = JSON.parse(localStorage.getItem("user_profile"));
+  const userRole = localStorage.getItem("user_role");
   const [listLoading, setListLoading] = useState(false);
   const [select, setSelect] = useState(1);
   const [selectedRange, setSelectedRange] = useState({
@@ -28,7 +27,7 @@ const Dashboard = () => {
   });
   const [data, setData] = useState([]);
   const [tutorData, setTutorData] = useState([]);
-  console.log(tutorData);
+  console.log(tutorData)
   const date = new Date(user.lastLoggedInDate);
   const formattedDate = date.toLocaleDateString("en-GB", {
     year: "numeric",
@@ -36,13 +35,20 @@ const Dashboard = () => {
     day: "numeric",
   });
 
-  useEffect(() => {
-    fetchMeetingList();
-  }, [selectedRange]);
-
-  useEffect(() => {
-    getRange();
-  }, [select]);
+  const getNotificationType = (note) => {
+    let message = "";
+    switch (note.notificationType) {
+      case "Comment":
+        message = `${note.name} commented on your blog`;
+        break;
+      case "Reaction":
+        message = `${note.name} reacted on your blog`;
+        break;
+      default:
+        message = `${note.name} performed an action on your blog`;
+    }
+    return message;
+  };
 
   const getRange = () => {
     switch (select) {
@@ -58,6 +64,8 @@ const Dashboard = () => {
           endTime: thisWeekEnd,
         }));
         break;
+      default:
+        break;
     }
   };
 
@@ -65,25 +73,22 @@ const Dashboard = () => {
     const url = `http://localhost:7142/meeting/tutor/${user.id}`;
     setListLoading(true);
 
-    axios
-      .post(url, selectedRange, {
+    try {
+      const response = await axios.post(url, selectedRange, {
         headers: {
           "Content-Type": "application/json",
         },
-        withCredentials: "true",
-      })
-      .then((response) => {
-        // console.log("getMeetingList", response.data);
-        setData(response.data);
-        // console.log(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-        toast.error("Sorry, something went wrong.", {
-          position: "top-right",
-        });
+        withCredentials: true,
       });
-    setListLoading(false);
+      setData(response.data);
+    } catch (error) {
+      console.log(error);
+      toast.error("Sorry, something went wrong.", {
+        position: "top-right",
+      });
+    } finally {
+      setListLoading(false);
+    }
   };
 
   const fetchTutorData = async () => {
@@ -111,11 +116,21 @@ const Dashboard = () => {
       setListLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchMeetingList();
+  }, [selectedRange]);
+
+  useEffect(() => {
+    getRange();
+  }, [select]);
+
   useEffect(() => {
     if (user?.id) {
       fetchTutorData();
     }
   }, [user?.id]);
+
   const userName =
     user.name &&
     user.name
@@ -123,28 +138,18 @@ const Dashboard = () => {
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
       .join(" ");
 
-  if (tutorData?.notifications?.length === 0) {
-    <div className="bg-gray-100 p-4 rounded-lg m-2">
-      <p className="text-gray-500 text-center">No notifications yet 📭</p>
-    </div>;
-  }
-
   return (
     <Container>
-      <div className=" grid grid-cols-5">
-        <div className=" col-span-3">
-          <div className=" flex justify-between items-center">
-            <p className=" text-2xl">
+      <div className="grid grid-cols-5">
+        <div className="col-span-3">
+          <div className="flex justify-between items-center">
+            <p className="text-2xl">
               {user.isFirstLoggedIn ? (
                 `Welcome ${userName}`
               ) : (
                 <div className="flex flex-col gap-3">
-                  {" "}
-                  <p>Welcome Back {userName}</p>{" "}
-                  <p className="text-sm">
-                    {" "}
-                    Your Last Login was {formattedDate}
-                  </p>
+                  <p>Welcome Back {userName}</p>
+                  <p className="text-sm">Your Last Login was {formattedDate}</p>
                 </div>
               )}
             </p>
@@ -155,99 +160,98 @@ const Dashboard = () => {
             <h1 className="text-xl mt-5">What's New</h1>
             <div>
               <h3 className="text-lg mt-5 font-semibold">Schedule</h3>
+              <div className="space-y-3 mt-3">
+    {data.length > 0 ? (
+      data.map((item) => (
+        <div
+          key={item.id}
+          className="block bg-white p-4 rounded-xl border border-gray-100
+            shadow-sm hover:shadow-md transition-all duration-300
+            transform hover:-translate-y-0.5 group"
+        >
+          <div className="flex items-start gap-3">
+            <div className="bg-teal-50 p-2.5 rounded-lg group-hover:bg-teal-100 transition-colors">
+              <IoIosPeople className="text-lg text-teal-600" />
             </div>
-            {data.length > 0 ? (
-              data.map((item) => (
-                <div
-                  key={item.id}
-                  className="bg-gray-100 flex p-2.5 mt-2 rounded-lg justify-between items-center m-2"
-                >
-                  <div className="flex gap-7 items-center">
-                    <IoIosPeople className="text-2xl text-teal-500" />
-                    <div>
-                      <p className="text-lg font-semibold">{item.title}</p>
-                      <span className="text-xs">
-                        From {formatTime(item.startTime)} to{" "}
-                        {formatTime(item.endTime)}
-                      </span>
-                    </div>
-                  </div>
-                  <p className="text-sm">{formatDate(item.startTime)}</p>
-                </div>
-              ))
-            ) : (
-              <p className="text-center text-gray-500 italic mt-4">
-                There are no schedules.
+            <div className="flex-1 min-w-0">
+              <div className="flex justify-between items-start gap-2">
+                <p className="font-medium text-gray-900 truncate group-hover:text-teal-700 transition-colors">
+                  {item.title}
+                </p>
+                <span className="text-xs text-gray-500 whitespace-nowrap group-hover:text-gray-600 transition-colors">
+                  {formatDate(item.startTime)}
+                </span>
+              </div>
+              <p className="text-sm text-gray-500 mt-1 group-hover:text-gray-600 transition-colors">
+                From {formatTime(item.startTime)} to {formatTime(item.endTime)}
               </p>
-            )}
+             
+            </div>
+          </div>
+        </div>
+      ))
+    ) : (
+      <div
+        className="bg-gray-50 p-6 rounded-xl text-center"
+      >
+        <div className="inline-block bg-gray-200 p-3 rounded-full mb-3 ">
+          <IoIosPeople className="text-xl text-gray-400" />
+        </div>
+        <p className="text-gray-500 font-medium">No schedules found</p>
+        <p className="text-sm text-gray-400 mt-1">You’re all caught up for now</p>
+      </div>
+    )}
+  </div>
+            </div>
 
             <div>
               <h3 className="text-lg mt-5 font-semibold">Notifications</h3>
-
-              <div className=" bg-gray-100 flex p-2.5 mt-2 rounded-lg justify-between items-center m-2">
-                <div className=" flex gap-7 items-center">
-                  {/* {tutorData?.notifications?.length > 0 ? (
-                    tutorData.notifications.map((note, index) => (
-                      <div
-                        key={index}
-                        className="bg-gray-100 flex p-2.5 mt-2 rounded-lg justify-between items-center m-2"
-                      >
-                        <div className="flex gap-7 items-center">
-                          <FaBlogger className="text-2xl text-teal-500" />
-                          <div>
-                            <p className="text-lg font-semibold">
-                              {note.senderName || "Someone"}{" "}
-                              {note.action || "reacted on your post"}
-                            </p>
-                            <span className="text-xs">
-                              {note.message || "No details provided."}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    ))
-                  ) : (
-                    <div className="bg-gray-100 p-4 rounded-lg m-2">
-                      <p className="text-gray-500 mx-auto mt-4">
-                        No notifications yet 📭
-                      </p>
-                    </div>
-                  )} */}
-
-                  {/* <FaBlogger className="text-2xl text-teal-500" /> */}
-                  {/* <div>
-                      <p className="text-lg font-semibold">
-                       {user.name} reacted on your post
-                      </p>
-                      <span className="text-xs">
-                        Today I would like to share....
-                      </span>
-                    </div> */}
-                </div>
-                {/* <p className="text-sm">01 Feb 2025</p> */}
+              <div className="space-y-3 mt-3">
+    {tutorData?.notifications?.length > 0 ? (
+      tutorData.notifications.map((note) => (
+        <Link
+          to={`/${userRole}/blog/details/${note.blogId}`}
+          key={note.createdOn}
+          className="block bg-white p-4 rounded-xl border border-gray-100 shadow hover:shadow-md transition-all duration-300 group"
+        >
+          <div className="flex items-start gap-3">
+            <div className="bg-teal-50 p-2.5 rounded-lg group-hover:bg-teal-100 transition-colors">
+              <FaBlogger className="text-lg text-teal-600" />
+            </div>
+            <div className="flex-1">
+              <div className="flex justify-between items-center">
+                <p className="font-medium text-gray-900 group-hover:text-teal-700 transition-colors">
+                  {getNotificationType(note)}
+                </p>
+                <span className="text-xs text-gray-500 group-hover:text-gray-600 transition-colors">
+                  {formatDate(note.createdOn)}
+                </span>
               </div>
-              {/* <div className=" bg-gray-100 flex p-2.5 mt-2 rounded-lg justify-between items-center m-2">
-                  <div className=" flex gap-7 items-center">
-                    <FaBlogger className="text-2xl text-teal-500" />
-                    <div>
-                      <p className="text-lg font-semibold">
-                        Kevin reacted on your post
-                      </p>
-                      <span className="text-xs">
-                        Hello everyone the following code....
-                      </span>
-                    </div>
-                  </div>
-                  <p className="text-sm">01 Feb 2025</p>
-                </div> */}
+              <p className="text-sm text-gray-500 mt-1 group-hover:text-gray-600 transition-colors">
+                Click to view blog →
+              </p>
+            </div>
+          </div>
+        </Link>
+      ))
+    ) : (
+      <div className="bg-gray-50 p-6 rounded-xl text-center ">
+        <div className="inline-block bg-gray-200 p-3 rounded-full mb-3 ">
+          <FaBell className="text-xl text-gray-400" />
+        </div>
+        <p className="text-gray-500 font-medium">No notifications yet</p>
+        <p className="text-sm text-gray-400 mt-1">We'll notify you when something arrives</p>
+      </div>
+    )}
+  </div>
             </div>
           </div>
           <div>
             <StudentListforTutorDashboard />
           </div>
         </div>
-        <div className=" col-span-2 m-5">
-          <h1 className=" mb-5 text-3xl">My Schedules</h1>
+        <div className="col-span-2 m-5">
+          <h1 className="mb-5 text-3xl">My Schedules</h1>
           <h3 className="text-2xl my-5">For Today</h3>
           {data.length > 0 ? (
             data.map((item) => (
@@ -262,7 +266,6 @@ const Dashboard = () => {
                         zIndex: item.participants.length - index,
                       }}
                       src={`data:image/jpeg;base64,${participant.avatar}`}
-                      // src="https://i.pinimg.com/736x/69/8e/34/698e34d4501ab531775c23fb2fbe351c.jpg"
                       alt="Student"
                     />
                   ))}

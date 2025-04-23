@@ -38,8 +38,11 @@ const StudentListforTutorDashboard = () => {
   useEffect(() => {
     fetchStudentData(user.id);
   }, []);
+
+  
+  
   return (
-    <div className="relative overflow-x-auto">
+    <div className="relative overflow-x-auto mt-10">
       <table className="w-full text-sm text-left rtl:text-right text-gray-500 ">
         <thead className="text-xs text-gray-700 uppercase bg-teal-200 ">
           <tr>

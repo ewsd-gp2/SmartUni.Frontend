@@ -9,6 +9,7 @@ import {
   unAssignTutor,
 } from "./api/api";
 import toast from "react-hot-toast";
+import axios from "axios";
 
 const AdminAllocation = () => {
   const [studentData, setStudentData] = useState([]);
@@ -16,8 +17,10 @@ const AdminAllocation = () => {
   const [allocation, setAllocation] = useState([]);
   const [selectedTutor, setSelectedTutor] = useState("");
   const [selectedStudents, setSelectedStudents] = useState([]);
+  const [sortName, setSortName] = useState("asc");
   const [loading, setLoading] = useState(false);
-console.log(studentData);
+  const [dropdownVisible, setDropdownVisible] = useState(false);
+  // console.log(studentData);
   useEffect(() => {
     const loadData = async () => {
       setLoading(true);
@@ -38,7 +41,13 @@ console.log(studentData);
     };
     loadData();
   }, []);
-
+  const sortedStudentData = [...studentData].sort((a, b) => {
+    const nameA = a.name.toLowerCase();
+    const nameB = b.name.toLowerCase();
+    if (sortName === "asc") return nameA.localeCompare(nameB);
+    else return nameB.localeCompare(nameA);
+  });
+  const toggleDropdown = () => setDropdownVisible(!dropdownVisible);
   const handleSelectStudent = (studentId) => {
     setSelectedStudents((prevSelected) =>
       prevSelected.includes(studentId)
@@ -161,7 +170,30 @@ console.log(studentData);
   const isAnyStudentAssigned = selectedStudents.some((studentID) =>
     allocation.some((assign) => assign.studentID === studentID)
   );
+  const pageView = async (pageName) => {
+    try {
+      const formData = new FormData();
+      formData.append("pageName", pageName);
 
+      const response = await axios.post(
+        "http://localhost:7142/pageview",
+        formData,
+        {
+          withCredentials: true,
+        }
+      );
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      console.error("Error:", error.response?.data || error.message);
+      throw error;
+    }
+  };
+  useEffect(() => {
+    pageView("Allocation");
+  }, []);
+
+  
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen gap-2">
@@ -177,12 +209,13 @@ console.log(studentData);
       </div>
     );
   }
+
   return (
     <div className="p-4">
       <form className="max-w-sm my-5">
         <label
           htmlFor="tutors"
-          className="block mb-2 text-2xl font-medium text-gray-900"
+          className="block mb-4 text-2xl font-medium text-gray-900"
         >
           Choose Tutor
         </label>
@@ -211,18 +244,43 @@ console.log(studentData);
               <th scope="col" className="px-6 py-3">
                 Students Name
               </th>
-              <th scope="col" className="px-6 py-3">
-                <div className="flex items-center gap-2">
-                  <BsSortDown /> Sorting
-                </div>
-              </th>
+              <th className="px-6 py-3 text-left text-sm font-medium text-gray-700 relative">
+            <div className="flex items-center gap-2 cursor-pointer" onClick={toggleDropdown}>
+              <BsSortDown className="text-teal-600" />
+              <span>Sorting</span>
+            </div>
+
+            {dropdownVisible && (
+              <div className="absolute top-full left-0 mt-1 w-20 bg-white border border-gray-200 rounded shadow-md z-10">
+                <p
+                  className={`px-3 py-2 hover:bg-teal-100 text-sm cursor-pointer ${sortName === "asc" ? "font-semibold text-teal-600" : ""}`}
+                  onClick={() => {
+                    setSortName("asc");
+                    toggleDropdown();
+                  }}
+                >
+                  A - Z
+                </p>
+                <p
+                  className={`px-3 py-2 hover:bg-teal-100 text-sm cursor-pointer ${sortName === "desc" ? "font-semibold text-teal-600" : ""}`}
+                  onClick={() => {
+                    setSortName("desc");
+                    toggleDropdown();
+                  }}
+                >
+                  Z - A
+                </p>
+              </div>
+            )}
+          </th>
+
               <th scope="col" className="px-6 py-3">
                 Status
               </th>
             </tr>
           </thead>
           <tbody>
-            {studentData.map((student, index) => {
+            {sortedStudentData.map((student, index) => {
               const isAssigned = allocation.some(
                 (a) => String(a.studentID) === String(student.id)
               );
@@ -243,8 +301,8 @@ console.log(studentData);
                         className="w-4 h-4 text-teal-600 bg-gray-100 border-gray-300 rounded-sm"
                       />
                       <img
-                        className="size-12 rounded-full"
-                       src={`data:image/jpeg;base64,${student.image}`}
+                        className="size-10 rounded-full"
+                        src={`data:image/jpeg;base64,${student.image}`}
                         alt={student.name}
                       />
                       <span>{student.name}</span>
