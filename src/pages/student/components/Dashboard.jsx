@@ -339,7 +339,7 @@ const user = JSON.parse(localStorage.getItem("user_profile"));
   <h1>My Personal Tutor</h1>
 </div>
 
-  <p className="text-center mt-15 mb-5"> Loading Tutor information . . .</p>
+  <p className="text-center mt-5 mx-8 py-10 text-gray-600 bg-gray-200 ">Unassigned Tutor</p>
 
 
 <div className=" px-14 pt-8 pb-2 md:px-6">
