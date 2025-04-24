@@ -4,7 +4,7 @@ import Container from "../../../components/Container";
 import HeaderTitle from "../../../components/common/HeaderTitle";
 import { IoIosPeople } from "react-icons/io";
 import { FaBlog, FaBook, FaPage4 } from "react-icons/fa";
-import { FaBlogger } from "react-icons/fa6";
+import { FaBell, FaBlogger } from "react-icons/fa6";
 import { CgProfile } from "react-icons/cg";
 import Profile from "../../profile/Profile";
 import { FiMail } from "react-icons/fi";
@@ -28,11 +28,27 @@ const Dashboard = () => {
     day: "numeric",
   });
 
+  const getNotificationType = (note) => {
+    let message = "";
+    switch (note.notificationType) {
+      case "Comment":
+        message = `${note.name} commented on your blog`;
+        break;
+      case "Reaction":
+        message = `${note.name} reacted on your blog`;
+        break;
+      default:
+        message = `${note.name} performed an action on your blog`;
+    }
+    return message;
+  };
+
   const [tutorId, setTutorId] = useState(null);
   const [tutor, setTutor] = useState(null);
 const user = JSON.parse(localStorage.getItem("user_profile"));
   const [listLoading, setListLoading] = useState(false);
   const [select, setSelect] = useState(1);
+  const [notifications, setNotifications] = useState([])
   const [selectedRange, setSelectedRange] = useState({
     startTime: todayStart,
     endTime: todayEnd,
@@ -41,11 +57,24 @@ const user = JSON.parse(localStorage.getItem("user_profile"));
   useEffect(() => {
     const fetchTutorId = async () => {
       try {
-        const response = await axios.get(`http://localhost:7142/dashboard/student/${user.id}`);
-        const id = response.data.allocation.TutorId;
-        setTutorId(id);
+        await axios.get(`http://localhost:7142/dashboard/student/${user.id}`, {
+          headers: {
+            Accept: "application/json",
+            "Access-Control-Allow-Origin": "http://localhost:5173",
+          },
+          withCredentials: "true",
+        })
+        .then((response) => {
+          const id = response.data.allocation.TutorId;
+          const noti = response.data.notifications;
+          setNotifications((prev) => {
+            return {
+              ...prev, noti
+            }
+          })
+          setTutorId(id);
+        });
       } catch (error) {
-        console.error("Error fetching tutor ID:", error);
         toast.error("Failed to fetch tutor ID");
       }
     };
@@ -58,10 +87,17 @@ const user = JSON.parse(localStorage.getItem("user_profile"));
   useEffect(() => {
     const fetchTutorDetails = async () => {
       try {
-        const response = await axios.get(`http://localhost:7142/tutor/${tutorId}`);
-        setTutor(response.data);
+        await axios.get(`http://localhost:7142/tutor/${tutorId}`,  {
+          headers: {
+            Accept: "application/json",
+            "Access-Control-Allow-Origin": "http://localhost:5173",
+          },
+          withCredentials: "true",})
+          .then((response) => {
+            setTutor(response.data);
+          }
+          );
       } catch (error) {
-        console.error("Error fetching tutor details:", error);
         toast.error("Unassigned Tutor");
       }
     };
@@ -188,39 +224,47 @@ const user = JSON.parse(localStorage.getItem("user_profile"));
               </div>
             </>
           ))}
-          <div>
-            <h3 className="text-lg mt-5 font-semibold">Notifications</h3>
-            <div>
-              <div className=" bg-gray-100 flex p-2.5 mt-2 rounded-lg justify-between items-center m-2">
-                <div className=" flex gap-7 items-center">
-                  <FaBlogger className="text-2xl text-teal-500" />
-                  <div>
-                    <p className="text-lg font-semibold">
-                      David Commented on your post
-                    </p>
-                    <span className="text-xs">
-                      Today I would like to share....
-                    </span>
-                  </div>
-                </div>
-                <p className="text-sm">01 Feb 2025</p>
+           <div>
+              <h3 className="text-lg mt-5 font-semibold">Notifications</h3>
+              <div className="space-y-3 mt-3">
+    {notifications.length > 0 ? (
+      notifications.map((note) => (
+        <Link
+          to={`/${userRole}/blog/details/${note.blogId}`}
+          key={note.createdOn}
+          className="block bg-white p-4 rounded-xl border border-gray-100 shadow hover:shadow-md transition-all duration-300 group"
+        >
+          <div className="flex items-start gap-3">
+            <div className="bg-teal-50 p-2.5 rounded-lg group-hover:bg-teal-100 transition-colors">
+              <FaBlogger className="text-lg text-teal-600" />
+            </div>
+            <div className="flex-1">
+              <div className="flex justify-between items-center">
+                <p className="font-medium text-gray-900 group-hover:text-teal-700 transition-colors">
+                  {getNotificationType(note)}
+                </p>
+                <span className="text-xs text-gray-500 group-hover:text-gray-600 transition-colors">
+                  {formatDate(note.createdOn)}
+                </span>
               </div>
-              <div className=" bg-gray-100 flex p-2.5 mt-2 rounded-lg justify-between items-center m-2">
-                <div className=" flex gap-7 items-center">
-                  <FaBlogger className="text-2xl text-teal-500" />
-                  <div>
-                    <p className="text-lg font-semibold">
-                      Kevin reacted on your post
-                    </p>
-                    <span className="text-xs">
-                      Hello everyone the following code....
-                    </span>
-                  </div>
-                </div>
-                <p className="text-sm">01 Feb 2025</p>
-              </div>
+              <p className="text-sm text-gray-500 mt-1 group-hover:text-gray-600 transition-colors">
+                Click to view blog →
+              </p>
             </div>
           </div>
+        </Link>
+      ))
+    ) : (
+      <div className="bg-gray-50 p-6 rounded-xl text-center ">
+        <div className="inline-block bg-gray-200 p-3 rounded-full mb-3 ">
+          <FaBell className="text-xl text-gray-400" />
+        </div>
+        <p className="text-gray-500 font-medium">No notifications yet</p>
+        <p className="text-sm text-gray-400 mt-1">We'll notify you when something arrives</p>
+      </div>
+    )}
+  </div>
+            </div>
         </div>
       </div>
 
