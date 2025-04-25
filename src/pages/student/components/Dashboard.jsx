@@ -29,20 +29,6 @@ const Dashboard = () => {
     day: "numeric",
   });
 
-  const getNotificationType = (note) => {
-    let message = "";
-    switch (note.notificationType) {
-      case "Comment":
-        message = `${note.name} commented on your blog`;
-        break;
-      case "Reaction":
-        message = `${note.name} reacted on your blog`;
-        break;
-      default:
-        message = `${note.name} performed an action on your blog`;
-    }
-    return message;
-  };
 
   const [tutorId, setTutorId] = useState(null);
   const [tutor, setTutor] = useState(null);
@@ -55,7 +41,7 @@ const user = JSON.parse(localStorage.getItem("user_profile"));
     endTime: todayEnd,
   });
 
-  useEffect(() => {
+
     const fetchTutorId = async () => {
       try {
         await axios.get(`http://localhost:7142/dashboard/student/${user.id}`, {
@@ -66,13 +52,11 @@ const user = JSON.parse(localStorage.getItem("user_profile"));
           withCredentials: "true",
         })
         .then((response) => {
-          const id = response.data.allocation.TutorId;
-          const noti = response.data.notifications;
-          setNotifications((prev) => {
-            return {
-              ...prev, noti
-            }
-          })
+          const id = response.data.allocation.tutorId;
+          let noti = response.data.notifications;
+          setNotifications((prev) => (
+            [...prev, noti]
+          ))
           setTutorId(id);
         });
       } catch (error) {
@@ -81,9 +65,11 @@ const user = JSON.parse(localStorage.getItem("user_profile"));
     };
   
     if (user?.id) {
-      fetchTutorId();
+      useEffect(() => {
+        fetchTutorId();
+    }, []);
     }
-  }, []);
+  
 
   useEffect(() => {
     const fetchTutorDetails = async () => {
@@ -228,7 +214,7 @@ const user = JSON.parse(localStorage.getItem("user_profile"));
            <div>
               <h3 className="text-lg mt-5 font-semibold">Notifications</h3>
               <div className="space-y-3 mt-3">
-    {notifications.length > 0 ? (
+    {notifications.length !== 0 ? (
       notifications.map((note) => (
         <Link
           to={`/${userRole}/blog/details/${note.blogId}`}
@@ -241,9 +227,16 @@ const user = JSON.parse(localStorage.getItem("user_profile"));
             </div>
             <div className="flex-1">
               <div className="flex justify-between items-center">
-                <p className="font-medium text-gray-900 group-hover:text-teal-700 transition-colors">
-                  {getNotificationType(note)}
-                </p>
+                {
+                  note.notificationType === "Comment" ? (
+                    <p className="font-medium text-gray-900 group-hover:text-teal-700 transition-colors">{`${note.name} commented on your blog`}</p>
+                  ) : note.notificationType === "Reaction" ? (
+                    <p className="font-medium text-gray-900 group-hover:text-teal-700 transition-colors">{`${note.name} reacted your blog`}</p>
+                  ) : (
+                    <p className="font-medium text-gray-900 group-hover:text-teal-700 transition-colors">{`${note.name} performed an action on your blog`}</p>
+                  )
+                }
+                
                 <span className="text-xs text-gray-500 group-hover:text-gray-600 transition-colors">
                   {formatDate(note.createdOn)}
                 </span>

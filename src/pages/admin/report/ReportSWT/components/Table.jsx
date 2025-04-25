@@ -6,10 +6,11 @@ import axios from "axios";
 export const StudentsTable = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [selected, setSelected] = useState("Status Bar");
+    const [sortOrder, setSortOrder] = useState(null);
 
     const options = [
-        { name: "A-Z", enabled: false},
-        { name: "Date", enabled: false },
+        { name: "Ascending", enabled: false},
+        { name: "Descending", enabled: false },
     ];
 
     
@@ -50,7 +51,7 @@ export const StudentsTable = () => {
     return (
         <div className="mt-8">
                 <h2 className="text-4xl mb-10">Students Without Tutors</h2>
-            <table className="w-7/9 border-none">
+{data.length !== 0 ? (<table className="w-7/9 border-none">
                 <thead>
                 <tr className="bg-teal-300">
                     <th className="rounded-l-2xl text-center py-2 font-normal text-xl w-20">No.</th>
@@ -64,28 +65,39 @@ export const StudentsTable = () => {
                 </tr>
                 </thead>
                 <tbody>
+
                 {isOpen && (
                     <div
                         className="absolute w-35 right-105 bg-gray-100 black shadow-lg rounded-md border-1 border-gray-300"
                     >
                         <div className="">
-                            {options.map((option) => (
-                                <button
-                                    key={option.name}
-                                    onClick={() => {
-                                        setSelected(option.name);
-                                        setIsOpen(!isOpen);
-                                    }}
-                                    className="w-full px-7 py-2 flex items-center gap-2 cursor-pointer border-b-1 border-gray-200"
-                                >
-                                    {option.name}
-                                </button>
+                        {options.map((option) => (
+                            <button
+                                key={option.name}
+                                onClick={() => {
+                                    setSelected(option.name);
+                                    setSortOrder(option.name.toLowerCase());
+                                    setIsOpen(false);
+                                }}
+                                className="w-full px-7 py-2 flex items-center gap-2 cursor-pointer border-b-1 border-gray-200"
+                            >
+                                {option.name}
+                            </button>
                             ))}
                         </div>
                     </div> )}
-                    {!!data && data.map((data) => (
+                    {!!data && [...data]
+                            .sort((a, b) => {
+                                if (sortOrder === "ascending") {
+                                return a.name.localeCompare(b.name);
+                                } else if (sortOrder === "descending") {
+                                return b.name.localeCompare(a.name);
+                                } else {
+                                return 0;
+                                }
+                                    }).map((data, index) => (
                         <tr className="border-b-2 border-teal-500" key={data.id}>
-                        <td className="text-center border-teal-500 border-r-2 text-xl">1</td>
+                        <td className="text-cent er border-teal-500 border-r-2 text-xl">{index + 1}</td>
                         <td className="py-4 ml-8 flex items-center">
                             <img src={`data:image/jpeg;base64,${data.image}`} alt="ProfileImage" className="w-13 h-13 rounded-full" />
                             <div className="ml-4">
@@ -101,7 +113,12 @@ export const StudentsTable = () => {
                 
 
                 </tbody>
-            </table>
+            </table>) : (
+                <div className="text-center mt-40">
+                <p className="text-gray-400">No Data Available</p>
+            </div>
+            )}
+            
         </div>
     );
 }
