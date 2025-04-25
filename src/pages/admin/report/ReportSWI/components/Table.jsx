@@ -52,7 +52,6 @@ export const StudentsTable = () => {
 
     const fetchData = async () => {
         setLoading(true);
-        
         axios
           .get(url, {
             headers: {
