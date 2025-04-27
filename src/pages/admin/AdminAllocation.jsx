@@ -193,7 +193,6 @@ const AdminAllocation = () => {
     pageView("Allocation");
   }, []);
 
-  
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen gap-2">
@@ -211,17 +210,18 @@ const AdminAllocation = () => {
   }
 
   return (
-    <div className="p-4">
-      <form className="max-w-sm my-5">
+    <div className="p-2 sm:p-4">
+      {/* Select Tutor Form */}
+      <form className="w-full m-auto max-w-sm my-5">
         <label
           htmlFor="tutors"
-          className="block mb-4 text-2xl font-medium text-gray-900"
+          className="block mb-4 text-xl sm:text-2xl font-medium text-gray-900"
         >
           Choose Tutor
         </label>
         <select
           id="tutors"
-          className="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-teal-500 focus:border-teal-500 block w-full p-3"
+          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm sm:text-base rounded-lg focus:ring-teal-500 focus:border-teal-500 block w-full p-3"
           value={selectedTutor}
           onChange={(e) => setSelectedTutor(e.target.value)}
         >
@@ -234,51 +234,53 @@ const AdminAllocation = () => {
         </select>
       </form>
 
+      {/* Student Table */}
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-        <table className="w-full text-sm text-left rtl:text-right text-gray-500">
-          <thead className="text-xs text-gray-700 uppercase bg-blue-100">
+        <table className="w-full text-xs sm:text-sm text-left text-gray-500">
+          <thead className="text-xs sm:text-sm text-gray-700 uppercase bg-blue-100">
             <tr>
-              <th scope="col" className="px-6 py-3">
-                No
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Students Name
-              </th>
-              <th className="px-6 py-3 text-left text-sm font-medium text-gray-700 relative">
-            <div className="flex items-center gap-2 cursor-pointer" onClick={toggleDropdown}>
-              <BsSortDown className="text-teal-600" />
-              <span>Sorting</span>
-            </div>
-
-            {dropdownVisible && (
-              <div className="absolute top-full left-0 mt-1 w-20 bg-white border border-gray-200 rounded shadow-md z-10">
-                <p
-                  className={`px-3 py-2 hover:bg-teal-100 text-sm cursor-pointer ${sortName === "asc" ? "font-semibold text-teal-600" : ""}`}
-                  onClick={() => {
-                    setSortName("asc");
-                    toggleDropdown();
-                  }}
+              <th className="px-4 sm:px-6 py-3">No</th>
+              <th className="px-4 sm:px-6 py-3">Students Name</th>
+              <th className="px-4 sm:px-6 py-3 relative">
+                <div
+                  className="flex items-center gap-2 cursor-pointer"
+                  onClick={toggleDropdown}
                 >
-                  A - Z
-                </p>
-                <p
-                  className={`px-3 py-2 hover:bg-teal-100 text-sm cursor-pointer ${sortName === "desc" ? "font-semibold text-teal-600" : ""}`}
-                  onClick={() => {
-                    setSortName("desc");
-                    toggleDropdown();
-                  }}
-                >
-                  Z - A
-                </p>
-              </div>
-            )}
-          </th>
+                  <BsSortDown className="text-teal-600" />
+                  <span>Sorting</span>
+                </div>
 
-              <th scope="col" className="px-6 py-3">
-                Status
+                {dropdownVisible && (
+                  <div className="absolute top-full left-0 mt-1 w-24 bg-white border border-gray-200 rounded shadow-md z-10">
+                    <p
+                      className={`px-3 py-2 hover:bg-teal-100 text-xs sm:text-sm cursor-pointer ${
+                        sortName === "asc" ? "font-semibold text-teal-600" : ""
+                      }`}
+                      onClick={() => {
+                        setSortName("asc");
+                        toggleDropdown();
+                      }}
+                    >
+                      A - Z
+                    </p>
+                    <p
+                      className={`px-3 py-2 hover:bg-teal-100 text-xs sm:text-sm cursor-pointer ${
+                        sortName === "desc" ? "font-semibold text-teal-600" : ""
+                      }`}
+                      onClick={() => {
+                        setSortName("desc");
+                        toggleDropdown();
+                      }}
+                    >
+                      Z - A
+                    </p>
+                  </div>
+                )}
               </th>
+              <th className="px-4 sm:px-6 py-3">Status</th>
             </tr>
           </thead>
+
           <tbody>
             {sortedStudentData.map((student, index) => {
               const isAssigned = allocation.some(
@@ -289,29 +291,34 @@ const AdminAllocation = () => {
                   key={student.id}
                   className="bg-white border-b hover:bg-gray-50"
                 >
-                  <td className="px-6 py-4 font-medium text-gray-900">
+                  <td className="px-4 sm:px-6 py-4 font-medium text-gray-900">
                     {index + 1}
                   </td>
-                  <td className="px-6 py-4">
-                    <div className="flex gap-3 items-center">
+
+                  <td className="px-4 sm:px-6 py-4">
+                    <div className="flex items-center gap-2 sm:gap-3">
                       <input
                         type="checkbox"
                         checked={selectedStudents.includes(student.id)}
                         onChange={() => handleSelectStudent(student.id)}
-                        className="w-4 h-4 text-teal-600 bg-gray-100 border-gray-300 rounded-sm"
+                        className="w-4 h-4 sm:w-5 sm:h-5 text-teal-600 bg-gray-100 border-gray-300 rounded-sm"
                       />
                       <img
-                        className="size-10 rounded-full"
                         src={`data:image/jpeg;base64,${student.image}`}
                         alt={student.name}
+                        className="size-8 sm:size-10 rounded-full object-cover"
                       />
-                      <span>{student.name}</span>
+                      <span className="text-sm sm:text-base font-medium text-gray-900">
+                        {student.name}
+                      </span>
                     </div>
                   </td>
-                  <td className="px-6 py-4"></td>
-                  <td className="px-6 py-4">
+
+                  <td className="px-4 sm:px-6 py-4"></td>
+
+                  <td className="px-4 sm:px-6 py-4">
                     <span
-                      className={`px-2.5 py-2 text-white rounded text-sm ${
+                      className={`px-3 py-1.5 rounded text-xs sm:text-sm font-medium text-white ${
                         isAssigned ? "bg-teal-500" : "bg-red-400"
                       }`}
                     >
@@ -325,7 +332,8 @@ const AdminAllocation = () => {
         </table>
       </div>
 
-      <div className="flex justify-end gap-3 mt-4">
+      {/* Buttons */}
+      <div className="flex flex-col sm:flex-row justify-end gap-3 mt-4">
         <button
           className={`border border-teal-500 text-slate-900 px-6 py-2 rounded-lg transition ${
             !isAnyStudentAssigned

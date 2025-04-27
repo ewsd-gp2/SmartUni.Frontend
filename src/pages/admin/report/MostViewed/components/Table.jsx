@@ -49,12 +49,9 @@ export const StudentsTable = () => {
         <div className="mt-8">
             <div className="w-65/100">
                 <h2 className="text-4xl mb-4">Most Viewed Pages</h2>
-                <div className="mt-8 mb-10 space-x-3">
-                    <input type={"text"} className="bg-gray-100 rounded-2xl text-sm w-60 py-[7px] pl-4 pr-4 focus:border-teal-500 focus:ring-teal-500" placeholder="Search"  />
-                </div>
             </div>
 
-                <table className="w-4/9 border-none">
+{data.length !== 0 ? ( <table className="w-4/9 border-none">
                 <thead>
                 <tr className="bg-teal-300">
                     <th className="rounded-l-2xl w-23 text-center py-2 font-normal text-xl">No.</th>
@@ -66,7 +63,7 @@ export const StudentsTable = () => {
                 </thead>
                     <tbody>
                     {!!data && data.map((data, index) => (<tr className="border-b-2 border-teal-500" key={index}>
-                        <td className="text-center border-teal-500 border-r-2 text-xl">1</td>
+                        <td className="text-center border-teal-500 border-r-2 text-xl">{index + 1}</td>
                         <td className="py-5 ml-8 flex items-center text-xl">
                             {data.pageName}
                         </td>
@@ -74,7 +71,12 @@ export const StudentsTable = () => {
                     </tr>))}
 
                     </tbody>
-                </table>
+                </table>) : (
+                  <div className="text-center mt-40">
+                  <p className="text-gray-400">No Data Available</p>
+              </div>
+                )}
+               
         </div>
     );
 }

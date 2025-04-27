@@ -27,7 +27,8 @@ const Dashboard = () => {
   });
   const [data, setData] = useState([]);
   const [tutorData, setTutorData] = useState([]);
-  console.log(tutorData)
+  const [showAllNotifications, setShowAllNotifications] = useState(false);
+  // console.log(tutorData)
   const date = new Date(user.lastLoggedInDate);
   const formattedDate = date.toLocaleDateString("en-GB", {
     year: "numeric",
@@ -208,8 +209,10 @@ const Dashboard = () => {
               <h3 className="text-lg mt-5 font-semibold">Notifications</h3>
               <div className="space-y-3 mt-3">
     {tutorData?.notifications?.length > 0 ? (
-      tutorData.notifications.map((note) => (
-        <Link
+      
+       <>
+       {(showAllNotifications ? tutorData.notifications : tutorData.notifications.slice(0,3)).map((note) => (
+          <Link
           to={`/${userRole}/blog/details/${note.blogId}`}
           key={note.createdOn}
           className="block bg-white p-4 rounded-xl border border-gray-100 shadow hover:shadow-md transition-all duration-300 group"
@@ -233,7 +236,21 @@ const Dashboard = () => {
             </div>
           </div>
         </Link>
-      ))
+       ))}
+
+{tutorData.notifications.length > 3 && (
+        <div className="text-center">
+          <button
+            onClick={() => setShowAllNotifications(!showAllNotifications)}
+            className="inline-block font-semibold text-teal-600 rounded-full hover:text-teal-700 transition duration-300 "
+          >
+            {showAllNotifications ? "See Less" : "See More..."}
+          </button>
+        </div>
+      )}
+       </>
+      
+      
     ) : (
       <div className="bg-gray-50 p-6 rounded-xl text-center ">
         <div className="inline-block bg-gray-200 p-3 rounded-full mb-3 ">
