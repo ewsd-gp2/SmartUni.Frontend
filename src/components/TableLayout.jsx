@@ -29,57 +29,70 @@ const roleLabels ={
 }
 
   const columns = [
-    // {
-    //   name: "Image",
-    //   selector: (row) => row.image,
-    //   sortable: true,
-    //   cell: (row) => (
-    //     <img
-    //       src={row.image}
+    {
+      name: "Image",
+      selector: (row) => row.image,
+      sortable: true,
+      minWidth: "80px",
+      cell: (row) => (
+        <img
+          src={`data:image/jpeg;base64,${row.image}`}
+          className="size-9 rounded-full object-cover"
           
-    //       className="size-12 rounded-full object-cover"
-    //     />
-    //   ),
-    // },
+        />
+      ),
+    },
     {
       name: "Full Name",
       selector: (row) => row.name,
       sortable: true,
+      mdWith: "100px",
+      
     },
     ...(shouldIncludeMajor
       ? [
           {
             name: "Major",
             selector: (row) => Major[row.major],
+             minWidth: "100px",
+             hide : "sm",
           },
         ]
       : []),
     {
       name: "Phone Number",
       selector: (row) => row.phoneNumber,
+      minWidth: "120px",
+             hide : "sm",
     },
     {
       name: "Email Address",
       selector: (row) => row.email,
+      minWidth: "120px",
+             hide : "md",
     },
     {
       name: "ID",
       selector: (row) => row.userCode,
+      minWidth: "120px",
+             hide : "md",
     },
     {
       name: "Edit",
+      minWidth: "100px",
       cell: (row) => (
         <HiOutlinePencil
-          className="size-4 text-blue-500"
+          className="size-4 md:size-5 text-blue-500"
           onClick={() => handleUpdate(row.id)}
         />
       ),
     },
     {
       name: "Delete",
+      minWidth: "100px",
       cell: (row) => (
         <FaRegTrashAlt
-          className="size-4 text-red-500"
+          className="size-4 md:size-5 text-red-500"
           onClick={() => openDeleteModal(row.id)}
         />
       ),

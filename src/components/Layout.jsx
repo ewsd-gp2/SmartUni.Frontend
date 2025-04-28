@@ -1,19 +1,15 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
-import Header from "./Header";
 import SideBar from "./SideBar";
-import HeaderTitle from "./common/HeaderTitle";
-import Footer from "./common/Footer";
 
 const Layout = () => {
   return (
-    <div className='flex min-h-screen bg-white p-4'>
-      <SideBar />
-
-      <div className='flex-1 p-4 pl-14 ml-72'>
-        <Outlet />
-      </div>
-    </div>
+    <div className="flex min-h-screen bg-white">
+    <SideBar />
+    <main className="flex-1 p-4 sm:mt-4 md:mt-2 transition-all duration-300">
+      <Outlet />
+    </main>
+  </div>
   );
 };
 

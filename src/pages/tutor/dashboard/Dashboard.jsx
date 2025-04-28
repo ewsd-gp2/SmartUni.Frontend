@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Container from "../../../components/Container";
 import { IoIosPeople } from "react-icons/io";
 import { FaBell, FaBlogger } from "react-icons/fa6";
 import StudentListforTutorDashboard from "./StudentListforTutorDashboard";
@@ -28,7 +27,7 @@ const Dashboard = () => {
   const [data, setData] = useState([]);
   const [tutorData, setTutorData] = useState([]);
   const [showAllNotifications, setShowAllNotifications] = useState(false);
-  // console.log(tutorData)
+
   const date = new Date(user.lastLoggedInDate);
   const formattedDate = date.toLocaleDateString("en-GB", {
     year: "numeric",
@@ -54,16 +53,10 @@ const Dashboard = () => {
   const getRange = () => {
     switch (select) {
       case 1:
-        setSelectedRange((prev) => ({
-          startTime: todayStart,
-          endTime: todayEnd,
-        }));
+        setSelectedRange({ startTime: todayStart, endTime: todayEnd });
         break;
       case 2:
-        setSelectedRange((prev) => ({
-          startTime: thisWeekStart,
-          endTime: thisWeekEnd,
-        }));
+        setSelectedRange({ startTime: thisWeekStart, endTime: thisWeekEnd });
         break;
       default:
         break;
@@ -76,17 +69,13 @@ const Dashboard = () => {
 
     try {
       const response = await axios.post(url, selectedRange, {
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         withCredentials: true,
       });
       setData(response.data);
     } catch (error) {
       console.log(error);
-      toast.error("Sorry, something went wrong.", {
-        position: "top-right",
-      });
+      toast.error("Sorry, something went wrong.", { position: "top-right" });
     } finally {
       setListLoading(false);
     }
@@ -140,175 +129,180 @@ const Dashboard = () => {
       .join(" ");
 
   return (
-    <Container>
-      <div className="grid grid-cols-5">
-        <div className="col-span-3">
-          <div className="flex justify-between items-center">
-            <p className="text-2xl">
-              {user.isFirstLoggedIn ? (
-                `Welcome ${userName}`
-              ) : (
-                <div className="flex flex-col gap-3">
-                  <p>Welcome Back {userName}</p>
-                  <p className="text-sm">Your Last Login was {formattedDate}</p>
-                </div>
-              )}
-            </p>
+    <div className="container mx-auto px-4 py-6">
+      <div className="flex flex-col lg:flex-row gap-6">
+        <div className="lg:w-2/3">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 lg:mb-6 pt-4">
+            <div>
+              <h1 className="text-2xl font-medium">
+                {user.isFirstLoggedIn ? (
+                  `Welcome ${userName}`
+                ) : (
+                  <>
+                    <p>Welcome Back {userName}</p>
+                    <p className="text-sm text-gray-500">Your Last Login was {formattedDate}</p>
+                  </>
+                )}
+              </h1>
+            </div>
             <Profile />
           </div>
 
-          <div>
-            <h1 className="text-xl mt-5">What's New</h1>
-            <div>
-              <h3 className="text-lg mt-5 font-semibold">Schedule</h3>
-              <div className="space-y-3 mt-3">
-    {data.length > 0 ? (
-      data.map((item) => (
-        <div
-          key={item.id}
-          className="block bg-white p-4 rounded-xl border border-gray-100
-            shadow-sm hover:shadow-md transition-all duration-300
-            transform hover:-translate-y-0.5 group"
-        >
-          <div className="flex items-start gap-3">
-            <div className="bg-teal-50 p-2.5 rounded-lg group-hover:bg-teal-100 transition-colors">
-              <IoIosPeople className="text-lg text-teal-600" />
-            </div>
-            <div className="flex-1 min-w-0">
-              <div className="flex justify-between items-start gap-2">
-                <p className="font-medium text-gray-900 truncate group-hover:text-teal-700 transition-colors">
-                  {item.title}
-                </p>
-                <span className="text-xs text-gray-500 whitespace-nowrap group-hover:text-gray-600 transition-colors">
-                  {formatDate(item.startTime)}
-                </span>
+          <section className="mb-8">
+            <h2 className="text-xl font-semibold mb-4">What's New</h2>
+
+            <div className="mb-8">
+              <h3 className="text-lg font-semibold mb-4">Schedule</h3>
+              <div className="space-y-3">
+                {data.length > 0 ? (
+                  data.map((item) => (
+                    <div
+                      key={item.id}
+                      className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition-all"
+                    >
+                      <div className="flex items-start gap-3">
+                        <div className="bg-teal-50 p-2 rounded-lg">
+                          <IoIosPeople className="text-lg text-teal-600" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-1">
+                            <p className="font-medium text-gray-900 truncate">
+                              {item.title}
+                            </p>
+                            <span className="text-xs text-gray-500 whitespace-nowrap">
+                              {formatDate(item.startTime)}
+                            </span>
+                          </div>
+                          <p className="text-sm text-gray-500 mt-1">
+                            From {formatTime(item.startTime)} to {formatTime(item.endTime)}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <div className="bg-gray-50 p-6 rounded-lg text-center">
+                    <div className="inline-block bg-gray-200 p-3 rounded-full mb-3">
+                      <IoIosPeople className="text-xl text-gray-400" />
+                    </div>
+                    <p className="text-gray-500 font-medium">No schedules found</p>
+                    <p className="text-sm text-gray-400 mt-1">You're all caught up for now</p>
+                  </div>
+                )}
               </div>
-              <p className="text-sm text-gray-500 mt-1 group-hover:text-gray-600 transition-colors">
-                From {formatTime(item.startTime)} to {formatTime(item.endTime)}
-              </p>
-             
-            </div>
-          </div>
-        </div>
-      ))
-    ) : (
-      <div
-        className="bg-gray-50 p-6 rounded-xl text-center"
-      >
-        <div className="inline-block bg-gray-200 p-3 rounded-full mb-3 ">
-          <IoIosPeople className="text-xl text-gray-400" />
-        </div>
-        <p className="text-gray-500 font-medium">No schedules found</p>
-        <p className="text-sm text-gray-400 mt-1">You’re all caught up for now</p>
-      </div>
-    )}
-  </div>
             </div>
 
-            <div>
-              <h3 className="text-lg mt-5 font-semibold">Notifications</h3>
-              <div className="space-y-3 mt-3">
-    {tutorData?.notifications?.length > 0 ? (
-      
-       <>
-       {(showAllNotifications ? tutorData.notifications : tutorData.notifications.slice(0,3)).map((note) => (
-          <Link
-          to={`/${userRole}/blog/details/${note.blogId}`}
-          key={note.createdOn}
-          className="block bg-white p-4 rounded-xl border border-gray-100 shadow hover:shadow-md transition-all duration-300 group"
-        >
-          <div className="flex items-start gap-3">
-            <div className="bg-teal-50 p-2.5 rounded-lg group-hover:bg-teal-100 transition-colors">
-              <FaBlogger className="text-lg text-teal-600" />
-            </div>
-            <div className="flex-1">
-              <div className="flex justify-between items-center">
-                <p className="font-medium text-gray-900 group-hover:text-teal-700 transition-colors">
-                  {getNotificationType(note)}
-                </p>
-                <span className="text-xs text-gray-500 group-hover:text-gray-600 transition-colors">
-                  {formatDate(note.createdOn)}
-                </span>
+            <div className="mb-8">
+              <h3 className="text-lg font-semibold mb-4">Notifications</h3>
+              <div className="space-y-3">
+                {tutorData?.notifications?.length > 0 ? (
+                  <>
+                    {(showAllNotifications
+                      ? tutorData.notifications
+                      : tutorData.notifications.slice(0, 3)
+                    ).map((note) => (
+                      <Link
+                        to={`/${userRole}/blog/details/${note.blogId}`}
+                        key={note.createdOn}
+                        className="block bg-white p-4 rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition-all"
+                      >
+                        <div className="flex items-start gap-3">
+                          <div className="bg-teal-50 p-2 rounded-lg">
+                            <FaBlogger className="text-lg text-teal-600" />
+                          </div>
+                          <div className="flex-1">
+                            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1">
+                              <p className="font-medium text-gray-900">
+                                {getNotificationType(note)}
+                              </p>
+                              <span className="text-xs text-gray-500">
+                                {formatDate(note.createdOn)}
+                              </span>
+                            </div>
+                            <p className="text-sm text-gray-500 mt-1">
+                              Click to view blog →
+                            </p>
+                          </div>
+                        </div>
+                      </Link>
+                    ))}
+                    {tutorData.notifications.length > 3 && (
+                      <div className="text-center pt-2">
+                        <button
+                          onClick={() => setShowAllNotifications(!showAllNotifications)}
+                          className="text-teal-600 hover:text-teal-700 font-medium text-sm"
+                        >
+                          {showAllNotifications ? "Show Less" : "Show All Notifications"}
+                        </button>
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <div className="bg-gray-50 p-6 rounded-lg text-center">
+                    <div className="inline-block bg-gray-200 p-3 rounded-full mb-3">
+                      <FaBell className="text-xl text-gray-400" />
+                    </div>
+                    <p className="text-gray-500 font-medium">No notifications yet</p>
+                    <p className="text-sm text-gray-400 mt-1">
+                      We'll notify you when something arrives
+                    </p>
+                  </div>
+                )}
               </div>
-              <p className="text-sm text-gray-500 mt-1 group-hover:text-gray-600 transition-colors">
-                Click to view blog →
-              </p>
             </div>
-          </div>
-        </Link>
-       ))}
+          </section>
 
-{tutorData.notifications.length > 3 && (
-        <div className="text-center">
-          <button
-            onClick={() => setShowAllNotifications(!showAllNotifications)}
-            className="inline-block font-semibold text-teal-600 rounded-full hover:text-teal-700 transition duration-300 "
-          >
-            {showAllNotifications ? "See Less" : "See More..."}
-          </button>
-        </div>
-      )}
-       </>
-      
-      
-    ) : (
-      <div className="bg-gray-50 p-6 rounded-xl text-center ">
-        <div className="inline-block bg-gray-200 p-3 rounded-full mb-3 ">
-          <FaBell className="text-xl text-gray-400" />
-        </div>
-        <p className="text-gray-500 font-medium">No notifications yet</p>
-        <p className="text-sm text-gray-400 mt-1">We'll notify you when something arrives</p>
-      </div>
-    )}
-  </div>
-            </div>
-          </div>
-          <div>
+          <div className="mb-8">
             <StudentListforTutorDashboard />
           </div>
         </div>
-        <div className="col-span-2 m-5">
-          <h1 className="mb-5 text-3xl">My Schedules</h1>
-          <h3 className="text-2xl my-5">For Today</h3>
-          {data.length > 0 ? (
-            data.map((item) => (
-              <div key={item.id}>
-                <div className="flex items-center mb-3">
-                  {item.participants.map((participant, index) => (
-                    <img
-                      key={participant.id}
-                      className="size-8 rounded-full inline-block border-2 border-white"
-                      style={{
-                        transform: `translateX(${-index * 10}px)`,
-                        zIndex: item.participants.length - index,
-                      }}
-                      src={`data:image/jpeg;base64,${participant.avatar}`}
-                      alt="Student"
-                    />
-                  ))}
+
+        <div className="lg:w-1/3">
+          <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 sticky top-6">
+            <h2 className="text-xl font-semibold mb-4">My Schedules</h2>
+            <h3 className="text-lg font-medium mb-4">For Today</h3>
+            
+            {data.length > 0 ? (
+              data.map((item) => (
+                <div key={item.id} className="mb-6">
+                  <div className="flex items-center mb-3">
+                    {item.participants.map((participant, index) => (
+                      <img
+                        key={participant.id}
+                        className="w-8 h-8 rounded-full inline-block border-2 border-white"
+                        style={{
+                          transform: `translateX(${-index * 10}px)`,
+                          zIndex: item.participants.length - index,
+                        }}
+                        src={`data:image/jpeg;base64,${participant.avatar}`}
+                        alt="Student"
+                      />
+                    ))}
+                  </div>
+                  <div className="flex gap-3 items-center mb-2">
+                    <PiNotepadLight className="text-xl text-teal-500" />
+                    <span className="text-gray-700">{item.title}</span>
+                  </div>
+                  <div className="flex gap-3 items-center mb-3">
+                    <PiNoteBlankLight className="text-xl text-teal-500" />
+                    <span className="text-sm text-gray-600">
+                      {formatDate(item.startTime)} {formatTime(item.startTime)} - {formatTime(item.endTime)}
+                    </span>
+                  </div>
+                  <hr className="my-4 border-t border-gray-200" />
                 </div>
-                <div className="flex gap-5 items-center mb-3">
-                  <PiNotepadLight className="text-2xl text-teal-500" />
-                  <span>{item.title}</span>
-                </div>
-                <div className="flex gap-5 items-center mb-3">
-                  <PiNoteBlankLight className="text-2xl text-teal-500" />
-                  <span className="text-sm">
-                    {formatDate(item.startTime)} {formatTime(item.startTime)} -{" "}
-                    {formatTime(item.endTime)}
-                  </span>
-                </div>
-                <hr className="my-4 border-t-1 border-teal-500" />
+              ))
+            ) : (
+              <div className="text-center py-4">
+                <p className="text-gray-500 italic">
+                  There are no schedules today.
+                </p>
               </div>
-            ))
-          ) : (
-            <p className="text-center text-gray-500 italic">
-              There are no schedules.
-            </p>
-          )}
+            )}
+          </div>
         </div>
       </div>
-    </Container>
+    </div>
   );
 };
 

@@ -210,50 +210,49 @@ const AdminAllocation = () => {
   }
 
   return (
-    <div className="p-2 sm:p-4">
-      {/* Select Tutor Form */}
-      <form className="w-full m-auto max-w-sm my-5">
+    <div className="p-2 md:p-4 lg:p-6 max-w-7xl mx-auto pt-10 md:pt-10">
+      <div className="w-full max-w-2xl mb-4 md:mb-6">
         <label
           htmlFor="tutors"
-          className="block mb-4 text-xl sm:text-2xl font-medium text-gray-900"
+          className="block mb-2 text-lg md:text-xl font-medium text-gray-900"
         >
           Choose Tutor
         </label>
-        <select
-          id="tutors"
-          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm sm:text-base rounded-lg focus:ring-teal-500 focus:border-teal-500 block w-full p-3"
-          value={selectedTutor}
-          onChange={(e) => setSelectedTutor(e.target.value)}
-        >
-          <option value="">Select Tutor</option>
-          {tutorData.map((tutor) => (
-            <option key={tutor.id} value={tutor.id}>
-              {tutor.name}
-            </option>
-          ))}
-        </select>
-      </form>
+        <div className="flex flex-col sm:flex-row gap-2 w-full">
+  <select
+    id="tutors"
+    className="w-full sm:flex-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm md:text-base rounded-lg focus:ring-teal-500 focus:border-teal-500 p-2 md:p-3"
+    value={selectedTutor}
+    onChange={(e) => setSelectedTutor(e.target.value)}
+  >
+    <option value="">Select Tutor</option>
+    {tutorData.map((tutor) => (
+      <option key={tutor.id} value={tutor.id}>
+        {tutor.name}
+      </option>
+    ))}
+  </select>
+</div>
+      </div>
 
-      {/* Student Table */}
-      <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-        <table className="w-full text-xs sm:text-sm text-left text-gray-500">
-          <thead className="text-xs sm:text-sm text-gray-700 uppercase bg-blue-100">
+      <div className="overflow-x-auto rounded-lg border border-gray-200 shadow-sm">
+        <table className="w-full text-xs md:text-sm text-left text-gray-500">
+          <thead className="text-xs md:text-sm text-gray-700 uppercase bg-cyan-100">
             <tr>
-              <th className="px-4 sm:px-6 py-3">No</th>
-              <th className="px-4 sm:px-6 py-3">Students Name</th>
-              <th className="px-4 sm:px-6 py-3 relative">
+              <th className="px-3 py-2 md:px-4 md:py-3">No</th>
+              <th className="px-3 py-2 md:px-4 md:py-3">Students Name</th>
+              <th className="px-3 py-2 md:px-4 md:py-3 relative">
                 <div
-                  className="flex items-center gap-2 cursor-pointer"
+                  className="flex items-center gap-1 md:gap-2 cursor-pointer"
                   onClick={toggleDropdown}
                 >
                   <BsSortDown className="text-teal-600" />
-                  <span>Sorting</span>
+                  <span>Sort</span>
                 </div>
-
                 {dropdownVisible && (
                   <div className="absolute top-full left-0 mt-1 w-24 bg-white border border-gray-200 rounded shadow-md z-10">
                     <p
-                      className={`px-3 py-2 hover:bg-teal-100 text-xs sm:text-sm cursor-pointer ${
+                      className={`px-2 py-1 md:px-3 md:py-2 hover:bg-teal-100 text-xs md:text-sm cursor-pointer ${
                         sortName === "asc" ? "font-semibold text-teal-600" : ""
                       }`}
                       onClick={() => {
@@ -264,7 +263,7 @@ const AdminAllocation = () => {
                       A - Z
                     </p>
                     <p
-                      className={`px-3 py-2 hover:bg-teal-100 text-xs sm:text-sm cursor-pointer ${
+                      className={`px-2 py-1 md:px-3 md:py-2 hover:bg-teal-100 text-sm md:text-base cursor-pointer ${
                         sortName === "desc" ? "font-semibold text-teal-600" : ""
                       }`}
                       onClick={() => {
@@ -277,7 +276,7 @@ const AdminAllocation = () => {
                   </div>
                 )}
               </th>
-              <th className="px-4 sm:px-6 py-3">Status</th>
+              <th className="px-3 py-2 md:px-4 md:py-3">Status</th>
             </tr>
           </thead>
 
@@ -291,34 +290,31 @@ const AdminAllocation = () => {
                   key={student.id}
                   className="bg-white border-b hover:bg-gray-50"
                 >
-                  <td className="px-4 sm:px-6 py-4 font-medium text-gray-900">
+                  <td className="px-3 py-2 md:px-4 md:py-3 font-medium text-gray-900 whitespace-nowrap">
                     {index + 1}
                   </td>
-
-                  <td className="px-4 sm:px-6 py-4">
-                    <div className="flex items-center gap-2 sm:gap-3">
+                  <td className="px-3 py-2 md:px-4 md:py-3">
+                    <div className="flex items-center gap-2">
                       <input
                         type="checkbox"
                         checked={selectedStudents.includes(student.id)}
                         onChange={() => handleSelectStudent(student.id)}
-                        className="w-4 h-4 sm:w-5 sm:h-5 text-teal-600 bg-gray-100 border-gray-300 rounded-sm"
+                        className="w-4 h-4 text-teal-600 bg-gray-100 border-gray-300 rounded-sm"
                       />
                       <img
                         src={`data:image/jpeg;base64,${student.image}`}
                         alt={student.name}
-                        className="size-8 sm:size-10 rounded-full object-cover"
+                        className="size-6 md:size-7 lg:size-8 rounded-full object-cover"
                       />
-                      <span className="text-sm sm:text-base font-medium text-gray-900">
+                      <span className="font-medium md:text-base text-gray-900 truncate max-w-[100px] md:max-w-none">
                         {student.name}
                       </span>
                     </div>
                   </td>
-
-                  <td className="px-4 sm:px-6 py-4"></td>
-
-                  <td className="px-4 sm:px-6 py-4">
+                  <td className="px-3 py-2 md:px-4 md:py-3"></td>
+                  <td className="px-3 py-2 md:px-4 md:py-3">
                     <span
-                      className={`px-3 py-1.5 rounded text-xs sm:text-sm font-medium text-white ${
+                      className={`px-2 py-1 md:px-3 md:py-1.5 rounded text-xs md:text-sm font-medium text-white whitespace-nowrap ${
                         isAssigned ? "bg-teal-500" : "bg-red-400"
                       }`}
                     >
@@ -332,10 +328,9 @@ const AdminAllocation = () => {
         </table>
       </div>
 
-      {/* Buttons */}
-      <div className="flex flex-col sm:flex-row justify-end gap-3 mt-4">
+      <div className="flex flex-col sm:flex-row justify-end gap-2 md:gap-3 mt-3 md:mt-4">
         <button
-          className={`border border-teal-500 text-slate-900 px-6 py-2 rounded-lg transition ${
+          className={`border border-teal-500 text-slate-900 px-4 py-1.5 md:px-6 md:py-2 rounded-lg transition text-sm md:text-base ${
             !isAnyStudentAssigned
               ? "opacity-50 cursor-not-allowed"
               : "hover:bg-teal-50"
@@ -347,7 +342,7 @@ const AdminAllocation = () => {
         </button>
         <button
           onClick={handleAssign}
-          className={`bg-teal-500 text-white px-6 py-2 rounded-lg transition ${
+          className={`bg-teal-500 text-white px-4 py-1.5 md:px-6 md:py-2 rounded-lg transition text-sm md:text-base ${
             isAnyStudentAssigned ||
             !selectedTutor ||
             selectedStudents.length === 0

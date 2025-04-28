@@ -61,7 +61,7 @@ const UserProfile = () => {
 
   return (
     <div className="p-4 sm:p-6 lg:p-8">
-  <Link to={`/${userRole}/dashboard`} className="flex items-center mb-6 hover:underline">
+  <Link to={`/${userRole}/dashboard`} className="flex items-center mb-6">
     <IoIosArrowBack className="text-2xl text-teal-500" />
     <h1 className="text-2xl font-semibold text-teal-500 ml-2">Smart Uni</h1>
   </Link>
@@ -70,7 +70,7 @@ const UserProfile = () => {
     <div className="flex items-center gap-6">
       <div className="relative">
         <img
-          className="w-32 h-32 object-cover rounded-lg border"
+          className="w-24 h-24 md:w-32 md:h-32 lg:w-32 lg:h-32 object-cover rounded-lg border"
           src={`data:image/jpeg;base64,${userProfile.image}`}
           alt="user profile"
         />

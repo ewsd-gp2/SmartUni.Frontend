@@ -124,10 +124,10 @@ const UpdateStudent = () => {
   
   return (
     <div>
-      <HeaderTitle title='Update Student Account' />
+      <HeaderTitle title='Update Student Account'  />
       <form>
-        <div className='mt-8 flex flex-row gap-15'>
-          <div className='' onClick={handleClick}>
+        <div className="mt-8 flex flex-col md:flex-row md:gap-16">
+        <div className="w-full md:w-1/2" onClick={handleClick}>
             <input
               ref={fileInputRef}
               type='file'
@@ -136,29 +136,29 @@ const UpdateStudent = () => {
               className='hidden'
             />
             {showImage ? (
-              <div className='mt-4 w-xs cursor-pointer relative aspect-[4/3] flex justify-center'>
-                <div className='absolute flex flex-row gap-2 bottom-2 bg-[#216ce7] font-bold text-white text-sm shadow-2xl px-4 py-2 rounded'>
-                  <IoImages size={20} />
+               <div className="mt-4 w-full cursor-pointer relative aspect-[4/3] flex justify-center">
+               <div className="absolute flex flex-row gap-2 bottom-2 bg-[#216ce7] font-bold text-white text-sm shadow-2xl px-4 py-2 rounded">
+                 <IoImages size={20} />
                   <p>Change Picture</p>
                 </div>
                 <img
                   src={showImage}
                   alt='Preview'
-                  className='max-w-full h-auto rounded-lg border border-gray-300'
+                 className="w-56 h-56 lg:max-w-full lg:h-auto rounded-lg border border-gray-300"
                 />
               </div>
             ) : (
-              <div className='w-xs cursor-pointer aspect-[4/3] border-2 border-dashed border-[#14B8A6] flex flex-col items-center'>
+              <div className="w-full cursor-pointer aspect-[4/3] border-2 border-dashed border-[#14B8A6] flex flex-col items-center justify-center">
                 <IoCloudUpload size={60} className='mt-5' color='#14B8A6' />
                 <p className='text-xl font-bold'>Upload Picture here</p>
                 <p className='mt-2'>Files supported: JPG, PNG and more</p>
-                <div className='aspect-[4/1] mt-4 h-9 border-2 rounded-lg bg-[#14b8a6] text-white font-bold border-[#14B8A6] text-center flex justify-center items-center'>
-                  BROWSE
-                </div>
+                <div className="aspect-[4/1] mt-4 h-9 border-2 rounded-lg bg-[#14b8a6] text-white font-bold border-[#14B8A6] text-center flex justify-center items-center px-4">
+              BROWSE
+            </div>
               </div>
             )}
           </div>
-          <div className=''>
+          <div className="w-full md:w-1/2 mt-8 md:mt-0">
             <div>
               <label
                 htmlFor='name'
