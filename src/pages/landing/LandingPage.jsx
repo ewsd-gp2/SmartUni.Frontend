@@ -4,7 +4,7 @@ import { Feature } from "./components/Feature";
 import { Blog } from "./components/Blog";
 import { StudentVoice } from "./components/StudentVoice";
 import { Teacher } from "./components/Teacher";
-import Footer from "../../components/common/Footer";
+import { Footer } from "./components/Footer";
 
 
 export const LandingPage = () => {
@@ -17,7 +17,7 @@ export const LandingPage = () => {
             <Blog />
             <StudentVoice/>
             <Teacher />
-            <Footer/>
+            <Footer />
         </>
 
 // mx-15 my-5
