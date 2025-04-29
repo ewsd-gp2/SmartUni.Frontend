@@ -109,7 +109,7 @@ const UpdateStudent = () => {
         withCredentials: true,
       })
       .then((response) => {
-        toast.success("Tutor Updated Successfully!", {
+        toast.success("Student Updated Successfully!", {
           position: "top-right",
         });
         navigate("/staff/dashboard/studentlist");
@@ -124,10 +124,10 @@ const UpdateStudent = () => {
   
   return (
     <div>
-      <HeaderTitle title='Update Student Account' />
+      <HeaderTitle title='Update Student Account'  />
       <form>
-        <div className='mt-8 flex flex-row gap-15'>
-          <div className='' onClick={handleClick}>
+        <div className="mt-8 flex flex-col md:flex-row md:gap-16">
+        <div className="w-full md:w-1/2" onClick={handleClick}>
             <input
               ref={fileInputRef}
               type='file'
@@ -136,33 +136,33 @@ const UpdateStudent = () => {
               className='hidden'
             />
             {showImage ? (
-              <div className='mt-4 w-xs cursor-pointer relative aspect-[4/3] flex justify-center'>
-                <div className='absolute flex flex-row gap-2 bottom-2 bg-[#216ce7] font-bold text-white text-sm shadow-2xl px-4 py-2 rounded'>
-                  <IoImages size={20} />
+               <div className="mt-4 w-full cursor-pointer relative aspect-[4/3] flex justify-center">
+               <div className="absolute flex flex-row gap-2 bottom-2 bg-[#216ce7] font-bold text-white text-sm shadow-2xl px-4 py-2 rounded">
+                 <IoImages size={20} />
                   <p>Change Picture</p>
                 </div>
                 <img
                   src={showImage}
                   alt='Preview'
-                  className='max-w-full h-auto rounded-lg border border-gray-300'
+                 className="w-56 h-56 lg:max-w-full lg:h-auto rounded-lg border border-gray-300"
                 />
               </div>
             ) : (
-              <div className='w-xs cursor-pointer aspect-[4/3] border-2 border-dashed border-[#14B8A6] flex flex-col items-center'>
+              <div className="w-full cursor-pointer aspect-[4/3] border-2 border-dashed border-[#14B8A6] flex flex-col items-center justify-center">
                 <IoCloudUpload size={60} className='mt-5' color='#14B8A6' />
                 <p className='text-xl font-bold'>Upload Picture here</p>
                 <p className='mt-2'>Files supported: JPG, PNG and more</p>
-                <div className='aspect-[4/1] mt-4 h-9 border-2 rounded-lg bg-[#14b8a6] text-white font-bold border-[#14B8A6] text-center flex justify-center items-center'>
-                  BROWSE
-                </div>
+                <div className="aspect-[4/1] mt-4 h-9 border-2 rounded-lg bg-[#14b8a6] text-white font-bold border-[#14B8A6] text-center flex justify-center items-center px-4">
+              BROWSE
+            </div>
               </div>
             )}
           </div>
-          <div className=''>
+          <div className="w-full md:w-1/2 mt-8 md:mt-0">
             <div>
               <label
-                for='name'
-                class=' block mb-2 w-xs text-sm font-medium text-gray-900 '
+                htmlFor='name'
+                className=' block mb-2 w-xs text-sm font-medium text-gray-900 '
               >
                 Full Name
               </label>
@@ -171,7 +171,7 @@ const UpdateStudent = () => {
                 id='name'
                 value={studentData.name}
                 onChange={handleChange}
-                class='bg-grey-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:teal-500 focus:border-teal-500 block w-full p-2.5 '
+                className='bg-grey-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:teal-500 focus:border-teal-500 block w-full p-2.5 '
                 placeholder='Full Name'
                 required
               />
@@ -179,8 +179,8 @@ const UpdateStudent = () => {
 
             <div className='mt-4'>
               <label
-                for='gender'
-                class='block mb-2 text-sm font-medium text-gray-900 '
+                htmlFor='gender'
+                className='block mb-2 text-sm font-medium text-gray-900 '
               >
                 Gender
               </label>
@@ -219,7 +219,7 @@ const UpdateStudent = () => {
             </div>
             <div className='mt-4'>
               <label
-                for='major'
+                htmlFor='major'
                 className='block mb-2 text-sm font-medium text-gray-900'
               >
                 Major
@@ -228,7 +228,7 @@ const UpdateStudent = () => {
                 id='major'
                 value={studentData.major}
                 onChange={handleChange}
-                class='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 '
+                className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 '
               >
                 <option value='Computing' selected>
                   Computing
@@ -239,17 +239,17 @@ const UpdateStudent = () => {
             </div>
             <div className='mt-4'>
               <label
-                for='email'
+                htmlFor='email'
                 className='block mb-2 text-sm font-medium text-gray-900'
               >
                 Email
               </label>
               <input
-                type='text'
+                type='email'
                 id='email'
                 value={studentData.email}
                 onChange={handleChange}
-                class='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 '
+                className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 '
                 placeholder='xxx@gmail.com'
                 pattern='[0-9]{3}-[0-9]{2}-[0-9]{3}'
                 required
@@ -257,8 +257,8 @@ const UpdateStudent = () => {
             </div>
             <div className='mt-4'>
               <label
-                for='phoneNumber'
-                class='block mb-2 text-sm font-medium text-gray-900 '
+                htmlFor='phoneNumber'
+                className='block mb-2 text-sm font-medium text-gray-900 '
               >
                 Phone Number
               </label>
@@ -267,7 +267,7 @@ const UpdateStudent = () => {
                 id='phoneNumber'
                 value={studentData.phoneNumber}
                 onChange={handleChange}
-                class='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 '
+                className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 '
                 placeholder='+959xxxx'
                 required
               />

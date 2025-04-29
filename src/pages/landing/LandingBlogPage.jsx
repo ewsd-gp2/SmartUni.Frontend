@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom"
-import { formatDate } from "../../../formatdatetime/FormatDateTime";
 import axios from "axios";
+import { formatDate } from "../../formatdatetime/FormatDateTime";
+import { Footer } from "./components/Footer";
+import { NavBar } from "./components/NavBar";
 
-export const Blog = () => {
+export const LandingBlogPage = () => {
 
     const [blogList, setBlogList] = useState([]);
     const userRole = localStorage.getItem("user_role");
@@ -29,6 +31,8 @@ export const Blog = () => {
       }, []);
 
     return(
+      <>
+      <NavBar />
         <div className="mt-12 md:mt-20 mx-4 md:mx-15">
             <div className="flex justify-center">
                 <h1 className="md:text-3xl text-xl text-teal-600 font-semibold">Blogs</h1>
@@ -38,7 +42,7 @@ export const Blog = () => {
             )}
     <div className="flex mt-20 gap-15 flex-wrap justify-center">
 
-{blogList.length !== 0 &&  blogList.slice(0, 6).map((blog) => (
+{blogList.length !== 0 &&  blogList.slice(0, 9).map((blog) => (
   <div className="rounded-2xl overflow-hidden w-70 lg:w-85 bg-gray-200" key={blog.id}>
     <div className="w-full h-45">
             <img src={`data:image/jpeg;base64,${blog.coverImage}`} alt="blogImage" className="object-cover h-45 w-full"/>
@@ -59,5 +63,7 @@ export const Blog = () => {
 
             </div>
         </div>
+        <Footer/>
+        </>
     )
 }

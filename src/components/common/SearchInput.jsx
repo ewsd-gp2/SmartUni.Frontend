@@ -8,7 +8,7 @@ const SearchInput = ({ className, onFilter, onClear, filterText }) => {
       </div>
       <input
         type='search'
-        className='block w-86 rounded-2xl p-3 ps-8 text-sm text-gray-900 border border-gray-300 bg-gray-50 focus:ring-teal-500 focus:border-teal-500'
+        className='block w-52 lg:w-86 md:72 rounded-2xl p-3 ps-8 text-sm text-gray-900 border border-gray-300 bg-gray-50 focus:ring-teal-500 focus:border-teal-500'
         placeholder='Search'
         value={filterText}
         onChange={onFilter} 

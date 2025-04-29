@@ -6,7 +6,6 @@ import { useParams } from "react-router-dom";
 
 const StudentListforTutorDashboard = () => {
   const [studentList, setStudentList] = useState([]);
-  console.log(studentList)
   const [loading, setLoading] = useState(false);
   const user = JSON.parse(localStorage.getItem("user_profile"));
 
@@ -26,7 +25,7 @@ const StudentListforTutorDashboard = () => {
           ? response.data
           : response.data?.students || [];
         setStudentList(data);
-        console.log(response.data);
+        // console.log(response.data);
         setLoading(false);
       })
       .catch((error) => {
@@ -39,8 +38,11 @@ const StudentListforTutorDashboard = () => {
   useEffect(() => {
     fetchStudentData(user.id);
   }, []);
+
+  
+  
   return (
-    <div className="relative overflow-x-auto">
+    <div className="relative overflow-x-auto mt-10">
       <table className="w-full text-sm text-left rtl:text-right text-gray-500 ">
         <thead className="text-xs text-gray-700 uppercase bg-teal-200 ">
           <tr>
