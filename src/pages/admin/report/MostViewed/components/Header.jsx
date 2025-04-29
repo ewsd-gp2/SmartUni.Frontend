@@ -6,10 +6,10 @@ export const Header = () => {
         <div className="flex justify-between">
 
             <div className="space-y-12">
-            <h1 className="text-[35px] flex items-center">Report <IoIosArrowForward/>Most Viewed Pages</h1>
+                <h1 className="text-lg lg:text-[35px] mt-5 lg:mt-0">Report &gt;&gt; Most Viewed Page</h1>
             </div>
 
-            <div className="mr-10">
+            <div className="mr-5 lg:mr-10">
                 <Profile />
             </div>
         </div>

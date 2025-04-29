@@ -5,6 +5,7 @@ import HeaderTitle from "../../../components/common/HeaderTitle";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import axios from "axios";
+import TableLayoutStaff from "../../../components/TableLayoutStaff";
 
 
 const StaffList = () => {
@@ -93,7 +94,7 @@ const StaffList = () => {
               </div>
             </div> */}
    
-              <TableLayout data={staffData} userRole='staff' handleDelete={handleDelete} CreateAccount={CreateAccount} loading={loading} />
+              <TableLayoutStaff data={staffData} userRole='staff' handleDelete={handleDelete} CreateAccount={CreateAccount} loading={loading} />
           </div>
         </div>
       </Container>

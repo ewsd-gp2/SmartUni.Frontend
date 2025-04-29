@@ -63,7 +63,7 @@ export const StudentsTable = () => {
 
 {(data.length !== 0 && message.length !== 0) ? (
     <div>
-    <div className="flex gap-15">
+    <div className="flex flex-warp gap-15">
 {data.filter((data) => data.SenderType == 'student' ).length !== 0 ? (
     <table className="w-6/13 border-none">
     <thead>

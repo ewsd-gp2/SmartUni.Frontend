@@ -120,8 +120,8 @@ const UpdateStaff = () => {
     <div>
       <HeaderTitle title='Update Staff Account' />
       <form>
-        <div className='mt-8 flex flex-row gap-15'>
-          <div className='' onClick={handleClick}>
+        <div className='mt-8 flex flex-col md:flex-row md:gap-16'>
+          <div className='w-full md:w-1/2' onClick={handleClick}>
             <input
               ref={fileInputRef}
               type='file'
@@ -138,7 +138,7 @@ const UpdateStaff = () => {
                 <img
                   src={showImage}
                   alt='Preview'
-                  className='max-w-full h-auto rounded-lg border border-gray-300'
+                  className='w-56 h-56 lg:max-w-full lg:h-auto rounded-lg border border-gray-300'
                 />
               </div>
             ) : (
@@ -152,7 +152,7 @@ const UpdateStaff = () => {
               </div>
             )}
           </div>
-          <div className=''>
+          <div className='w-full md:w-1/2 mt-8 md:mt-0'>
             <div>
               <label
                 for='name'

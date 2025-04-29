@@ -50,17 +50,19 @@ export const StudentsTable = () => {
     
     return (
         <div className="mt-8">
-                <h2 className="text-4xl mb-10">Students Without Tutors</h2>
-{data.length !== 0 ? (<table className="w-7/9 border-none">
+                <h2 className="text-xl lg:text-4xl mb-10">Students Without Tutors</h2>
+
+
+{data.length !== 0 ? (<table className="w-full lg:w-7/9 border-none">
                 <thead>
                 <tr className="bg-teal-300">
-                    <th className="rounded-l-2xl text-center py-2 font-normal text-xl w-20">No.</th>
-                    <th className="py-2 text-start font-normal text-xl px-7 w-full flex justify-between">
+                    <th className="text-center py-3 pl-2 font-normal text-base lg:text-xl w-20">No.</th>
+                    <th className="py-3 text-start font-normal text-base lg:text-xl px-4 lg:px-7 w-full">
                         <h1>Student Names</h1>
-                        <button onClick={() => setIsOpen(!isOpen)} className="hover:text-gray-600 flex items-center cursor-pointer mr-5"><GoSortAsc className="mr-1 mt-1 text-2xl"/>Sorting</button>
+                        
                     </th>
-                    <th className="p-2 w-40 font-normal text-xl rounded-r-2xl">
-                        <h1 className="flex justify-center items-center"><IoFilterSharp className="mt-1 mr-1.5 text-md"/>Filter</h1>
+                    <th className="p-3 w-40 font-normal text-base lg:text-xl rounded-r-2xl">
+                    <button onClick={() => setIsOpen(!isOpen)} className="hover:text-gray-600 flex items-center cursor-pointer ml-4"><GoSortAsc className="mt-1 mr-1 text-base lg:text-xl"/>Sorting</button>
                     </th>
                 </tr>
                 </thead>
@@ -68,7 +70,7 @@ export const StudentsTable = () => {
 
                 {isOpen && (
                     <div
-                        className="absolute w-35 right-105 bg-gray-100 black shadow-lg rounded-md border-1 border-gray-300"
+                        className="absolute w-25 xl:w-35 right-10 xl:right-60 bg-gray-100 black shadow-lg rounded-md border-1 border-gray-300"
                     >
                         <div className="">
                         {options.map((option) => (
@@ -79,7 +81,7 @@ export const StudentsTable = () => {
                                     setSortOrder(option.name.toLowerCase());
                                     setIsOpen(false);
                                 }}
-                                className="w-full px-7 py-2 flex items-center gap-2 cursor-pointer border-b-1 border-gray-200"
+                                className="w-full px-3 xl:px-7 py-2 flex items-center gap-2 cursor-pointer border-b-1 border-gray-200 text-sm xl:text-base"
                             >
                                 {option.name}
                             </button>
