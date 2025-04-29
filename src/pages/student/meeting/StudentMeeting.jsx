@@ -4,7 +4,6 @@ import { MdLocationPin, MdAccessTimeFilled } from "react-icons/md";
 import { IoMdAddCircle } from "react-icons/io";
 import { motion } from "framer-motion";
 import { IoAddCircle } from "react-icons/io5";
-import CreateMeeting from "./CreateMeeting";
 import CustomDateModal from "./CustomDateModal";
 import ShowEmpty from "../../../components/common/ShowEmpty";
 import axios from "axios";
@@ -22,7 +21,7 @@ const filterOptions = [
   { id: 2, name: "This Week" },
   { id: 3, name: "Custom" },
 ];
-const TutorMeeting = () => {
+const StudentMeeting = () => {
   const user = JSON.parse(localStorage.getItem("user_profile"));
   const [select, setSelect] = useState(1);
   const [openForm, setOpenForm] = useState(false);
@@ -60,7 +59,7 @@ const TutorMeeting = () => {
   };
 
   const fetchMeetingList = async () => {
-    const url = `http://localhost:7142/meeting/tutor/${user.id}`;
+    const url = `http://localhost:7142/meeting/student/${user.id}`;
     setListLoading(true);
     console.log("SELECTED RANGE", selectedRange);
     axios
@@ -134,13 +133,13 @@ const TutorMeeting = () => {
             </div>
           ))}
         </div>
-        <button
+        {/* <button
           className='rounded-3xl px-4 flex flex-row gap-1.5 mt-5 justify-center bg-gradient-to-br from-green-400 to-blue-600 text-white  transition-transform duration-300 hover:scale-105 hover:bg-green-500'
           onClick={openModal}
         >
           <IoAddCircle size={20} color='white' className='self-center' />
           <span className='self-center font-semibold'>New Event</span>
-        </button>
+        </button> */}
       </div>
       {data.length === 0 ? (
         <div className='px-2 py-4 w-md my-4'>
@@ -148,57 +147,56 @@ const TutorMeeting = () => {
         </div>
       ) : (
         data.map((item, index) => (
-         <motion.div
-                 initial={{ opacity: 0, x: -200, scale: 0.5 }}
-                 animate={{ opacity: 1, x: 0, scale: 1 }}
-                 exit={{ opacity: 0, x: 200, scale: 1.2 }}
-                 transition={{ duration: 0.2, type: "spring" }}
-                 className='bg-white border-1 border-gray-300 px-2 py-4 my-4 w-2xl rounded-xl shadow-md transition-transform duration-300'
-               >
-                 <div className='flex flex-row gap-4'>
-                   <div className='pl-4 pr-14 flex flex-col border-r-1 border-[#d3d3d3] basis-1/7'>
-                     <span className='text-xl text-center text-teal-500'>
-                       {moment(item.startTime).utc().format("ddd")}
-                     </span>
-                     <span className='text-3xl text-center font-semibold text-[#0D9488]'>
-                       {moment(item.startTime).utc().format("D")}
-                     </span>
-                   </div>
-     
-                   <div className='flex flex-col gap-2 pr-14  basis-3/7'>
-                     <div className='flex flex-row gap-2'>
-                       <MdAccessTimeFilled
-                         size={16}
-                         color='#8e9394'
-                         className='self-center'
-                       />
-                       <span>
-                         {moment(item.startTime).format("h:mm A")} -
-                         {moment(item.endTime).format("h:mm A")}
-                       </span>
-                     </div>
-                     <div className='flex flex-row gap-2 '>
-                       <MdLocationPin
-                         size={16}
-                         color='#8e9394'
-                         className='self-center'
-                       />
-                       <span>{item.isOnline ? "online" : "offline"}</span>
-                     </div>
-                   </div>
-     
-                   <div className=''>{item.title}</div>
-                 </div>
-                 <div className='pt-2 pl-4 border-t border-gray-300 mt-4'>
-                   <p className='font-semibold text-[#0D9488] text-lg'>{item.isOnline ? "Meeting Link" : "Location"}</p>
-                   <p>{item.isOnline ? item.url : item.location}</p>
-                   {/* {item.isOnline ? `Meeting Link: ${item.url}` : `Location: ${item.location}`} */}
-                 </div>
-               </motion.div>
+          <motion.div
+            initial={{ opacity: 0, x: -200, scale: 0.5 }}
+            animate={{ opacity: 1, x: 0, scale: 1 }}
+            exit={{ opacity: 0, x: 200, scale: 1.2 }}
+            transition={{ duration: 0.2, type: "spring" }}
+            className='bg-white border-1 border-gray-300 px-2 py-4 my-4 w-2xl rounded-xl shadow-md transition-transform duration-300'
+          >
+            <div className='flex flex-row gap-4'>
+              <div className='pl-4 pr-14 flex flex-col border-r-1 border-[#d3d3d3] basis-1/7'>
+                <span className='text-xl text-center text-teal-500'>
+                  {moment(item.startTime).utc().format("ddd")}
+                </span>
+                <span className='text-3xl text-center font-semibold text-[#0D9488]'>
+                  {moment(item.startTime).utc().format("D")}
+                </span>
+              </div>
+
+              <div className='flex flex-col gap-2 pr-14  basis-3/7'>
+                <div className='flex flex-row gap-2'>
+                  <MdAccessTimeFilled
+                    size={16}
+                    color='#8e9394'
+                    className='self-center'
+                  />
+                  <span>
+                    {moment(item.startTime).format("h:mm A")} -
+                    {moment(item.endTime).format("h:mm A")}
+                  </span>
+                </div>
+                <div className='flex flex-row gap-2 '>
+                  <MdLocationPin
+                    size={16}
+                    color='#8e9394'
+                    className='self-center'
+                  />
+                  <span>{item.isOnline ? "online" : "offline"}</span>
+                </div>
+              </div>
+
+              <div className=''>{item.title}</div>
+            </div>
+            <div className='pt-2 pl-4 border-t border-gray-300 mt-4'>
+              <p className='font-semibold text-[#0D9488] text-lg'>{item.isOnline ? "Meeting Link" : "Location"}</p>
+              <p>{item.isOnline ? item.url : item.location}</p>
+              {/* {item.isOnline ? `Meeting Link: ${item.url}` : `Location: ${item.location}`} */}
+            </div>
+          </motion.div>
         ))
       )}
 
-      <CreateMeeting isVisible={openForm} onClose={() => closeModal("form")} />
       <CustomDateModal
         isVisible={openCustomDate}
         clearData={clearData}
@@ -210,4 +208,4 @@ const TutorMeeting = () => {
   );
 };
 
-export default TutorMeeting;
+export default StudentMeeting;

@@ -83,7 +83,6 @@ const CreateMeeting = ({ isVisible, onClose }) => {
   }, [startDateTime, endDateTime]);
 
   const handleDateChange = (date) => {
-    console.log("Date changed:", date);
     setStartDate(date);
   };
 
@@ -105,7 +104,6 @@ const CreateMeeting = ({ isVisible, onClose }) => {
   };
 
   const firstFormNext = () => {
-    console.log("MEETING FORM:", meetingForm);
     if (!meetingForm.title) {
       setMessage("Please fill in title");
       return;
@@ -141,7 +139,7 @@ const CreateMeeting = ({ isVisible, onClose }) => {
         withCredentials: true,
       })
       .then((response) => {
-        console.log('res',response)
+        console.log("res", response);
         toast.success("Meeting Created Successfully!", {
           position: "top-right",
         });

@@ -2,7 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import Layout from "./components/Layout";
 import TutorList from "./pages/admin/dashboard/TutorList";
-import Chat from "./pages/Chat";
+import Chat from "./pages/tutor/chat/Chat.jsx";
 import CreateTutor from "./pages/admin/CreateTutor";
 import UpdateTutor from "./pages/admin/UpdateTutor";
 import TutorMeeting from "./pages/tutor/meeting/TutorMeeting";
@@ -22,10 +22,16 @@ import StaffList from "./pages/admin/dashboard/StaffList.jsx";
 import CreateStudent from "./pages/admin/CreateStudent.jsx";
 import UpdateStudent from "./pages/admin/UpdateStudent.jsx";
 import StudentDashboard from "./pages/student/StudentDashboard.jsx";
+import StudentMeeting from "./pages/student/meeting/StudentMeeting.jsx";
+import StudentChat from "./pages/student/chat/StudentChat.jsx";
 import UserProfile from "./pages/profile/UserProfile.jsx";
 import UpdateStaff from "./pages/admin/UpdateStudent.jsx";
 import BlogCreatePage from "./components/blogs/BlogCreatePage.jsx";
 import { LandingPage } from "./pages/landing/LandingPage.jsx";
+
+import ProtectedRoute from "./routes/ProtectedRoutes.jsx";
+
+const userRole = localStorage.getItem("user_role");
 
 const router = createBrowserRouter([
   {
@@ -41,9 +47,13 @@ const router = createBrowserRouter([
       },
       {
         path: "/staff",
-        element: <Layout />,
+        element: (
+          <ProtectedRoute allowedRoles={["staff"]}>
+            <Layout />
+          </ProtectedRoute>
+        ),
+
         children: [
-          
           {
             path: "dashboard/tutorlist",
             element: <TutorList />,
@@ -74,13 +84,13 @@ const router = createBrowserRouter([
           },
           {
             path: "dashboard/create/staff",
-            element: <CreateStaff/>
+            element: <CreateStaff />,
           },
           {
             path: "dashboard/create/student",
-            element: <CreateStudent/>
+            element: <CreateStudent />,
           },
-          
+
           {
             path: "allocation",
             element: <AdminAllocation />,
@@ -105,11 +115,15 @@ const router = createBrowserRouter([
       },
       {
         path: "/student",
-        element: <Layout />,
+        element: (
+          <ProtectedRoute allowedRoles={["student"]}>
+            <Layout />
+          </ProtectedRoute>
+        ),
         children: [
           {
-            path:"dashboard",
-            element:<StudentDashboard/>
+            path: "dashboard",
+            element: <StudentDashboard />,
           },
           {
             path: "blog",
@@ -124,15 +138,23 @@ const router = createBrowserRouter([
             element: <BlogDetailPage />,
           },
           {
+            path: "meeting",
+            element: <StudentMeeting />,
+          },
+          {
             path: "chat",
-            element: <Chat />,
+            element: <StudentChat />,
           },
         ],
       },
-      
+
       {
         path: "/tutor",
-        element: <Layout />,
+        element: (
+          <ProtectedRoute allowedRoles={["staff"]}>
+            <Layout />
+          </ProtectedRoute>
+        ),
         children: [
           {
             path: "blog",
@@ -160,11 +182,11 @@ const router = createBrowserRouter([
           },
           {
             path: "profile",
-            element:<UserProfile/>
-          }
+            element: <UserProfile />,
+          },
         ],
       },
-      
+
       {
         path: "*",
         element: <PageNotFound />,
