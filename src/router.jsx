@@ -26,6 +26,8 @@ import UserProfile from "./pages/profile/UserProfile.jsx";
 import BlogCreatePage from "./components/blogs/BlogCreatePage.jsx";
 import { LandingPage } from "./pages/landing/LandingPage.jsx";
 import UpdateStaff from "./pages/admin/UpdateStaff.jsx";
+import { LandingBlogPage } from "./pages/landing/LandingBlogPage.jsx";
+import { FeaturePage } from "./pages/landing/FeaturePage.jsx";
 
 const router = createBrowserRouter([
   {
@@ -38,6 +40,14 @@ const router = createBrowserRouter([
       {
         path: "/login",
         element: <LoginPage />,
+      },
+      {
+        path: 'blogs',
+        element: <LandingBlogPage />
+      },
+      {
+        path: 'feature',
+        element: <FeaturePage />
       },
       {
         path: "/staff",

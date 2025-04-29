@@ -33,7 +33,7 @@ const roleLabels ={
       name: "Image",
       selector: (row) => row.image,
       sortable: true,
-      minWidth: "80px",
+      minWidth: "100px",
       cell: (row) => (
         <img
           src={`data:image/jpeg;base64,${row.image}`}
