@@ -77,7 +77,7 @@ const SideBar = () => {
         { id: 1, name: "Student With Interact", path: "/staff/report/swi" },
         {
           id: 2,
-          name: "Student Without Interact",
+          name: "Student Without Tutors",
           path: "/staff/report/swt",
         },
         {

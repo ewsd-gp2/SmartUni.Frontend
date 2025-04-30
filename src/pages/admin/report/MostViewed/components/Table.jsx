@@ -48,26 +48,26 @@ export const StudentsTable = () => {
     return (
         <div className="mt-8">
             <div className="w-65/100">
-                <h2 className="text-4xl mb-4">Most Viewed Pages</h2>
+                <h2 className="text-[15px] lg:text-4xl mb-4">Most Viewed Pages</h2>
             </div>
 
-{data.length !== 0 ? ( <table className="w-4/9 border-none">
+{data.length !== 0 ? ( <table className="w-full lg:w-7/9 border-none">
                 <thead>
                 <tr className="bg-teal-300">
-                    <th className="rounded-l-2xl w-23 text-center py-2 font-normal text-xl">No.</th>
-                    <th className="py-2 text-start font-normal text-xl pl-6 w-110">Pages</th>
-                    <th className="p-2 w-40 font-normal text-lg rounded-r-2xl">
+                    <th className="rounded-l-2xl w-23 text-center py-2 font-normal text-base lg:text-xl">No.</th>
+                    <th className="py-2 text-start font-normal text-base lg:text-xl pl-6 w-110">Pages</th>
+                    <th className="p-2 w-40 font-normal text-base lg:text-xl rounded-r-2xl">
                         Views
                     </th>
                 </tr>
                 </thead>
                     <tbody>
                     {!!data && data.map((data, index) => (<tr className="border-b-2 border-teal-500" key={index}>
-                        <td className="text-center border-teal-500 border-r-2 text-xl">{index + 1}</td>
-                        <td className="py-5 ml-8 flex items-center text-xl">
+                        <td className="text-center border-teal-500 border-r-2 text-base lg:text-xl">{index + 1}</td>
+                        <td className="py-5 ml-8 flex items-center text-base lg:text-xl">
                             {data.pageName}
                         </td>
-                        <td className="text-center border-teal-500 border-l-2 text-xl">{data.viewCount}</td>
+                        <td className="text-center border-teal-500 border-l-2 text-base lg:text-xl">{data.viewCount}</td>
                     </tr>))}
 
                     </tbody>

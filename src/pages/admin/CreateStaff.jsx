@@ -186,6 +186,26 @@ const CreateStaff = () => {
                 </label>
               </div>
             </div>
+
+            <div className='mt-4'>
+              <label
+                htmlFor='major'
+                className='block mb-2 text-sm font-medium text-gray-900'
+              >
+                Role
+              </label>
+              <select
+                id='role'
+                // value={studentData.major}
+                // onChange={handleChange}
+                className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 '
+              >
+                <option value='Authorized' selected>
+                  Authorized
+                </option>
+                <option value='Unauthorized'>Unauthorized</option>
+              </select>
+            </div>
            
             <div className='mt-4'>
               <label
