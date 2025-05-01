@@ -1,18 +1,20 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
-const ChatList = ({ chatList, handleChange, handleChatRoomChange }) => {
+const StudentChatList = ({ chatList, handleChange, handleChatRoomChange }) => {
   const handleData = (data) => {
-    let tutor = { value: data.otherUserId, label: data.otherUserName};
+    let tutor = { value: data.otherUserId, label: data.otherUserName };
     handleChange(tutor);
     handleChatRoomChange(data.chatRoomId);
   };
+
   return (
     <div>
       {chatList?.map((item, index) => (
         <div
           key={index}
           onClick={() => handleData(item)}
-          className='border-b-1 border-b-[rgba(0,0,0,0.3)] rounded-b-lg flex flex-row pb-4 gap-5 mt-2'
+          className='border-b-1 pointer-cursor border-b-[rgba(0,0,0,0.3)] rounded-b-lg flex flex-row pb-4 gap-5 mt-2'
         >
           <img
             src={`data:image/jpeg;base64,${item.otherUserImage}`}
@@ -29,4 +31,4 @@ const ChatList = ({ chatList, handleChange, handleChatRoomChange }) => {
   );
 };
 
-export default ChatList;
+export default StudentChatList;

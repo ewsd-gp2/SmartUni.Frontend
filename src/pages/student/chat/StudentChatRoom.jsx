@@ -9,6 +9,7 @@ const StudentChatRoom = ({ messages, sendMessage, recipient }) => {
     sendMessage(message);
     setMessage("");
   };
+  console.log('RECIPIENT',recipient)
   return (
     <div className='flex flex-1 flex-col mt-18 pb-14'>
       <div className='flex flex-row items-center gap-8 border-b-1 border-b-[rgba(0,0,0,0.3)] w-full pb-2 '>
@@ -19,7 +20,7 @@ const StudentChatRoom = ({ messages, sendMessage, recipient }) => {
         /> */}
         <p className='text-xl'>{recipient?.label}</p>
       </div>
-      <div className=' flex flex-1 flex-col mt-6 h-[500px]'>
+      <div className='flex flex-1 flex-col mt-6 h-[500px] overflow-y-auto'>
         {messages?.map((msg, index) => {
           const isMine = msg.username === user.id;
           return (

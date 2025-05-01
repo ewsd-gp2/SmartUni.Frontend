@@ -86,22 +86,6 @@ const TutorList = () => {
           <div className=' mt-5 w-full'>
             <HeaderTitle title='Tutor List' />
             <div className='mb-8'/>
-            {/* <div className='flex flex-row justify-between'>
-              <div className=' flex items-center justify-between mt-5'>
-                <button
-                  className='rounded-3xl py-3 px-4 flex flex-row gap-1.5 justify-center bg-gradient-to-br from-green-400 to-blue-600 text-white  transition-transform duration-300 hover:scale-105 hover:bg-green-500'
-                  onClick={CreateAccount}
-                >
-                  <IoAddCircle
-                    size={20}
-                    color='white'
-                    className='self-center'
-                  />
-                  <span className='self-center font-semibold'>New Tutor</span>
-                </button>
-              </div>
-            </div> */}
-   
               <TableLayout data={tutorData} userRole="tutor" handleDelete={handleDelete} CreateAccount={CreateAccount} loading={loading} />
           </div>
         </div>

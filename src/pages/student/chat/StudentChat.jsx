@@ -1,12 +1,11 @@
 import Container from "../../../components/Container";
 import HeaderTitle from "../../../components/common/HeaderTitle";
-import ChatList from "./ChatList";
+import StudentChatList from "./StudentChatList";
 import StudentChatRoom from "./StudentChatRoom";
 import NoConnection from "./NoConnection";
 import axios from "axios";
 import Select from "react-select";
 import { HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
-import { v4 as uuidv4 } from "uuid";
 import { useState, useEffect, use } from "react";
 import toast from "react-hot-toast";
 
@@ -21,27 +20,29 @@ const StudentChat = () => {
   const [students, setStudents] = useState([]);
   const [chatList, setChatList] = useState([]);
   const [recipient, setRecipient] = useState();
-  const [chatId, setChatId] = useState();
+  const [chatRoom, setChatRoom] = useState(null);
 
   const studentOptions = students?.map((student) => ({
     value: student.id,
     label: student.name,
   }));
-  useEffect(() => {
-    console.log("msg", messages);
-  }, [messages]);
 
   useEffect(() => {
     fetchTutors();
-    // fetchChatList();
+    fetchChatList();
   }, []);
 
   useEffect(() => {
-    const newId = uuidv4();
     if (user && capitalRole && recipient) {
-      joinChatRoom(user.id, null, user.name, capitalRole, recipient.value);
+      joinChatRoom(
+        user.id,
+        chatRoom,
+        user.name,
+        capitalRole,
+        recipient.value ? recipient.value : recipient
+      );
     }
-  }, [recipient, user.id]);
+  }, [recipient, user.id, chatRoom]);
 
   const fetchChatList = () => {
     const url = `http://localhost:7142/message/chatlist/${user.id}`;
@@ -82,7 +83,9 @@ const StudentChat = () => {
   const handleChange = (selectedOption) => {
     setRecipient(selectedOption);
   };
-
+  const handleChatRoomChange = (selectedChatRoom) => {
+    setChatRoom(selectedChatRoom);
+  };
   const joinChatRoom = async (
     username,
     chatroom,
@@ -140,7 +143,7 @@ const StudentChat = () => {
         chatRoom: chatroom,
         senderName: sendername,
         senderType: usertype,
-        recieverID: receiverid
+        recieverID: receiverid,
       });
       // Store connection
       setConnection(newConn);
@@ -177,9 +180,13 @@ const StudentChat = () => {
           <Select
             options={studentOptions}
             onChange={handleChange}
-            placeholder='Select a student...'
+            placeholder='Create new chat'
           />
-          <ChatList chatList={chatList} />
+          <StudentChatList
+            chatList={chatList}
+            handleChange={handleChange}
+            handleChatRoomChange={handleChatRoomChange}
+          />
         </div>
         {!conn ? (
           <NoConnection />
