@@ -151,7 +151,7 @@ const router = createBrowserRouter([
       {
         path: "/tutor",
         element: (
-          <ProtectedRoute allowedRoles={["staff"]}>
+          <ProtectedRoute allowedRoles={["tutor"]}>
             <Layout />
           </ProtectedRoute>
         ),

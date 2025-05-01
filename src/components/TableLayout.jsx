@@ -26,7 +26,8 @@ const roleLabels ={
   tutor : "New Tutor",
   student : "New Student",
   staff : "New Staff"
-}
+  }
+  console.log(data)
 
   const columns = [
     // {

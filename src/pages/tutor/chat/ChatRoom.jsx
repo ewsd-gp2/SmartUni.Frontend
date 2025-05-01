@@ -19,7 +19,7 @@ const ChatRoom = ({ messages, sendMessage, recipient }) => {
           className='w-13 h-12 rounded-full ml-4'
           alt=''
         /> */}
-        <p className='text-xl'>{recipient?.label}</p>
+        <p className='text-xl'>{recipient.label?recipient.label:recipient}</p>
       </div>
       <div className=' flex flex-1 flex-col pb-6 mt-6 h-[500px] overflow-y-auto'>
         {messages?.map((msg, index) => {

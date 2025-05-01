@@ -21,27 +21,31 @@ const Chat = () => {
   const [students, setStudents] = useState([]);
   const [chatList, setChatList] = useState([]);
   const [recipient, setRecipient] = useState();
-  const [chatId, setChatId] = useState();
+  const [chatRoom, setChatRoom] = useState(null);
+  
 
   const studentOptions = students?.map((student) => ({
     value: student.id,
     label: student.name,
   }));
-  useEffect(() => {
-    console.log("msg", messages);
-  }, [messages]);
 
   useEffect(() => {
     fetchStudents();
-    // fetchChatList();
+    fetchChatList();
   }, []);
 
+
   useEffect(() => {
-    const newId = uuidv4();
     if (user && capitalRole && recipient) {
-      joinChatRoom(user.id, null, user.name, capitalRole, recipient.value);
+      joinChatRoom(
+        user.id,
+        chatRoom,
+        user.name,
+        capitalRole,
+        recipient.value ? recipient.value : recipient
+      );
     }
-  }, [recipient, user.id]);
+  }, [recipient, user.id, chatRoom]);
 
   const fetchChatList = () => {
     const url = `http://localhost:7142/message/chatlist/${user.id}`;
@@ -81,6 +85,9 @@ const Chat = () => {
 
   const handleChange = (selectedOption) => {
     setRecipient(selectedOption);
+  };
+  const handleChatRoomChange = (selectedChatRoom) => {
+    setChatRoom(selectedChatRoom);
   };
 
   const joinChatRoom = async (
@@ -140,7 +147,7 @@ const Chat = () => {
         chatRoom: chatroom,
         senderName: sendername,
         senderType: usertype,
-        recieverID: receiverid
+        recieverID: receiverid,
       });
       // Store connection
       setConnection(newConn);
@@ -177,9 +184,13 @@ const Chat = () => {
           <Select
             options={studentOptions}
             onChange={handleChange}
-            placeholder='Select a student...'
+            placeholder='Create new chat'
           />
-          <ChatList chatList={chatList} />
+          <ChatList
+            chatList={chatList}
+            handleChange={handleChange}
+            handleChatRoomChange={handleChatRoomChange}
+          />
         </div>
         {!conn ? (
           <NoConnection />
