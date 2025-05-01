@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { useState } from 'react'
 import toast from 'react-hot-toast';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import GradientButton from '../buttons/GradientButton';
 import { IoAddCircle } from 'react-icons/io5';
 
@@ -59,7 +59,7 @@ const navigate = useNavigate()
   
   return (
     <div className="max-w-xl mx-auto p-6 bg-white rounded shadow">
-      <h1 className="text-2xl font-bold mb-6">Create A Blog Post</h1>
+      <h1 className="text-2xl font-bold mb-6 mt-5 md:mt-5 lg:mt-0">Create A Blog Post</h1>
       
       <form className="space-y-6" onSubmit={handleFormSubmit}>
         <div>
@@ -121,6 +121,16 @@ const navigate = useNavigate()
           )}
         </div>
         <GradientButton Icon={IoAddCircle} type="submit" text={"Create Blog"} width={"full"} rounded={"xl"} />
+        
+        <Link to={`/${userRole}/blog`}>
+  <button
+    type="button"
+    className="w-full px-4 py-2 md:py-2.5 lg:py-3 bg-gray-300 text-gray-900 font-semibold rounded-xl hover:bg-gray-400 transition duration-300"
+  >
+    Cancel
+  </button>
+</Link>
+        
       </form>
     </div>
   )

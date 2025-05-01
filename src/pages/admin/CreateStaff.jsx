@@ -17,6 +17,7 @@ const CreateStaff = () => {
     password: "",
     image: null,
   });
+  
   const [showImage, setShowImage] = useState();
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -92,7 +93,7 @@ const CreateStaff = () => {
     <div>
       <HeaderTitle title='Create Staff Account' />
       <form>
-        <div className='mt-8 flex flex-row gap-15'>
+        <div className='mt-8 flex flex-col md:flex-row md:gap-16'>
           <div className='' onClick={handleClick}>
             <input
               ref={fileInputRef}
@@ -110,7 +111,7 @@ const CreateStaff = () => {
                 <img
                   src={showImage}
                   alt='Preview'
-                  className='max-w-full h-auto rounded-lg border border-gray-300'
+                  className='w-56 h-56 lg:max-w-full lg:h-auto rounded-lg border border-gray-300'
                 />
               </div>
             ) : (
@@ -126,7 +127,7 @@ const CreateStaff = () => {
               </div>
             )}
           </div>
-          <div className=''>
+          <div className='w-full md:w-1/2 mt-8 md:mt-0'>
             <div>
               <label
                 htmlFor='name'
@@ -184,6 +185,26 @@ const CreateStaff = () => {
                   Female
                 </label>
               </div>
+            </div>
+
+            <div className='mt-4'>
+              <label
+                htmlFor='major'
+                className='block mb-2 text-sm font-medium text-gray-900'
+              >
+                Role
+              </label>
+              <select
+                id='role'
+                // value={studentData.major}
+                // onChange={handleChange}
+                className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 '
+              >
+                <option value='Authorized' selected>
+                  Authorized
+                </option>
+                <option value='Unauthorized'>Unauthorized</option>
+              </select>
             </div>
            
             <div className='mt-4'>

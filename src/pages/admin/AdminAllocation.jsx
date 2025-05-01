@@ -9,6 +9,7 @@ import {
   unAssignTutor,
 } from "./api/api";
 import toast from "react-hot-toast";
+import axios from "axios";
 
 const AdminAllocation = () => {
   const [studentData, setStudentData] = useState([]);
@@ -16,8 +17,10 @@ const AdminAllocation = () => {
   const [allocation, setAllocation] = useState([]);
   const [selectedTutor, setSelectedTutor] = useState("");
   const [selectedStudents, setSelectedStudents] = useState([]);
+  const [sortName, setSortName] = useState("asc");
   const [loading, setLoading] = useState(false);
-
+  const [dropdownVisible, setDropdownVisible] = useState(false);
+  // console.log(studentData);
   useEffect(() => {
     const loadData = async () => {
       setLoading(true);
@@ -38,7 +41,13 @@ const AdminAllocation = () => {
     };
     loadData();
   }, []);
-
+  const sortedStudentData = [...studentData].sort((a, b) => {
+    const nameA = a.name.toLowerCase();
+    const nameB = b.name.toLowerCase();
+    if (sortName === "asc") return nameA.localeCompare(nameB);
+    else return nameB.localeCompare(nameA);
+  });
+  const toggleDropdown = () => setDropdownVisible(!dropdownVisible);
   const handleSelectStudent = (studentId) => {
     setSelectedStudents((prevSelected) =>
       prevSelected.includes(studentId)
@@ -161,6 +170,28 @@ const AdminAllocation = () => {
   const isAnyStudentAssigned = selectedStudents.some((studentID) =>
     allocation.some((assign) => assign.studentID === studentID)
   );
+  const pageView = async (pageName) => {
+    try {
+      const formData = new FormData();
+      formData.append("pageName", pageName);
+
+      const response = await axios.post(
+        "http://localhost:7142/pageview",
+        formData,
+        {
+          withCredentials: true,
+        }
+      );
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      console.error("Error:", error.response?.data || error.message);
+      throw error;
+    }
+  };
+  useEffect(() => {
+    pageView("Allocation");
+  }, []);
 
   if (loading) {
     return (
@@ -177,52 +208,80 @@ const AdminAllocation = () => {
       </div>
     );
   }
+
   return (
-    <div className="p-4">
-      <form className="max-w-sm my-5">
+    <div className="p-2 md:p-4 lg:p-6 max-w-7xl mx-auto pt-10 md:pt-10">
+      <div className="w-full max-w-2xl mb-4 md:mb-6">
         <label
           htmlFor="tutors"
-          className="block mb-2 text-2xl font-medium text-gray-900"
+          className="block mb-2 text-lg md:text-xl font-medium text-gray-900"
         >
           Choose Tutor
         </label>
-        <select
-          id="tutors"
-          className="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-teal-500 focus:border-teal-500 block w-full p-3"
-          value={selectedTutor}
-          onChange={(e) => setSelectedTutor(e.target.value)}
-        >
-          <option value="">Select Tutor</option>
-          {tutorData.map((tutor) => (
-            <option key={tutor.id} value={tutor.id}>
-              {tutor.name}
-            </option>
-          ))}
-        </select>
-      </form>
+        <div className="flex flex-col sm:flex-row gap-2 w-full">
+  <select
+    id="tutors"
+    className="w-full sm:flex-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm md:text-base rounded-lg focus:ring-teal-500 focus:border-teal-500 p-2 md:p-3"
+    value={selectedTutor}
+    onChange={(e) => setSelectedTutor(e.target.value)}
+  >
+    <option value="">Select Tutor</option>
+    {tutorData.map((tutor) => (
+      <option key={tutor.id} value={tutor.id}>
+        {tutor.name}
+      </option>
+    ))}
+  </select>
+</div>
+      </div>
 
-      <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-        <table className="w-full text-sm text-left rtl:text-right text-gray-500">
-          <thead className="text-xs text-gray-700 uppercase bg-blue-100">
+      <div className="overflow-x-auto rounded-lg border border-gray-200 shadow-sm">
+        <table className="w-full text-xs md:text-sm text-left text-gray-500">
+          <thead className="text-xs md:text-sm text-gray-700 uppercase bg-cyan-100">
             <tr>
-              <th scope="col" className="px-6 py-3">
-                No
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Students Name
-              </th>
-              <th scope="col" className="px-6 py-3">
-                <div className="flex items-center gap-2">
-                  <BsSortDown /> Sorting
+              <th className="px-3 py-2 md:px-4 md:py-3">No</th>
+              <th className="px-3 py-2 md:px-4 md:py-3">Students Name</th>
+              <th className="px-3 py-2 md:px-4 md:py-3 relative">
+                <div
+                  className="flex items-center gap-1 md:gap-2 cursor-pointer"
+                  onClick={toggleDropdown}
+                >
+                  <BsSortDown className="text-teal-600" />
+                  <span>Sort</span>
                 </div>
+                {dropdownVisible && (
+                  <div className="absolute top-full left-0 mt-1 w-24 bg-white border border-gray-200 rounded shadow-md z-10">
+                    <p
+                      className={`px-2 py-1 md:px-3 md:py-2 hover:bg-teal-100 text-xs md:text-sm cursor-pointer ${
+                        sortName === "asc" ? "font-semibold text-teal-600" : ""
+                      }`}
+                      onClick={() => {
+                        setSortName("asc");
+                        toggleDropdown();
+                      }}
+                    >
+                      A - Z
+                    </p>
+                    <p
+                      className={`px-2 py-1 md:px-3 md:py-2 hover:bg-teal-100 text-sm md:text-base cursor-pointer ${
+                        sortName === "desc" ? "font-semibold text-teal-600" : ""
+                      }`}
+                      onClick={() => {
+                        setSortName("desc");
+                        toggleDropdown();
+                      }}
+                    >
+                      Z - A
+                    </p>
+                  </div>
+                )}
               </th>
-              <th scope="col" className="px-6 py-3">
-                Status
-              </th>
+              <th className="px-3 py-2 md:px-4 md:py-3">Status</th>
             </tr>
           </thead>
+
           <tbody>
-            {studentData.map((student, index) => {
+            {sortedStudentData.map((student, index) => {
               const isAssigned = allocation.some(
                 (a) => String(a.studentID) === String(student.id)
               );
@@ -231,11 +290,11 @@ const AdminAllocation = () => {
                   key={student.id}
                   className="bg-white border-b hover:bg-gray-50"
                 >
-                  <td className="px-6 py-4 font-medium text-gray-900">
+                  <td className="px-3 py-2 md:px-4 md:py-3 font-medium text-gray-900 whitespace-nowrap">
                     {index + 1}
                   </td>
-                  <td className="px-6 py-4">
-                    <div className="flex gap-3 items-center">
+                  <td className="px-3 py-2 md:px-4 md:py-3">
+                    <div className="flex items-center gap-2">
                       <input
                         type="checkbox"
                         checked={selectedStudents.includes(student.id)}
@@ -243,17 +302,19 @@ const AdminAllocation = () => {
                         className="w-4 h-4 text-teal-600 bg-gray-100 border-gray-300 rounded-sm"
                       />
                       <img
-                        className="size-12 rounded-full"
-                        src="https://i.pinimg.com/736x/0e/d7/e8/0ed7e8509f71c4161e7443a86ce517a8.jpg"
+                        src={`data:image/jpeg;base64,${student.image}`}
                         alt={student.name}
+                        className="size-6 md:size-7 lg:size-8 rounded-full object-cover"
                       />
-                      <span>{student.name}</span>
+                      <span className="font-medium md:text-base text-gray-900 truncate max-w-[100px] md:max-w-none">
+                        {student.name}
+                      </span>
                     </div>
                   </td>
-                  <td className="px-6 py-4"></td>
-                  <td className="px-6 py-4">
+                  <td className="px-3 py-2 md:px-4 md:py-3"></td>
+                  <td className="px-3 py-2 md:px-4 md:py-3">
                     <span
-                      className={`px-2.5 py-2 text-white rounded text-sm ${
+                      className={`px-2 py-1 md:px-3 md:py-1.5 rounded text-xs md:text-sm font-medium text-white whitespace-nowrap ${
                         isAssigned ? "bg-teal-500" : "bg-red-400"
                       }`}
                     >
@@ -267,9 +328,9 @@ const AdminAllocation = () => {
         </table>
       </div>
 
-      <div className="flex justify-end gap-3 mt-4">
+      <div className="flex flex-col sm:flex-row justify-end gap-2 md:gap-3 mt-3 md:mt-4">
         <button
-          className={`border border-teal-500 text-slate-900 px-6 py-2 rounded-lg transition ${
+          className={`border border-teal-500 text-slate-900 px-4 py-1.5 md:px-6 md:py-2 rounded-lg transition text-sm md:text-base ${
             !isAnyStudentAssigned
               ? "opacity-50 cursor-not-allowed"
               : "hover:bg-teal-50"
@@ -281,7 +342,7 @@ const AdminAllocation = () => {
         </button>
         <button
           onClick={handleAssign}
-          className={`bg-teal-500 text-white px-6 py-2 rounded-lg transition ${
+          className={`bg-teal-500 text-white px-4 py-1.5 md:px-6 md:py-2 rounded-lg transition text-sm md:text-base ${
             isAnyStudentAssigned ||
             !selectedTutor ||
             selectedStudents.length === 0

@@ -17,7 +17,28 @@ import TableSkeleton from "../../../components/TableSkelenton";
 
 const StudentList = () => {
   const navigate = useNavigate();
+  const pageView = async (pageName) => {
+    try {
+      const formData = new FormData();
+      formData.append("pageName", pageName);
 
+      const response = await axios.post(
+        "http://localhost:7142/pageview",
+        formData,
+        {
+          withCredentials: true,
+        }
+      );
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      console.error("Error:", error.response?.data || error.message);
+      throw error;
+    }
+  };
+  useEffect(() => {
+    pageView("StudentList");
+  }, []);
   const [openDelete, setOpenDelete] = useState({
     isOpen: false,
     id: "",

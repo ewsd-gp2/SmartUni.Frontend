@@ -19,15 +19,14 @@ import Lottie from "lottie-react";
 
 const Major = ["Computing", "Information Systems", "Networking"];
 
-const TableLayout = ({ data, handleDelete, CreateAccount, loading ,userRole }) => {
+const TableLayoutStaff = ({ data, handleDelete, CreateAccount, loading ,userRole }) => {
   // const userData = Array.isArray(data) ? data : [];
 const shouldIncludeMajor = Array.isArray(data) && data.some((row) => row.major !== undefined);
 const roleLabels ={
   tutor : "New Tutor",
   student : "New Student",
   staff : "New Staff"
-  }
-  console.log(data)
+}
 
   const columns = [
     {
@@ -78,6 +77,12 @@ const roleLabels ={
       minWidth: "120px",
              hide : "md",
     },
+    {
+        name: "Permission",
+        selector: (row) => 'Authorized',
+        minWidth: "120px",
+               hide : "md",
+      },
     {
       name: "Edit",
       minWidth: "100px",
@@ -257,4 +262,4 @@ const roleLabels ={
   );
 };
 
-export default TableLayout;
+export default TableLayoutStaff;

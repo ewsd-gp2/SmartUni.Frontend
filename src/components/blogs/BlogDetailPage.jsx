@@ -9,7 +9,7 @@ const BlogDetailPage = () => {
   return (
     <main>
         <div className=" flex col-span-4 gap-5">
-          <div className=" col-span-3 mt-5">
+          <div className=" col-span-3 mt-10 md:mt-6 lg:mt-5 md:ms-15 lg:ms-18">
             <Breadcrumb
               currentPageTitle={"Details"}
               links={[{ title: "Blogs List", path: `/${userRole}/blog` }]}

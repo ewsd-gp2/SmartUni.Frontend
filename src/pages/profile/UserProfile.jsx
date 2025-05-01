@@ -8,6 +8,28 @@ import toast from "react-hot-toast";
 const UserProfile = () => {
   const userRole = localStorage.getItem("user_role");
   const [userProfile, setUserProfile] = useState({});
+  const pageView = async (pageName) => {
+    try {
+      const formData = new FormData();
+      formData.append("pageName", pageName);
+
+      const response = await axios.post(
+        "http://localhost:7142/pageview",
+        formData,
+        {
+          withCredentials: true,
+        }
+      );
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      console.error("Error:", error.response?.data || error.message);
+      throw error;
+    }
+  };
+  useEffect(() => {
+    pageView("Profile");
+  }, []);
   const fetchProfileData = async () => {
     const url=`http://localhost:7142/${userRole}/profile`
     await axios.get(url,{
@@ -39,16 +61,16 @@ const UserProfile = () => {
 
   return (
     <div className="p-4 sm:p-6 lg:p-8">
-  <Link to={`/${userRole}/dashboard`} className="flex items-center mb-6 hover:underline">
+  <Link to={`/${userRole}/dashboard`} className="flex items-center mb-6">
     <IoIosArrowBack className="text-2xl text-teal-500" />
     <h1 className="text-2xl font-semibold text-teal-500 ml-2">Smart Uni</h1>
   </Link>
 
-  <div className="bg-white border border-gray-100 shadow-md rounded-xl p-6 grid sm:grid-cols-1 lg:grid-cols-2 gap-6">
-    <div className="flex flex-col items-center lg:items-start space-y-4">
+  <div className="bg-white border border-gray-100 shadow-md rounded-xl p-6 space-y-8">
+    <div className="flex items-center gap-6">
       <div className="relative">
         <img
-          className="w-32 h-32 object-cover rounded-lg border"
+          className="w-24 h-24 md:w-32 md:h-32 lg:w-32 lg:h-32 object-cover rounded-lg border"
           src={`data:image/jpeg;base64,${userProfile.image}`}
           alt="user profile"
         />
@@ -56,44 +78,45 @@ const UserProfile = () => {
           <HiOutlineCamera className="text-teal-500" />
         </span>
       </div>
-      <div className="text-center lg:text-left">
-        <h2 className="text-xl font-bold text-gray-900">{userName}</h2>
+      <div>
+        <h2 className="text-2xl font-bold text-gray-900">{userName}</h2>
         <p className="text-sm text-gray-500 mt-1">{userProfile.userCode}</p>
       </div>
-      <button className="mt-2 flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-teal-500 hover:bg-teal-600 rounded-lg focus:outline-none focus:ring-4 focus:ring-teal-300">
-        <HiLockOpen /> Edit Profile
-      </button>
     </div>
 
-    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-      <div>
-        <p className="text-sm font-semibold text-gray-800 mb-1">Name</p>
-        <p className="text-gray-600">{userName}</p>
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="space-y-4">
+        <div>
+          <p className="text-sm font-semibold text-gray-800 mb-1">Name</p>
+          <p className="text-gray-600">{userName}</p>
+        </div>
+        <div>
+          <p className="text-sm font-semibold text-gray-800 mb-1">ID</p>
+          <p className="text-gray-600">{userProfile.userCode}</p>
+        </div>
+        <div>
+          <p className="text-sm font-semibold text-gray-800 mb-1">Major</p>
+          <p className="text-gray-600">{userProfile.major}</p>
+        </div>
       </div>
-      <div>
-        <p className="text-sm font-semibold text-gray-800 mb-1">ID</p>
-        <p className="text-gray-600">{userProfile.userCode}</p>
-      </div>
-      <div>
-        <p className="text-sm font-semibold text-gray-800 mb-1">Major</p>
-        <p className="text-gray-600">{userProfile.major}</p>
-      </div>
-      <div>
-        <p className="text-sm font-semibold text-gray-800 mb-1">Gender</p>
-        <p className="text-gray-600">{userProfile.gender}</p>
-      </div>
-      <div>
-        <p className="text-sm font-semibold text-gray-800 mb-1">Phone Number</p>
-        <p className="text-gray-600">{userProfile.phoneNumber}</p>
-      </div>
-      <div>
-        <p className="text-sm font-semibold text-gray-800 mb-1">Email Address</p>
-        <p className="text-gray-600">{userProfile.email}</p>
+
+      <div className="space-y-4">
+        <div>
+          <p className="text-sm font-semibold text-gray-800 mb-1">Gender</p>
+          <p className="text-gray-600">{userProfile.gender}</p>
+        </div>
+        <div>
+          <p className="text-sm font-semibold text-gray-800 mb-1">Phone Number</p>
+          <p className="text-gray-600">{userProfile.phoneNumber}</p>
+        </div>
+        <div>
+          <p className="text-sm font-semibold text-gray-800 mb-1">Email Address</p>
+          <p className="text-gray-600">{userProfile.email}</p>
+        </div>
       </div>
     </div>
   </div>
 </div>
-
   );
 };
 

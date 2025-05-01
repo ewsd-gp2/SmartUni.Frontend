@@ -25,9 +25,11 @@ import StudentDashboard from "./pages/student/StudentDashboard.jsx";
 import StudentMeeting from "./pages/student/meeting/StudentMeeting.jsx";
 import StudentChat from "./pages/student/chat/StudentChat.jsx";
 import UserProfile from "./pages/profile/UserProfile.jsx";
-import UpdateStaff from "./pages/admin/UpdateStudent.jsx";
 import BlogCreatePage from "./components/blogs/BlogCreatePage.jsx";
 import { LandingPage } from "./pages/landing/LandingPage.jsx";
+import UpdateStaff from "./pages/admin/UpdateStaff.jsx";
+import { LandingBlogPage } from "./pages/landing/LandingBlogPage.jsx";
+import { FeaturePage } from "./pages/landing/FeaturePage.jsx";
 
 import ProtectedRoute from "./routes/ProtectedRoutes.jsx";
 
@@ -44,6 +46,14 @@ const router = createBrowserRouter([
       {
         path: "/login",
         element: <LoginPage />,
+      },
+      {
+        path: 'blogs',
+        element: <LandingBlogPage />
+      },
+      {
+        path: 'feature',
+        element: <FeaturePage />
       },
       {
         path: "/staff",
@@ -145,6 +155,10 @@ const router = createBrowserRouter([
             path: "chat",
             element: <StudentChat />,
           },
+          {
+            path: "profile",
+            element:<UserProfile/>
+          }
         ],
       },
 

@@ -1,7 +1,7 @@
 const HeaderTitle = ({ title }) => {
   return (
-    <div className='mt-5'>
-      <h2 className="text-3xl"> {title}</h2>
+    <div className='md:mt-7'>
+      <h2 className="text-xl md:text-2xl lg:text-3xl text-center md:text-start lg:text-start"> {title}</h2>
     </div>
   );
 };
