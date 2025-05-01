@@ -15,6 +15,7 @@ const CreateStaff = () => {
     phoneNumber: "",
     gender: "Female",
     password: "",
+    role: "",
     image: null,
   });
   
@@ -70,6 +71,7 @@ const CreateStaff = () => {
     formData.append("gender", staffData.gender);
     formData.append("major", staffData.major);
     formData.append("image", staffData.image);
+    formData.append("role", staffData.role)
     formData.append("password", staffData.password);
     console.log(formData);
     axios
@@ -196,14 +198,14 @@ const CreateStaff = () => {
               </label>
               <select
                 id='role'
-                // value={studentData.major}
-                // onChange={handleChange}
+                value={staffData.role}
+                onChange={handleChange}
                 className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 '
               >
-                <option value='Authorized' selected>
-                  Authorized
+                <option value='Staff'>
+                  Unthorized Staff
                 </option>
-                <option value='Unauthorized'>Unauthorized</option>
+                <option value='authorizedStaff'>{`Authorized Staff`}</option>
               </select>
             </div>
            
