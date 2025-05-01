@@ -50,10 +50,11 @@ export const StudentsTable = () => {
     
     return (
         <div className="mt-8">
-                <h2 className="text-xl lg:text-4xl mb-10">Students Without Tutors</h2>
+                <h2 className="text-[15px] lg:text-4xl mb-10">Students Without Tutors</h2>
 
 
-{data.length !== 0 ? (<table className="w-full lg:w-7/9 border-none">
+{data.length !== 0 ? (
+    <table className="w-full lg:w-7/9 border-none">
                 <thead>
                 <tr className="bg-teal-300">
                     <th className="text-center py-3 pl-2 font-normal text-base lg:text-xl w-20">No.</th>
@@ -99,16 +100,16 @@ export const StudentsTable = () => {
                                 }
                                     }).map((data, index) => (
                         <tr className="border-b-2 border-teal-500" key={data.id}>
-                        <td className="text-cent er border-teal-500 border-r-2 text-xl">{index + 1}</td>
+                        <td className="text-cent er border-teal-500 border-r-2 text-sm lg:text-xl">{index + 1}</td>
                         <td className="py-4 ml-8 flex items-center">
-                            <img src={`data:image/jpeg;base64,${data.image}`} alt="ProfileImage" className="w-13 h-13 rounded-full" />
+                            <img src={`data:image/jpeg;base64,${data.image}`} alt="ProfileImage" className="w-10 h-10 lg:w-13 lg:h-13 rounded-full" />
                             <div className="ml-4">
-                                <p className="text-xl">{data.name}</p>
-                                <p className="text-xs text-gray-700">{data.major}</p>
+                                <p className="text-sm lg:text-xl">{data.name}</p>
+                                <p className="text-[10px] lg:text-xl text-gray-700">{data.major}</p>
                             </div>
                         </td>
                         <td className="text-center border-teal-500 border-l-2">
-                            <p className="bg-red-200 mx-4 py-1.5 rounded-xl">Unassigned</p>
+                            <p className="bg-red-200 mx-4 py-2 lg:py-1.5 rounded-xl text-xs lg:text-base">Unassigned</p>
                         </td>
                     </tr>
                     ))}
