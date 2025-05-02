@@ -10,14 +10,22 @@ const LoginPage = () => {
   const navigate = useNavigate();
   const [role, setRole] = useState("staff");
   const { register, handleSubmit } = useForm();
-  const [isFirstLogin, setIsFirstLogin] = useState(null);
-  const [showWelcome, setShowWelcome] = useState(false);
+  // const [isFirstLogin, setIsFirstLogin] = useState(null);
+  // const [showWelcome, setShowWelcome] = useState(false);
 
+  const api = axios.create({
+    baseURL: "http://localhost:7142",
+    withCredentials: true,
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
   const getProfile = async () => {
-    const url = `http://localhost:7142/${role}/profile`;
+    const url = api.get(`/${role}/profile`);
 
     try {
       const response = await axios.get(url, {
+        
         withCredentials: true,
       });
       if (response.status === 200) {
@@ -25,15 +33,22 @@ const LoginPage = () => {
         localStorage.setItem("user_profile", JSON.stringify(response.data));
         localStorage.setItem("user_role", role);
         if (role === "staff") {
-          navigate(`/${role}/dashboard/tutorlist`);
+        const profile = response.data;
+
+          if (profile.role === "authorized_staff") {
+            navigate("/staff/dashboard/tutorlist");
+          } else {
+            navigate("/staff/dashboard/studentlist");
+          }
         } else {
           navigate(`/${role}/dashboard`);
         }
       } else {
-        toast.error("Login failed. Please try again.");
+        toast.error("Log in failed. Please try again.");
       }
     } catch (error) {
-      console.log(error);
+      console.error("Profile error:", error);
+      toast.error("Error fetching profile.");
     }
   };
 
@@ -52,13 +67,13 @@ const LoginPage = () => {
       if (response.status === 200) {
         
         getProfile();
-        const firstLoginKey = `firstLogin_${data.email}`;
-        const isFirstTime = sessionStorage.getItem(firstLoginKey) === null;
+        // const firstLoginKey = `firstLogin_${data.email}`;
+        // const isFirstTime = sessionStorage.getItem(firstLoginKey) === null;
 
-        sessionStorage.setItem(firstLoginKey, "false");
+        // sessionStorage.setItem(firstLoginKey, "false");
 
-        setIsFirstLogin(isFirstTime);
-        setShowWelcome(true);
+        // setIsFirstLogin(isFirstTime);
+        // setShowWelcome(true);
       } else {
         toast.error("Login failed. Please try again.");
       }
@@ -81,14 +96,14 @@ const LoginPage = () => {
       // toast.error("Oops! That didn't work. Let's try that again.");
     }
   };
-  useEffect(() => {
-    if (showWelcome) {
-      const timer = setTimeout(() => {
-        navigate(`${role}/dashboard`);
-      }, 2000);
-      return () => clearTimeout(timer);
-    }
-  }, [showWelcome, navigate, role]);
+  // useEffect(() => {
+  //   if (showWelcome) {
+  //     const timer = setTimeout(() => {
+  //       navigate(`${role}/dashboard`);
+  //     }, 2000);
+  //     return () => clearTimeout(timer);
+  //   }
+  // }, [showWelcome, navigate, role]);
 
   return (
     <div className='flex flex-col md:justify-center md:items-center lg:flex-row lg:items-center lg:justify-center min-h-screen p-4 gap-6 lg:gap-10'>
