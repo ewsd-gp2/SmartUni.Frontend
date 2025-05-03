@@ -15,7 +15,7 @@ const CreateStaff = () => {
     phoneNumber: "",
     gender: "Female",
     password: "",
-    role: "",
+    role: "Staff",
     image: null,
   });
   
@@ -69,9 +69,8 @@ const CreateStaff = () => {
     formData.append("email", staffData.email);
     formData.append("phoneNumber", staffData.phoneNumber);
     formData.append("gender", staffData.gender);
-    formData.append("major", staffData.major);
     formData.append("image", staffData.image);
-    formData.append("role", staffData.role)
+    formData.append("role", staffData.role);
     formData.append("password", staffData.password);
     console.log(formData);
     axios
@@ -191,7 +190,7 @@ const CreateStaff = () => {
 
             <div className='mt-4'>
               <label
-                htmlFor='major'
+                htmlFor='role'
                 className='block mb-2 text-sm font-medium text-gray-900'
               >
                 Role
@@ -203,7 +202,7 @@ const CreateStaff = () => {
                 className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 '
               >
                 <option value='Staff'>
-                  Unthorized Staff
+                Unauthorized Staff
                 </option>
                 <option value='authorizedStaff'>{`Authorized Staff`}</option>
               </select>
