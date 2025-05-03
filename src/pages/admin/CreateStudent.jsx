@@ -3,7 +3,6 @@ import axios from "axios";
 import HeaderTitle from "../../components/common/HeaderTitle";
 import toast, { Toaster } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import { AiOutlineCloudUpload } from "react-icons/ai";
 import { IoCloudUpload, IoAddCircle } from "react-icons/io5";
 import GradientButton from "../../components/buttons/GradientButton";
 import { IoImages } from "react-icons/io5";
@@ -82,9 +81,10 @@ const CreateStudent = () => {
       })
       .catch((error) => {
         console.log(error);
-        toast.error("Sorry, something went wrong.", {
+        toast.error("Email is already exists, please try with another email", {
           position: "top-right",
-        });
+        }
+      );
       });
   };
   return (
@@ -204,6 +204,7 @@ const CreateStudent = () => {
                 <option value='Networking'>{`Computing (Network Systems)`}</option>
               </select>
             </div>
+            
             <div className='mt-4'>
               <label
                 htmlFor='email'
