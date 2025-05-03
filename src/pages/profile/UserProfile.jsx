@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import { IoIosArrowBack } from "react-icons/io";
 import { HiLockOpen, HiOutlineCamera } from "react-icons/hi2";
 import { Link } from "react-router-dom";
@@ -61,7 +61,7 @@ const UserProfile = () => {
 
   return (
     <div className="p-4 sm:p-6 lg:p-8">
-  <Link to={`/${userRole}/dashboard`} className="flex items-center mb-6">
+  <Link to={userRole=== "staff"? `/${userRole}/dashboard/tutorlist`:`/${userRole}/dashboard`} className="flex items-center mb-6">
     <IoIosArrowBack className="text-2xl text-teal-500" />
     <h1 className="text-2xl font-semibold text-teal-500 ml-2">Smart Uni</h1>
   </Link>
@@ -71,7 +71,7 @@ const UserProfile = () => {
       <div className="relative">
         <img
           className="w-24 h-24 md:w-32 md:h-32 lg:w-32 lg:h-32 object-cover rounded-lg border"
-          src={`data:image/jpeg;base64,${userProfile.image}`}
+          src={userProfile.image ? `data:image/jpeg;base64,${userProfile.image}` :"https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"}
           alt="user profile"
         />
         <span className="absolute -right-2 bottom-0 bg-gray-100 w-7 h-7 text-gray-700 rounded-full flex items-center justify-center shadow">

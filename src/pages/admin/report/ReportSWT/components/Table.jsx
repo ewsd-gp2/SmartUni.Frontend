@@ -102,7 +102,7 @@ export const StudentsTable = () => {
                         <tr className="border-b-2 border-teal-500" key={data.id}>
                         <td className="text-cent er border-teal-500 border-r-2 text-sm lg:text-xl">{index + 1}</td>
                         <td className="py-4 ml-8 flex items-center">
-                            <img src={`data:image/jpeg;base64,${data.image}`} alt="ProfileImage" className="w-10 h-10 lg:w-13 lg:h-13 rounded-full" />
+                            <img src={data.image ? `data:image/jpeg;base64,${data.image}` : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"} alt="ProfileImage" className="w-10 h-10 lg:w-13 lg:h-13 rounded-full" />
                             <div className="ml-4">
                                 <p className="text-sm lg:text-xl">{data.name}</p>
                                 <p className="text-[10px] lg:text-xl text-gray-700">{data.major}</p>
