@@ -59,9 +59,9 @@ const Chat = () => {
       })
       .catch((error) => {
         console.log(error);
-        toast.error("Sorry, something went wrong.", {
-          position: "top-right",
-        });
+        // toast.error("Sorry, something went wrong.", {
+        //   position: "top-right",
+        // });
       });
   };
 
@@ -77,7 +77,7 @@ const Chat = () => {
       })
       .catch((error) => {
         console.log(error);
-        toast.error("Sorry, something went wrong.", {
+        toast.error("There is no student!", {
           position: "top-right",
         });
       });
