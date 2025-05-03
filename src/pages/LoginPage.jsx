@@ -4,41 +4,36 @@ import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { motion } from "framer-motion";
 import loginImage from "../assets/images/LogInImg.png";
 const LoginPage = () => {
   const navigate = useNavigate();
   const [role, setRole] = useState("staff");
-  const { register, handleSubmit } = useForm();
-  // const [isFirstLogin, setIsFirstLogin] = useState(null);
-  // const [showWelcome, setShowWelcome] = useState(false);
-
+  const { register, handleSubmit,setError, formState: { errors,isSubmitting } } = useForm();
+ 
   const api = axios.create({
     baseURL: "http://localhost:7142",
     withCredentials: true,
     headers: {
       "Content-Type": "application/json",
+      "Allow-Access-Control-Origin": "http://localhost:5173",
     },
   });
   const getProfile = async () => {
-    const url = api.get(`/${role}/profile`);
-
     try {
-      const response = await axios.get(url, {
-        
-        withCredentials: true,
-      });
+      const response = await api.get(`/${role}/profile`);
+  
       if (response.status === 200) {
         toast.success("Login Successfully!");
         localStorage.setItem("user_profile", JSON.stringify(response.data));
         localStorage.setItem("user_role", role);
+  
         if (role === "staff") {
-        const profile = response.data;
-
-          if (profile.role === "authorized_staff") {
+          const profile = response.data;
+          if (profile.role === "AuthorizedStaff") {
+            navigate("/staff/dashboard/stafflist");
+          } else 
+          if (profile.role === "Staff") {
             navigate("/staff/dashboard/tutorlist");
-          } else {
-            navigate("/staff/dashboard/studentlist");
           }
         } else {
           navigate(`/${role}/dashboard`);
@@ -46,64 +41,57 @@ const LoginPage = () => {
       } else {
         toast.error("Log in failed. Please try again.");
       }
+      
     } catch (error) {
       console.error("Profile error:", error);
       toast.error("Error fetching profile.");
     }
   };
+  
 
   const handleLogIn = async (data) => {
-    const url = `http://localhost:7142/signin/${role}`;
-
     try {
-      const response = await axios.post(url, data, {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "http://localhost:5173",
-          "Access-Control-Expose-Headers": "Set-Cookie",
-        },
-        withCredentials: true,
-      });
+      const response = await api.post(`/signin/${role}`, data);
+      
       if (response.status === 200) {
-        
-        getProfile();
-        // const firstLoginKey = `firstLogin_${data.email}`;
-        // const isFirstTime = sessionStorage.getItem(firstLoginKey) === null;
-
-        // sessionStorage.setItem(firstLoginKey, "false");
-
-        // setIsFirstLogin(isFirstTime);
-        // setShowWelcome(true);
-      } else {
-        toast.error("Login failed. Please try again.");
+        await getProfile();
       }
     } catch (error) {
-      toast.error("Login attempt failed!Please try again.", {
-        icon: "✋",
-        style: {
-          borderRadius: "8px",
-          background: "#ECFDF5", // Teal-50
-          color: "#065F46", // Teal-800
-          borderLeft: "4px solid #047857", // Teal-700
-          boxShadow: "0 2px 10px rgba(5, 150, 105, 0.1)",
-          fontSize: "20px",
-        },
-        iconTheme: {
-          primary: "#047857", // Teal-700
-          secondary: "#D1FAE5", // Teal-100
-        },
-      });
-      // toast.error("Oops! That didn't work. Let's try that again.");
+      if (error.response) {
+        if (error.response.status === 401) {
+          setError("email", {
+            type: "manual",
+            message: "Invalid email or password"
+          });
+          setError("password", {
+            type: "manual",
+            message: "Invalid email or password"
+          });
+          
+          toast.error("Invalid credentials. Please try again.", {
+            icon: "✋",
+            style: {
+              borderRadius: "8px",
+              background: "#FEF2F2", 
+              color: "#B91C1C", 
+              borderLeft: "4px solid #DC2626", 
+              boxShadow: "0 2px 10px rgba(220, 38, 38, 0.1)",
+              fontSize: "14px",
+            },
+            iconTheme: {
+              primary: "#DC2626",
+              secondary: "#FEE2E2", 
+            },
+          });
+        } else {
+          toast.error("Login failed. Please try again later.");
+        }
+      } else {
+        toast.error("Network error. Please check your connection.");
+      }
     }
   };
-  // useEffect(() => {
-  //   if (showWelcome) {
-  //     const timer = setTimeout(() => {
-  //       navigate(`${role}/dashboard`);
-  //     }, 2000);
-  //     return () => clearTimeout(timer);
-  //   }
-  // }, [showWelcome, navigate, role]);
+ 
 
   return (
     <div className='flex flex-col md:justify-center md:items-center lg:flex-row lg:items-center lg:justify-center min-h-screen p-4 gap-6 lg:gap-10'>
@@ -118,28 +106,44 @@ const LoginPage = () => {
     <div className='w-full max-w-md'>
       <form onSubmit={handleSubmit(handleLogIn)} className='w-full'>
         <h3 className='text-2xl text-center mb-5 text-teal-600'>SmartUni</h3>
+<div className='mb-4'>
+  <input
+    type='email'
+    id='email'
+    {...register("email", { 
+      required: "Email is required",
+      pattern: {
+        value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+        message: "Invalid email address"
+      }
+    })}
+    className={`bg-teal-50 border-2 ${
+      errors.email ? 'border-red-500 bg-red-50 focus:border-red-500' : 'border-teal-300 focus:border-teal-500'
+    } text-teal-900 text-sm rounded-lg focus:ring-teal-500 block w-full p-3`}
+    placeholder='Email' 
+  />
+  {errors.email && (
+    <p className='mt-2 text-sm text-red-600'>{errors.email.message}</p>
+  )}
+</div>
 
-        <div className='mb-4'>
-          <input
-            type='email'
-            id='email'
-            {...register("email")}
-            className='bg-teal-50 border border-teal-300 text-teal-900 text-sm rounded-lg focus:ring-teal-500 focus:border-teal-500 block w-full p-3'
-            placeholder='Username'
-            required
-          />
-        </div>
-        
-        <div className='mb-4'>
-          <input
-            type='password'
-            id='password'
-            {...register("password")}
-            className='bg-teal-50 border border-teal-300 text-teal-900 text-sm rounded-lg focus:ring-teal-500 focus:border-teal-500 block w-full p-3'
-            placeholder='Password'
-            required
-          />
-        </div>
+<div className='mb-4'>
+  <input
+    type='password'
+    id='password'
+    {...register("password", { 
+      required: "Password is required",
+      
+    })}
+    className={`bg-teal-50 border-2 ${
+      errors.password ? 'border-red-500 bg-red-50 focus:border-red-500' : 'border-teal-300 focus:border-teal-500'
+    } text-teal-900 text-sm rounded-lg focus:ring-teal-500 block w-full p-3 `}
+    placeholder='Password'
+  />
+  {errors.password && (
+    <p className='mt-2 text-sm text-red-600'>{errors.password.message}</p>
+  )}
+</div>
 
         <div className='flex gap-3 mb-6 '>
           <span className='font-semibold w-full sm:w-auto'>*Sign in as: </span>
@@ -178,11 +182,14 @@ const LoginPage = () => {
         </div>
 
         <button
-          type='submit'
-          className='w-full text-white bg-gradient-to-r from-teal-600 via-teal-500 to-teal-400 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-teal-300 font-medium rounded-lg text-sm px-5 py-3 text-center'
-        >
-          Log In
-        </button>
+            type='submit'
+            disabled={isSubmitting}
+            className={`w-full text-white bg-gradient-to-r from-teal-600 via-teal-500 to-teal-400 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-teal-300 font-medium rounded-lg text-sm px-5 py-3 text-center ${
+              isSubmitting ? 'opacity-70 cursor-not-allowed' : ''
+            }`}
+          >
+            {isSubmitting ? 'Logging in...' : 'Log In'}
+          </button>
       </form>
     </div>
   </div>

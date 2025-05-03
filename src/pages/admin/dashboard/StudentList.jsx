@@ -39,10 +39,10 @@ const StudentList = () => {
   useEffect(() => {
     pageView("StudentList");
   }, []);
-  const [openDelete, setOpenDelete] = useState({
-    isOpen: false,
-    id: "",
-  });
+  // const [openDelete, setOpenDelete] = useState({
+  //   isOpen: false,
+  //   id: "",
+  // });
   const [loading, setLoading] = useState(false);
   const [studentData, setStudentData] = useState([]);
   const CreateAccount = () => {
@@ -60,7 +60,7 @@ const StudentList = () => {
         withCredentials: "true",
       })
       .then((response) => {
-        console.log("getstudent", response.data);
+        // console.log("getstudent", response.data);
         setStudentData(response.data);
       })
       
@@ -81,7 +81,7 @@ const StudentList = () => {
         withCredentials: true,
       })
       .then((response) => {
-        console.log("delete res", response);
+        // console.log("delete res", response);
         fetchStudentData();
       })
       .catch((error) => {

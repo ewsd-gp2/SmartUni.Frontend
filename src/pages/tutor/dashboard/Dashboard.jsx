@@ -132,7 +132,7 @@ const Dashboard = () => {
     <div className="container mx-auto px-4 py-6">
       <div className="flex flex-col lg:flex-row gap-6">
         <div className="lg:w-2/3">
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 lg:mb-6 pt-4">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 lg:mb-6 pt-4 lg:pt-0">
             <div>
               <h1 className="text-2xl font-medium">
                 {user.isFirstLoggedIn ? (
