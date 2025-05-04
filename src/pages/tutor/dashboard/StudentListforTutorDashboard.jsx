@@ -66,7 +66,7 @@ const StudentListforTutorDashboard = () => {
                   <div className="flex gap-5 items-center">
                     <img
                       className="size-10 rounded-full"
-                      src={`data:image/jpeg;base64,${student.avatar}`}
+                      src={student.avatar ? `data:image/jpeg;base64,${student.avatar}` :"https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"}
                       alt=""
                     />
                     <span>{student.name}</span>

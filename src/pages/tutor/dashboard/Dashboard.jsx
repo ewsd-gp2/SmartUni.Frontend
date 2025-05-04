@@ -279,7 +279,7 @@ const Dashboard = () => {
                           transform: `translateX(${-index * 10}px)`,
                           zIndex: item.participants.length - index,
                         }}
-                        src={`data:image/jpeg;base64,${participant.avatar}`}
+                        src={participant.avatar ? `data:image/jpeg;base64,${participant.avatar}` :"https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"}
                         alt="Student"
                       />
                     ))}

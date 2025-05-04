@@ -1,70 +1,72 @@
 import axios from "axios";
 import {useEffect, useState} from "react";
 import { RiArrowDropDownLine } from "react-icons/ri";
-
+ 
 export const StudentsTable = () => {
-
+ 
     const [data, setData] = useState([])
     const [message, setMessage] = useState([])
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(null)
-
-    const url_message = useState(`http://localhost:7142/message`)
-    const url_average = useState('http://localhost:7142/message/averageMessage')
-
+ 
+    const url_message =`http://localhost:7142/message`
+    const url_average = 'http://localhost:7142/message/averageMessage'
+ 
     const fetchData = async () => {
-        setLoading(true);
-        
-        axios
-          .get(url_message, {
+        try {
+          setLoading(true);
+          const response = await axios.get(url_message,{
             headers: {
               "Access-Control-Allow-Origin": "http://localhost:5173",
             },
-            withCredentials: "true",
-          })
-          .then((response) => {
-            console.log(response.data);
-            setData(response.data);
-          })
-        setLoading(false);
+            withCredentials: true,
+          });
+          console.log(response.data);
+          setData(prevState => [...prevState, ...response.data]);
+        } catch (error) {
+          console.error("Fetch data error:", error);
+        } finally {
+          setLoading(false);
+        }
       };
-
+ 
       const fetchMessage = async () => {
-        setLoading(true);
-        
-        axios
-          .get(url_average, {
+        try {
+          setLoading(true);
+          const response = await axios.get(url_average, {
             headers: {
               "Access-Control-Allow-Origin": "http://localhost:5173",
             },
-            withCredentials: "true",
-          })
-          .then((response) => {
-            console.log(response.data);
-            setMessage(response.data);
-          })
-        setLoading(false);
+            withCredentials: true,
+          });
+          console.log(response.data);
+          setMessage(prevState => [...prevState, ...response.data]);
+        } catch (error) {
+          console.error("Fetch message error:", error);
+        } finally {
+          setLoading(false);
+        }
       };
-
+ 
       useEffect(() => {
         fetchData();
       }, []);
-
+ 
       useEffect(() => {
         fetchMessage();
       }, []);
-
-
+ 
+ 
     return (
         <div className="mt-8 w-full">
             <div className="w-65/100">
                 <h2 className="text-4xl mb-4">Total Messages in last 7 days</h2>
             </div>
-
-{(data.length !== 0 && message.length !== 0) ? (
+ 
+ 
     <div>
     <div className="flex flex-warp gap-15">
-{data.filter((data) => data.SenderType == 'student' ).length !== 0 ? (
+ 
     <table className="w-full lg:w-6/13 border-none">
     <thead>
     <tr className="bg-teal-300">
@@ -74,60 +76,61 @@ export const StudentsTable = () => {
             No. of Msg
         </th>
     </tr>
-
+ 
     </thead>
         <tbody>
-        {!!data && data.filter((data) => data.SenderType == 'student' ).map((studentMessage, index) => {
-            <tr className="border-b-2 border-teal-500" key={studentMessage.SenderId}>
+        {data.map((studentMessage, index) => {
+            <tr className="border-b-2 border-teal-500" key={studentMessage.senderId}>
             <td className="text-center border-teal-500 border-r-2 text-xs lg:text-base ">{index + 1}</td>
             <td className="py-4 ml-8 flex items-center">
                 <img
-                    src={`data:image/jpeg;base64,${data.image}`} className="w-10 h-10 lg:w-13 lg:h-13 rounded-full"/>
+                    src={` data:image/jpeg;base64,${studentMessage.image}`} className="w-10 h-10 lg:w-13 lg:h-13 rounded-full"/>
                 <div className="ml-4">
                     <p className="text-xs lg:text-base ">{studentMessage.senderName}</p>
-                    <p className="text-[10px] lg:text-xs text-gray-700">{studentMessage.senderMajor}</p>
+                    <p className="text-[10px] lg:text-xs text-gray-700">{studentMessage.major}</p>
                 </div>
             </td>
-            <td className="text-center text-xs lg:text-base  border-teal-500 border-l-2">{studentMessage.MessageCount}</td>
+            <td className="text-center text-xs lg:text-base  border-teal-500 border-l-2">{studentMessage.messageCount}</td>
         </tr>
-        })} 
-
+        })}
+ 
         </tbody>
     </table>
-) : (<p></p>)}
-    
-
-{data.filter((data) => data.SenderType == 'tutor' ).length !== 0 ? (<table className="w-full lg:w-6/13 border-none">
+ 
+   
+ 
+<table className="w-full lg:w-6/13 border-none">
     <thead>
     <tr className="bg-teal-300">
         <th className="rounded-l-2xl w-23 text-center py-2 font-normal text-base lg:text-xl">No.</th>
-        <th className="py-2 text-start font-normal text-base lg:text-xl pl-2 lg:pl-6 w-80">Student Names</th>
+        <th className="py-2 text-start font-normal text-base lg:text-xl pl-2 lg:pl-6 w-80">Tutor Names</th>
         <th className="p-2 w-40 font-normal text-base lg:text-xl rounded-r-2xl">
             No. of Msg
         </th>
     </tr>
     </thead>
     <tbody>
-    {!!data && data.filter((data) => data.SenderType == 'tutor' ).map((tutorMessage, index) => {
-            <tr className="border-b-2 border-teal-500" key={tutorMessage.SenderId}>
+    {data.map((tutorMessage, index) => {
+            <tr className="border-b-2 border-teal-500" key={tutorMessage.senderId}>
             <td className="text-center border-teal-500 border-r-2 text-xs lg:text-base ">{index + 1}</td>
             <td className="py-4 ml-8 flex items-center">
                 <img
-                    src={`data:image/jpeg;base64,${data.image}`} className="w-10 h-10 lg:w-13 lg:h-13 rounded-full"/>
+                    src={`data:image/jpeg;base64,${tutorMessage.image}`} className="w-10 h-10 lg:w-13 lg:h-13 rounded-full"/>
                 <div className="ml-4">
                     <p className="text-xs lg:text-base ">{tutorMessage.senderName}</p>
                 </div>
             </td>
-            <td className="text-center text-xs lg:text-base  border-teal-500 border-l-2">{tutorMessage.MessageCount}</td>
+            <td className="text-center text-xs lg:text-base  border-teal-500 border-l-2">{tutorMessage.messageCount}</td>
         </tr>
-        })} 
-
+        })}
+ 
     </tbody>
-</table>) : (<p></p>)}
-    
+</table>
+ 
+   
 </div>
-
-{message.length !== 0 ? (<div className="mt-15">
+ 
+<div className="mt-15">
     <h1 className="mt-3 mb-5 text-4xl">Tutor's Average Messages</h1>
     <table className="w-full lg:w-6/13 border-none">
         <thead>
@@ -140,7 +143,7 @@ export const StudentsTable = () => {
         </tr>
         </thead>
         <tbody>
-        {!!message && message.map((message, index) => {
+        {message.map((message, index) => {
             <tr className="border-b-2 border-teal-500" key={message.SenderId}>
             <td className="text-center border-teal-500 border-r-2 text-base lg:text-xl">{index + 1}</td>
             <td className="py-4 ml-8 flex items-center">
@@ -153,16 +156,13 @@ export const StudentsTable = () => {
             </td>
             <td className="text-center text-xs lg:text-base border-teal-500 border-l-2">{message.MessageCount}</td>
         </tr>
-        })} 
+        })}
         </tbody>
     </table>
-</div>) : (<p></p>)}
-
 </div>
-) : (
-    <div className="text-center mt-40">
-        <p className="text-gray-400">No Data Available</p>
-    </div> )}     
+ 
+</div>
+   
         </div>
     );
 }
