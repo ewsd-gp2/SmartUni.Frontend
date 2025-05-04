@@ -74,7 +74,7 @@ const SideBar = () => {
       name: "Report",
       icon: HiOutlinePencilSquare,
       submenu: [
-        { id: 1, name: "Student With Interact", path: "/staff/report/swi" },
+        { id: 1, name: "Student Without Interact", path: "/staff/report/swi" },
         {
           id: 2,
           name: "Student Without Tutors",
