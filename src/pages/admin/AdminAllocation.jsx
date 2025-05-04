@@ -21,6 +21,7 @@ const AdminAllocation = () => {
   const [loading, setLoading] = useState(false);
   const [dropdownVisible, setDropdownVisible] = useState(false);
   // console.log(studentData);
+  // console.log(tutorData)
   useEffect(() => {
     const loadData = async () => {
       setLoading(true);
@@ -302,7 +303,7 @@ const AdminAllocation = () => {
                         className="w-4 h-4 text-teal-600 bg-gray-100 border-gray-300 rounded-sm"
                       />
                       <img
-                        src={`data:image/jpeg;base64,${student.image}`}
+                        src={student.image ? `data:image/jpeg;base64,${student.image}` : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"}
                         alt={student.name}
                         className="size-6 md:size-7 lg:size-8 rounded-full object-cover"
                       />

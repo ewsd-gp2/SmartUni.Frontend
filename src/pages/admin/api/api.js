@@ -67,7 +67,7 @@ export const assignTutor = async (tutorID, studentID) => {
       },
       withCredentials: true,
     });
-    console.log("Allocation successful");
+    // console.log("Allocation successful");
   } catch (error) {
     console.error("Error allocating tutor:", error);
   }
@@ -109,7 +109,7 @@ export const unAssignTutor = async (allocationId) => {
 
   try {
     await axios.request(options);
-    console.log("Tutor unassigned successfully");
+    // console.log("Tutor unassigned successfully");
   } catch (error) {
     console.error("Error unassigning tutor:", error);
     throw error;
@@ -124,7 +124,7 @@ export const sendEmail = async (emailData) => {
       },
       withCredentials: true,
     });
-    console.log("Email sent successfully");
+    // console.log("Email sent successfully");
   } catch (error) {
     console.error("Error sending email:", error);
   }

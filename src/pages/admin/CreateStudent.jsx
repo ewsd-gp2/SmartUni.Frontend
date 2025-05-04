@@ -204,6 +204,7 @@ const CreateStudent = () => {
                 <option value='Networking'>{`Computing (Network Systems)`}</option>
               </select>
             </div>
+            
             <div className='mt-4'>
               <label
                 htmlFor='email'

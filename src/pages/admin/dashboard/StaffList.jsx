@@ -6,12 +6,13 @@ import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import axios from "axios";
 import TableLayoutStaff from "../../../components/TableLayoutStaff";
+import UnauthorizedPage from "../../UnauthorizedPage";
 
 
 const StaffList = () => {
   const navigate = useNavigate();
   
-
+ const profile = JSON.parse(localStorage.getItem("user_profile"));
   const [openDelete, setOpenDelete] = useState({
     isOpen: false,
     id: "",
@@ -71,6 +72,9 @@ const StaffList = () => {
     setLoading(false);
   };
 
+  if(profile.role === "Staff"){
+    return <UnauthorizedPage/>
+  }
   return (
     <main>
       <Container>

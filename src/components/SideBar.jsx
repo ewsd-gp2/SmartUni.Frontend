@@ -172,7 +172,10 @@ const SideBar = () => {
 
           <button
             className='flex items-center w-full p-2 mt-8 text-gray-500 hover:bg-gray-50 rounded-lg'
-            onClick={() => navigate("/")}
+            onClick={() => {
+              localStorage.clear();
+              navigate("/");
+            }}
           >
             <CiLogout size={20} className='mr-3' />
             <span>Log Out</span>

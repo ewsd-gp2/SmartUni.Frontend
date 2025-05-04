@@ -121,6 +121,10 @@ const router = createBrowserRouter([
             path: "report/mostviewed",
             element: <MostViewed />,
           },
+          {
+            path: "profile",
+            element:<UserProfile/>
+          }
         ],
       },
       {
