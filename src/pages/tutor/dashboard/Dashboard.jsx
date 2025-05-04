@@ -129,20 +129,25 @@ const Dashboard = () => {
       .join(" ");
 
   return (
-    <div className="container mx-auto px-4 py-6">
+    <div className="container mx-auto px-4">
       <div className="flex flex-col lg:flex-row gap-6">
         <div className="lg:w-2/3">
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 lg:mb-6 pt-4">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 lg:mb-6 pt-9 lg:pt-0">
             <div>
-              <h1 className="text-2xl font-medium">
-                {user.isFirstLoggedIn ? (
-                  `Welcome ${userName}`
-                ) : (
-                  <>
-                    <p>Welcome Back {userName}</p>
-                    <p className="text-sm text-gray-500">Your Last Login was {formattedDate}</p>
-                  </>
-                )}
+              <h1 className="text-2xl font-medium mb-2
+              ">
+                 {user.isFirstLoggedIn ? (
+              `Welcome ${userName}`
+            ) : (
+              <div className="flex flex-col gap-3">
+                {" "}
+                <p>Welcome Back {userName}</p>{" "}
+                <p className="text-sm">
+                  {" "}
+                  Your Last Login was {formattedDate}
+                </p>
+              </div>
+            )}
               </h1>
             </div>
             <Profile />

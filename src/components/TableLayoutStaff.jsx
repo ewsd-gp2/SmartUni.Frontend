@@ -78,8 +78,8 @@ const roleLabels ={
              hide : "md",
     },
     {
-        name: "Permission",
-        selector: (row) => 'Authorized',
+        name: "Role",
+        selector: (row) => row.role === 'staff' ? 'Unauthorized' : 'Authorized',
         minWidth: "120px",
                hide : "md",
       },
