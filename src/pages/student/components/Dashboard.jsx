@@ -10,6 +10,7 @@ import Profile from "../../profile/Profile";
 import { FiMail } from "react-icons/fi";
 import { MdConnectWithoutContact } from "react-icons/md";
 import { MdOutlineMessage } from "react-icons/md";
+import { HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
 
 import axios from "axios";
 import {
@@ -20,9 +21,8 @@ import {
 } from "../../../utility/DateRange";
 import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
- 
-const Dashboard = () => {
 
+const Dashboard = () => {
   const today = new Date().toLocaleDateString("en-GB", {
     year: "numeric",
     month: "long",
@@ -46,12 +46,17 @@ const Dashboard = () => {
 
   const [tutorId, setTutorId] = useState(null);
   const [tutor, setTutor] = useState(null);
-const user = JSON.parse(localStorage.getItem("user_profile"));
-const userRole = localStorage.getItem("user_role");
+  const user = JSON.parse(localStorage.getItem("user_profile"));
+  const userRole = localStorage.getItem("user_role");
+  const capitalRole = userRole
+    ? userRole.charAt(0).toUpperCase() + userRole.slice(1)
+    : "";
+  const [conn, setConnection] = useState(null);
   const [listLoading, setListLoading] = useState(false);
   const [select, setSelect] = useState(1);
-  const [notifications, setNotifications] = useState([])
-  console.log(notifications)
+  const [notifications, setNotifications] = useState([]);
+  const [message, setMessage] = useState("");
+  const [messages, setMessages] = useState([]);
   const [selectedRange, setSelectedRange] = useState({
     startTime: todayStart,
     endTime: todayEnd,
@@ -60,26 +65,27 @@ const userRole = localStorage.getItem("user_role");
   useEffect(() => {
     const fetchTutorId = async () => {
       try {
-        await axios.get(`http://localhost:7142/dashboard/student/${user.id}`, {
-          headers: {
-            Accept: "application/json",
-            "Access-Control-Allow-Origin": "http://localhost:5173",
-          },
-          withCredentials: "true",
-        })
-        .then((response) => {
-          const id = response.data.allocation.tutorId;
-          let noti = response.data.notifications;
-          setNotifications((prev) => [...prev, ...noti]);
- 
-          setTutorId(id);
-          console.log(response.data)
-        });
+        await axios
+          .get(`http://localhost:7142/dashboard/student/${user.id}`, {
+            headers: {
+              Accept: "application/json",
+              "Access-Control-Allow-Origin": "http://localhost:5173",
+            },
+            withCredentials: "true",
+          })
+          .then((response) => {
+            const id = response.data.allocation.tutorId;
+            let noti = response.data.notifications;
+            setNotifications((prev) => [...prev, ...noti]);
+
+            setTutorId(id);
+            console.log(response.data);
+          });
       } catch (error) {
         toast.error("Failed to fetch tutor ID");
       }
     };
-  
+
     if (user?.id) {
       fetchTutorId();
     }
@@ -88,21 +94,22 @@ const userRole = localStorage.getItem("user_role");
   useEffect(() => {
     const fetchTutorDetails = async () => {
       try {
-        await axios.get(`http://localhost:7142/tutor/${tutorId}`,  {
-          headers: {
-            Accept: "application/json",
-            "Access-Control-Allow-Origin": "http://localhost:5173",
-          },
-          withCredentials: "true",})
+        await axios
+          .get(`http://localhost:7142/tutor/${tutorId}`, {
+            headers: {
+              Accept: "application/json",
+              "Access-Control-Allow-Origin": "http://localhost:5173",
+            },
+            withCredentials: "true",
+          })
           .then((response) => {
             setTutor(response.data);
-          }
-          );
+          });
       } catch (error) {
         toast.error("Unassigned Tutor");
       }
     };
-  
+
     if (tutorId) {
       fetchTutorDetails();
     }
@@ -116,7 +123,6 @@ const userRole = localStorage.getItem("user_role");
     day: "numeric",
   });
 
-
   useEffect(() => {
     fetchMeetingList();
   }, [selectedRange]);
@@ -125,8 +131,86 @@ const userRole = localStorage.getItem("user_role");
     getRange();
   }, [select]);
 
+  useEffect(() => {
+    if (user && capitalRole && tutorId) {
+      joinChatRoom(user.id, null, user.name, capitalRole, tutorId);
+    }
+  }, [tutorId, user.id]);
+
+  const joinChatRoom = async (
+    username,
+    chatroom,
+    sendername,
+    usertype,
+    receiverid
+  ) => {
+    console.log("join", username, chatroom, sendername, usertype, receiverid);
+    try {
+      // Initiate a SignalR connection
+      const newConn = new HubConnectionBuilder()
+        .withUrl("http://localhost:7142/ChatHub")
+        .configureLogging(LogLevel.Information)
+        .build();
+
+      // Setup event listeners
+      newConn.on(
+        "JoinSpecificChatRoom",
+        (username, chatroom, sendername, usertype, receiverid) => {
+          console.log(
+            "User Joined:",
+            username,
+            chatroom,
+            sendername,
+            usertype,
+            receiverid
+          );
+        }
+      );
+
+      newConn.on("LoadChatHistory", (chatHistory) => {
+        console.log("Chat History Loaded:", chatHistory);
+        setMessages(
+          chatHistory.map((msg) => ({
+            username: msg.senderId,
+            msg: msg.content,
+            timestamp: msg.timestamp,
+          }))
+        );
+      });
+
+      newConn.on("ReceiveSpecificMessage", (username, msg) => {
+        setMessages((prevMessages) => [...prevMessages, { username, msg }]);
+      });
+
+      // Start connection
+      await newConn.start();
+      await newConn.invoke("JoinSpecificChatRoom", {
+        senderID: username,
+        chatRoom: chatroom,
+        senderName: sendername,
+        senderType: usertype,
+        recieverID: receiverid,
+      });
+      // Store connection
+      setConnection(newConn);
+    } catch (e) {
+      console.error("Connection Error:", e);
+    }
+  };
+
+  const sendMessage = async (message) => {
+    try {
+      if (conn) {
+        console.log(message);
+        await conn.invoke("SendMessage", message);
+      }
+    } catch (e) {
+      console.error("SendMessage Error:", e);
+    }
+  };
+
   const getRange = () => {
-    switch (select) { 
+    switch (select) {
       case 1:
         setSelectedRange((prev) => ({
           startTime: todayStart,
@@ -134,10 +218,10 @@ const userRole = localStorage.getItem("user_role");
         }));
         break;
       case 2:
-      setSelectedRange((prev) => ({
+        setSelectedRange((prev) => ({
           startTime: thisWeekStart,
           endTime: thisWeekEnd,
-      }));
+        }));
         break;
     }
   };
@@ -182,21 +266,18 @@ const userRole = localStorage.getItem("user_role");
     });
   };
 
-     return(
-        <div className="grid md:grid-cols-5">
-        <div className=" col-span-3">
-        <div className=" flex justify-between items-center">
-          <p className=" text-2xl">
+  return (
+    <div className='grid md:grid-cols-5'>
+      <div className=' col-span-3'>
+        <div className=' flex justify-between items-center'>
+          <p className=' text-2xl'>
             {user.isFirstLoggedIn ? (
               `Welcome ${user.name}`
             ) : (
-              <div className="flex flex-col gap-3">
+              <div className='flex flex-col gap-3'>
                 {" "}
                 <p>Welcome Back {user.name}</p>{" "}
-                <p className="text-sm">
-                  {" "}
-                  Your Last Login was {formattedDate}
-                </p>
+                <p className='text-sm'> Your Last Login was {formattedDate}</p>
               </div>
             )}
           </p>
@@ -204,174 +285,191 @@ const userRole = localStorage.getItem("user_role");
         </div>
 
         <div>
-          <h1 className="text-xl mt-5">What's New</h1>
+          <h1 className='text-xl mt-5'>What's New</h1>
           <div>
-            <h3 className="text-lg mt-5 font-semibold">Schedule</h3>
+            <h3 className='text-lg mt-5 font-semibold'>Schedule</h3>
           </div>
           {data.map((item) => (
             <>
-              <div key={item.id} className=" bg-gray-100 flex p-2.5 mt-2 rounded-lg justify-between items-center m-2">
-                <div className=" flex gap-7 items-center">
-                  <IoIosPeople className="text-2xl text-teal-500" />
+              <div
+                key={item.id}
+                className=' bg-gray-100 flex p-2.5 mt-2 rounded-lg justify-between items-center m-2'
+              >
+                <div className=' flex gap-7 items-center'>
+                  <IoIosPeople className='text-2xl text-teal-500' />
                   <div>
-                    <p className="text-lg font-semibold">{item.title}</p>
-                    <span className="text-xs">
+                    <p className='text-lg font-semibold'>{item.title}</p>
+                    <span className='text-xs'>
                       From {formatTime(item.startTime)} to{" "}
                       {formatTime(item.endTime)}
                     </span>
                   </div>
                 </div>
-                <p className="text-sm"> {formatDate(item.startTime)}</p>
+                <p className='text-sm'> {formatDate(item.startTime)}</p>
               </div>
             </>
           ))}
-           <div>
-              <h3 className="text-lg mt-5 font-semibold">Notifications</h3>
-              <div className="space-y-3 mt-3">
-    {Array.isArray(notifications) && notifications?.length !== 0 ? (
-      notifications.map((note) => (
-        <Link
-          to={`/${userRole}/blog/details/${note.blogId}`}
-          key={note.createdOn}
-          className="block bg-white p-4 rounded-xl border border-gray-100 shadow hover:shadow-md transition-all duration-300 group"
-        >
-          <div className="flex items-start gap-3">
-            <div className="bg-teal-50 p-2.5 rounded-lg group-hover:bg-teal-100 transition-colors">
-              <FaBlogger className="text-lg text-teal-600" />
-            </div>
-            <div className="flex-1">
-              <div className="flex justify-between items-center">
-                <p className="font-medium text-gray-900 group-hover:text-teal-700 transition-colors">
-                {
-                  note.notificationType === "Comment" ? (
-                    <p className="font-medium text-gray-900 group-hover:text-teal-700 transition-colors">{`${note.name} commented on your blog`}</p>
-                  ) : note.notificationType === "Reaction" ? (
-                    <p className="font-medium text-gray-900 group-hover:text-teal-700 transition-colors">{`${note.name} reacted your blog`}</p>
-                  ) : (
-                    <p className="font-medium text-gray-900 group-hover:text-teal-700 transition-colors">{`${note.name} performed an action on your blog`}</p>
-                  )
-                }
-                </p>
-                <span className="text-xs text-gray-500 group-hover:text-gray-600 transition-colors">
-                  {formatDate(note.createdOn)}
-                </span>
-              </div>
-              <p className="text-sm text-gray-500 mt-1 group-hover:text-gray-600 transition-colors">
-                Click to view blog →
-              </p>
+          <div>
+            <h3 className='text-lg mt-5 font-semibold'>Notifications</h3>
+            <div className='space-y-3 mt-3'>
+              {Array.isArray(notifications) && notifications?.length !== 0 ? (
+                notifications.map((note) => (
+                  <Link
+                    to={`/${userRole}/blog/details/${note.blogId}`}
+                    key={note.createdOn}
+                    className='block bg-white p-4 rounded-xl border border-gray-100 shadow hover:shadow-md transition-all duration-300 group'
+                  >
+                    <div className='flex items-start gap-3'>
+                      <div className='bg-teal-50 p-2.5 rounded-lg group-hover:bg-teal-100 transition-colors'>
+                        <FaBlogger className='text-lg text-teal-600' />
+                      </div>
+                      <div className='flex-1'>
+                        <div className='flex justify-between items-center'>
+                          <p className='font-medium text-gray-900 group-hover:text-teal-700 transition-colors'>
+                            {note.notificationType === "Comment" ? (
+                              <p className='font-medium text-gray-900 group-hover:text-teal-700 transition-colors'>{`${note.name} commented on your blog`}</p>
+                            ) : note.notificationType === "Reaction" ? (
+                              <p className='font-medium text-gray-900 group-hover:text-teal-700 transition-colors'>{`${note.name} reacted your blog`}</p>
+                            ) : (
+                              <p className='font-medium text-gray-900 group-hover:text-teal-700 transition-colors'>{`${note.name} performed an action on your blog`}</p>
+                            )}
+                          </p>
+                          <span className='text-xs text-gray-500 group-hover:text-gray-600 transition-colors'>
+                            {formatDate(note.createdOn)}
+                          </span>
+                        </div>
+                        <p className='text-sm text-gray-500 mt-1 group-hover:text-gray-600 transition-colors'>
+                          Click to view blog →
+                        </p>
+                      </div>
+                    </div>
+                  </Link>
+                ))
+              ) : (
+                <div className='bg-gray-50 p-6 rounded-xl text-center '>
+                  <div className='inline-block bg-gray-200 p-3 rounded-full mb-3 '>
+                    <FaBell className='text-xl text-gray-400' />
+                  </div>
+                  <p className='text-gray-500 font-medium'>
+                    No notifications yet
+                  </p>
+                  <p className='text-sm text-gray-400 mt-1'>
+                    We'll notify you when something arrives
+                  </p>
+                </div>
+              )}
             </div>
           </div>
-        </Link>
-      ))
-    ) : (
-      <div className="bg-gray-50 p-6 rounded-xl text-center ">
-        <div className="inline-block bg-gray-200 p-3 rounded-full mb-3 ">
-          <FaBell className="text-xl text-gray-400" />
-        </div>
-        <p className="text-gray-500 font-medium">No notifications yet</p>
-        <p className="text-sm text-gray-400 mt-1">We'll notify you when something arrives</p>
-      </div>
-    )}
-  </div>
-            </div>
         </div>
       </div>
 
       {tutor !== null ? (
-        <div className="md:col-span-2 bg-gray-300 py-6">
-
-<div className="text-[24px] xl:text-[32px] px-4 md:px-0 md:flex justify-center">
-  <h1>My Personal Tutor</h1>
-</div>
-
-<div className="flex items-center px-6 pt-11 pb-6 border-b-2 border-teal-400">
-    <CgProfile className="text-[50px]" />
-  <div className="flex flex-col pl-4">
-    <h1 className="text-[20px]">{tutor.name}</h1>
-    <span className="text-[13px]">Tutor</span>
-  </div>
-</div>
-
-<div>
-  <ul className="pt-5 pb-2 px-5 xl:px-10">
-    <li className="py-4 xl:py-5">
-        <div className="flex items-center gap-5 xl:gap-8">
-            <FaBook className="text-[22px] xl:text-[26px] text-teal-600" />
-            <span className="text-[14px] xl:text-[18px] text-gray-700">{tutor.major}</span>
-        </div>
-    </li>
-
-      <li className="py-4 xl:py-5">
-          <div className="flex items-center gap-5 xl:gap-8">
-              <FiMail className="text-[22px] xl:text-[26px] text-teal-600" />
-              <span className="text-[14px] xl:text-[18px] text-gray-700">{tutor.email}</span>
+        <div className='md:col-span-2 bg-gray-300 py-6'>
+          <div className='text-[24px] xl:text-[32px] px-4 md:px-0 md:flex justify-center'>
+            <h1>My Personal Tutor</h1>
           </div>
-      </li>
 
-      <li className="py-4 xl:py-5">
-          <div className="flex items-center gap-5 xl:gap-8">
-              <MdConnectWithoutContact className="text-[22px] xl:text-[26px] text-teal-600" />
-              <span className="text-[14px] xl:text-[18px] text-gray-700">Teaching Department</span>
+          <div className='flex items-center px-6 pt-11 pb-6 border-b-2 border-teal-400'>
+            <CgProfile className='text-[50px]' />
+            <div className='flex flex-col pl-4'>
+              <h1 className='text-[20px]'>{tutor.name}</h1>
+              <span className='text-[13px]'>Tutor</span>
+            </div>
           </div>
-      </li>
-  </ul>
-</div>
 
-<div className="flex items-center px-4 pt-2 pb-10 xl:px-8 border-b-2 border-teal-400">
-  <div className="text-[18px] xl:text-[28px] pr-2 text-teal-600">
-    <MdOutlineMessage/>
-  </div>
-  <div>
-    <input type="text" className="py-[2px] text-[13px] xl:text-[17px] xl:py-[6px] rounded-sm bg-white border-none focus:ring-0 text-gray-700 w-full" placeholder="Quick Message"/>
-  </div>
-</div>
+          <div>
+            <ul className='pt-5 pb-2 px-5 xl:px-10'>
+              <li className='py-4 xl:py-5'>
+                <div className='flex items-center gap-5 xl:gap-8'>
+                  <FaBook className='text-[22px] xl:text-[26px] text-teal-600' />
+                  <span className='text-[14px] xl:text-[18px] text-gray-700'>
+                    {tutor.major}
+                  </span>
+                </div>
+              </li>
 
+              <li className='py-4 xl:py-5'>
+                <div className='flex items-center gap-5 xl:gap-8'>
+                  <FiMail className='text-[22px] xl:text-[26px] text-teal-600' />
+                  <span className='text-[14px] xl:text-[18px] text-gray-700'>
+                    {tutor.email}
+                  </span>
+                </div>
+              </li>
 
-<div className=" px-14 pt-8 pb-2 md:px-6">
-      <div>
-        <h1 className="lg:text-xl text-md">My Presents</h1>
+              <li className='py-4 xl:py-5'>
+                <div className='flex items-center gap-5 xl:gap-8'>
+                  <MdConnectWithoutContact className='text-[22px] xl:text-[26px] text-teal-600' />
+                  <span className='text-[14px] xl:text-[18px] text-gray-700'>
+                    Teaching Department
+                  </span>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <div className='flex items-center px-4 pt-2 pb-10 xl:px-8 border-b-2 border-teal-400'>
+            <div className='text-[18px] xl:text-[28px] pr-2 text-teal-600'>
+              <MdOutlineMessage />
+            </div>
+
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                sendMessage(message);
+                setMessage("");
+              }}
+            >
+              <input
+                type='text'
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                className='py-[2px] text-[13px] xl:text-[17px] xl:py-[6px] rounded-sm bg-white border-none focus:ring-0 text-gray-700 w-full'
+                placeholder='Quick Message'
+              />
+              <button type='submit' className='hidden' />
+            </form>
+          </div>
+
+          <div className=' px-14 pt-8 pb-2 md:px-6'>
+            <div>
+              <h1 className='lg:text-xl text-md'>My Presents</h1>
+            </div>
+          </div>
+
+          <div className='w-full px-10 md:px-6'>
+            <div className='relative bg-white h-[30px] w-full'>
+              <div className='absolute top-0 bg-teal-500 h-[30px] w-2/3'></div>
+            </div>
+            <span className='text-xs text-gray-700 xl:text-sm'>{today}</span>
+          </div>
         </div>
-</div>
+      ) : (
+        <div className='md:col-span-2 bg-gray-300 py-6'>
+          <div className='text-[24px] xl:text-[32px] px-4 md:px-0 md:flex justify-center'>
+            <h1>My Personal Tutor</h1>
+          </div>
 
-   <div className="w-full px-10 md:px-6">
-       <div className="relative bg-white h-[30px] w-full">
-           <div className="absolute top-0 bg-teal-500 h-[30px] w-2/3">
-           </div>
-       </div>
-       <span className="text-xs text-gray-700 xl:text-sm">{today}</span>
-   </div>
+          <p className='text-center mt-5 mx-8 py-10 text-gray-600 bg-gray-200 '>
+            Unassigned Tutor
+          </p>
 
-</div> ) : (
-    <div className="md:col-span-2 bg-gray-300 py-6">
+          <div className=' px-14 pt-8 pb-2 md:px-6'>
+            <div>
+              <h1 className='lg:text-xl text-md'>My Presents</h1>
+            </div>
+          </div>
 
-  <div className="text-[24px] xl:text-[32px] px-4 md:px-0 md:flex justify-center">
-  <h1>My Personal Tutor</h1>
-</div>
+          <div className='w-full px-10 md:px-6'>
+            <div className='relative bg-white h-[30px] w-full'>
+              <div className='absolute top-0 bg-teal-500 h-[30px] w-2/3'></div>
+            </div>
+            <span className='text-xs text-gray-700 xl:text-sm'>{today}</span>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
 
-  <p className="text-center mt-5 mx-8 py-10 text-gray-600 bg-gray-200 ">Unassigned Tutor</p>
-
-
-<div className=" px-14 pt-8 pb-2 md:px-6">
-      <div>
-        <h1 className="lg:text-xl text-md">My Presents</h1>
-      </div>
-</div>
-
-   <div className="w-full px-10 md:px-6">
-       <div className="relative bg-white h-[30px] w-full">
-           <div className="absolute top-0 bg-teal-500 h-[30px] w-2/3">
-           </div>
-       </div>
-       <span className="text-xs text-gray-700 xl:text-sm">{today}</span>
-   </div>
-
-</div>
-)
-}
-
-
-     </div>
-    )
- }
- 
- export default Dashboard;
+export default Dashboard;

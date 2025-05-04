@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { IoMdSend } from "react-icons/io";
+import moment from "moment";
 
 const ChatRoom = ({ messages, sendMessage, recipient }) => {
   const user = JSON.parse(localStorage.getItem("user_profile"));
@@ -33,8 +34,9 @@ const ChatRoom = ({ messages, sendMessage, recipient }) => {
                   : "self-start bg-[#11a186]"
               }`}
             >
-              <p className={isMine ? "" : "text-white"}>{msg.msg}</p>
-            </div>
+                <p className={isMine ? "" : "text-white"}>{msg.msg}</p>
+                
+              </div>
           );
         })}
       </div>

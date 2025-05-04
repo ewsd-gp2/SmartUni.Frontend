@@ -34,7 +34,7 @@ const CustomDateModal = memo(
     };
 
     const onCancel = () => {
-      clearData();
+      //clearData();
       onClose();
     };
     const modalClasses = `fixed top-0 right-0 left-0 z-50 justify-center items-center w-full h-full md:inset-0 max-h-full overflow-y-auto overflow-x-hidden ${

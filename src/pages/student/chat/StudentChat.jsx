@@ -186,6 +186,7 @@ const StudentChat = () => {
             chatList={chatList}
             handleChange={handleChange}
             handleChatRoomChange={handleChatRoomChange}
+            recipient={recipient}
           />
         </div>
         {!conn ? (

@@ -5,7 +5,7 @@ import moment from "moment";
 import "react-datepicker/dist/react-datepicker.css";
 
 const CustomDateModal = memo(
-  ({ isVisible, onClose, handleSelectedRange, clearData }) => {
+  ({ isVisible, onClose, handleSelectedRange }) => {
     const [selectDate, setSelectDate] = useState({
       startTime: new Date(),
       endTime: new Date(),
@@ -34,7 +34,7 @@ const CustomDateModal = memo(
     };
 
     const onCancel = () => {
-      clearData();
+      console.log('ckicked')
       onClose();
     };
     const modalClasses = `fixed top-0 right-0 left-0 z-50 justify-center items-center w-full h-full md:inset-0 max-h-full overflow-y-auto overflow-x-hidden ${
@@ -44,25 +44,25 @@ const CustomDateModal = memo(
     return (
       <div
         id='default-modal'
-        tabindex='-1'
+        tabIndex='-1'
         aria-hidden='true'
         className={modalClasses}
         style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
       >
-        <div class='relative p-4 w-full max-w-2xl max-h-full'>
-          <div class='relative bg-white rounded-lg shadow-sm'>
-            <div class='flex items-center justify-between p-4 md:p-5 rounded-t'>
-              <h3 class='text-xl font-semibold text-gray-900'>
+        <div className='relative p-4 w-full max-w-2xl max-h-full'>
+          <div className='relative bg-white rounded-lg shadow-sm'>
+            <div className='flex items-center justify-between p-4 md:p-5 rounded-t'>
+              <h3 className='text-xl font-semibold text-gray-900'>
                 Choose Custom Date
               </h3>
               <button
                 onClick={onCancel}
                 type='button'
-                class='text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center'
+                className='text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center'
                 data-modal-hide='default-modal'
               >
                 <svg
-                  class='w-3 h-3'
+                  className='w-3 h-3'
                   aria-hidden='true'
                   xmlns='http://www.w3.org/2000/svg'
                   fill='none'
@@ -70,13 +70,13 @@ const CustomDateModal = memo(
                 >
                   <path
                     stroke='currentColor'
-                    stroke-linecap='round'
-                    stroke-linejoin='round'
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
                     stroke-width='2'
                     d='m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6'
                   />
                 </svg>
-                <span class='sr-only'>Close modal</span>
+                <span Name='sr-only'>Close modal</span>
               </button>
             </div>
             <div className='flex flex-row justify-around'>
@@ -118,15 +118,15 @@ const CustomDateModal = memo(
                   onClick={onApply}
                   data-modal-hide='default-modal'
                   type='button'
-                  class='text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center '
+                  className='text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center '
                 >
                   Apply
                 </button>
                 <button
-                  onClick={onCancel}
-                  data-modal-hide='default-modal'
+                  onClick={onClose}
+                  //data-modal-hide='default-modal'
                   type='button'
-                  class='py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 '
+                  className='py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 '
                 >
                   Cancel
                 </button>
