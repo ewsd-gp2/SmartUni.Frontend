@@ -13,7 +13,7 @@ export const Teacher = () => {
                     </div>
                     <div>
                         <p className="text-xs md:text-sm mt-5">
-                            Lorem ipsum dolor sit amet consectetur. Augue fames at mauris lobortis purus gravida. Donec malesuada pulvinar sapien consectetur vulputate lorem tincidunt. At id scelerisque nunc sed vulputate amet donec. Quis sapien risus risus donec. Lorem ipsum dolor sit amet consectetur.
+                        SmartUni’s platform makes it easy to connect with students and tailor lessons to their individual needs, resulting in more meaningful and effective tutoring sessions.
                         </p>
                     </div>
                 </div>
@@ -24,7 +24,7 @@ export const Teacher = () => {
                     </div>
                     <div>
                         <p className="text-xs md:text-sm mt-5">
-                            Lorem ipsum dolor sit amet consectetur. Augue fames at mauris lobortis purus gravida. Donec malesuada pulvinar sapien consectetur vulputate lorem tincidunt. At id scelerisque nunc sed vulputate amet donec. Quis sapien risus risus donec. Lorem ipsum dolor sit amet consectetur.
+                        I appreciate how SmartUni’s collaborative tools streamline communication and help me communicate with my students in real-time, enhancing the overall learning experience.
                         </p>
                     </div>
                 </div>
@@ -35,7 +35,7 @@ export const Teacher = () => {
                     </div>
                     <div>
                         <p className="text-xs md:text-sm mt-5">
-                            Lorem ipsum dolor sit amet consectetur. Augue fames at mauris lobortis purus gravida. Donec malesuada pulvinar sapien consectetur vulputate lorem tincidunt. At id scelerisque nunc sed vulputate amet donec. Quis sapien risus risus donec. Lorem ipsum dolor sit amet consectetur.
+                        The intuitive dashboard and resource sharing features allow me to focus on teaching while ensuring each student receives personalized support to succeed.
                         </p>
                     </div>
                 </div>

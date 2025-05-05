@@ -45,7 +45,7 @@ export const Blog = () => {
     </div>
     <div className="py-2 border-b-2 px-4 flex flex-col">
     <h1 className="font-semibold text-[24px]">{blog.title}</h1>
-    <Link to={`/${userRole}/blog/details/${blog.id}`} className="text-teal-600">See the article &gt;&gt;&gt;</Link>
+    <Link to={`/login`} className="text-teal-600">See the article &gt;&gt;&gt;</Link>
     </div>
     <div className="px-5 py-4 flex justify-between items-center">
         <div className="flex items-center gap-3">

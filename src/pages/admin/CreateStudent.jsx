@@ -88,11 +88,11 @@ const CreateStudent = () => {
       });
   };
   return (
-    <div>
+    <div className="md:ml-6">
       <HeaderTitle title='Create Student Account' />
       <form>
-      <div className="mt-8 flex flex-col md:flex-row md:gap-16">
-          <div className='' onClick={handleClick}>
+      <div className='mt-8 flex flex-col md:flex-row md:gap-15 gap-8 '>
+          <div className='self-center md:self-auto' onClick={handleClick}>
             <input
               ref={fileInputRef}
               type='file'
@@ -113,9 +113,7 @@ const CreateStudent = () => {
                 />
               </div>
             ) : (
-              <div
-                className='w-xs cursor-pointer aspect-[4/3] border-2 border-dashed border-[#14B8A6] flex flex-col items-center'
-              >
+              <div className='w-full md:w-xs p-4 cursor-pointer aspect-[4/3] border-2 border-dashed border-[#14B8A6] flex flex-col justify-center items-center'>
                 <IoCloudUpload size={60} className='mt-5' color='#14B8A6' />
                 <p className='text-xl font-bold'>Upload Picture here</p>
                 <p className='mt-2'>Files supported: JPG, PNG and more</p>

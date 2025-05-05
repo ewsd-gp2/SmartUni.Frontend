@@ -87,7 +87,7 @@ const LoginPage = () => {
           toast.error("Login failed. Please try again later.");
         }
       } else {
-        toast.error("Network error. Please check your connection.");
+        toast.error("Login failed. Please try again later.");
       }
     }
   };

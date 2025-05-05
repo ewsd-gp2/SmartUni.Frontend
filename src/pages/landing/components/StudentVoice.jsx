@@ -40,7 +40,7 @@ export const StudentVoice = () => {
           />
           <h1 className="mt-5 font-semibold text-xl md:text-2xl">John Doe</h1>
           <p className="mt-5 text-sm px-5 text-center">
-            Lorem ipsum dolor sit amet consectetur. Augue fames at mauris lobortis purus gravida. Donec malesuada pulvinar sapien consectetur vulputate lorem tincidunt. At id scelerisque nunc sed vulputate amet donec. 
+          SmartUni transformed the way I learn. The personalized tutoring and easy-to-use dashboard helped me stay organized and achieve my academic goals faster.
           </p>
         </div>
 
@@ -56,7 +56,7 @@ export const StudentVoice = () => {
           />
           <h1 className="mt-5 font-semibold text-xl md:text-2xl">Smith</h1>
           <p className="mt-5 text-sm px-5 text-center">
-          Lorem ipsum dolor sit amet consectetur. Augue fames at mauris lobortis purus gravida. Donec malesuada pulvinar sapien consectetur vulputate lorem tincidunt. At id scelerisque nunc sed vulputate amet donec. Quis sapien risus risus donec. Lorem ipsum dolor sit amet consectetur.
+          Thanks to SmartUni’s collaborative tools, I felt supported every step of the way. The interactive sessions made studying engaging and effective.
           </p>
         </div>
 
@@ -72,7 +72,7 @@ export const StudentVoice = () => {
           />
           <h1 className="mt-5 font-semibold text-xl md:text-2xl">Ricky</h1>
           <p className="mt-5 text-sm px-5 text-center">
-          Lorem ipsum dolor sit amet consectetur. Augue fames at mauris lobortis purus gravida. Donec malesuada pulvinar sapien consectetur vulputate lorem tincidunt. At id scelerisque nunc sed vulputate amet donec. Quis sapien risus risus donec. Lorem ipsum dolor sit amet consectetur.
+          The resources and guidance available on SmartUni gave me the confidence to excel in my courses. It’s like having a tutor and study group all in one!
           </p>
         </div>
       </div>

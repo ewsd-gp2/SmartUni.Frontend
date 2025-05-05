@@ -60,7 +60,7 @@ const StudentMeeting = () => {
   const fetchMeetingList = async () => {
     const url = `http://localhost:7142/meeting/student/${user.id}`;
     setListLoading(true);
-    console.log("SELECTED RANGE", selectedRange);
+
     axios
       .post(url, selectedRange, {
         headers: {

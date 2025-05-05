@@ -62,6 +62,8 @@ const Dashboard = () => {
     endTime: todayEnd,
   });
 
+  
+
   useEffect(() => {
     const fetchTutorId = async () => {
       try {
@@ -250,6 +252,34 @@ const Dashboard = () => {
     setListLoading(false);
   };
 
+  // const fetchMeetingList = async () => {
+  //   const url = `http://localhost:7142/meeting/student/${user.id}`;
+  //   setListLoading(true);
+  //   let ranger = {
+  //       startTime: "2025-05-05T12:30:00Z",
+  //       endTime: "2025-05-05T13:30:00Z"
+  //   };
+
+  //   console.log("SELECTED RANGE", selectedRange);
+  //   axios
+  //     .post(url, ranger, {
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       withCredentials: "true",
+  //     })
+  //     .then((response) => {
+  //       console.log("getMeetingList", response.data);
+  //       setData(response.data);
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //       toast.error("Sorry, something went wrong.", {
+  //         position: "top-right",
+  //       });
+  //     });
+  //   setListLoading(false);
+  // };
   const formatDate = (dateStr) => {
     return new Date(dateStr).toLocaleDateString("en-GB", {
       year: "numeric",
