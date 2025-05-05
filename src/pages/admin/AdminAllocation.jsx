@@ -22,6 +22,7 @@ const AdminAllocation = () => {
   const [dropdownVisible, setDropdownVisible] = useState(false);
   // console.log(studentData);
   // console.log(tutorData)
+  console.log(allocation)
   useEffect(() => {
     const loadData = async () => {
       setLoading(true);

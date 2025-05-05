@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { AiFillLike, AiOutlineLike } from "react-icons/ai";
 import { AiOutlineDislike } from "react-icons/ai";
-import { FaRegImage } from "react-icons/fa6";
+import { FaDownload, FaRegImage } from "react-icons/fa6";
 import { IoMdSend } from "react-icons/io";
 import { useParams } from "react-router-dom";
 import { formatDate } from "../../formatdatetime/FormatDateTime";
@@ -16,6 +16,7 @@ const BlogDetailRow = () => {
   const [newComment, setNewComment] = useState("");
   const [liked, setLiked] = useState(false);
   const [reactionCount, setReactionCount] = useState(0);
+  console.log(blogDetail)
   useEffect(() => {
     getBlogDetail(id);
   }, []);
@@ -39,6 +40,8 @@ const BlogDetailRow = () => {
       console.log("Fetching blog error", error);
     }
   };
+
+
 
   const handleCommentSubmit = async (e, id) => {
     e.preventDefault();
@@ -98,7 +101,7 @@ const BlogDetailRow = () => {
       >
         <img
           className=" size-10 rounded-full"
-          src={`data:image/jpeg;base64,${blogDetail.authorAvatar}`}
+          src={blogDetail.authorAvatar ? `data:image/jpeg;base64,${blogDetail.authorAvatar}` : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"}
           alt=""
         />
         <div>
@@ -119,6 +122,24 @@ const BlogDetailRow = () => {
             <p className="  text-sm text-gray-700 dark:text-gray-400">
               {blogDetail.content}
             </p>
+            {blogDetail.attachmentName && (
+              <div className="mt-4 p-3 bg-gray-50 rounded-lg border border-gray-200">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center">
+                    <FaDownload className="text-gray-500 mr-2" />
+                    <span className="text-sm font-medium text-gray-700">
+                      {blogDetail.attachmentName || "Attachment"}
+                    </span>
+                  </div>
+                  <button
+                    className="px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 transition-colors flex items-center"
+                  >
+                    <FaDownload className="mr-1" size={12} />
+                    Download
+                  </button>
+                </div>
+              </div>
+            )}
             <div className="mt-3 flex gap-3">
               <button
                 type="button"
@@ -179,7 +200,7 @@ const BlogDetailRow = () => {
                 <div className="flex items-start gap-3">
                   <img
                     className="w-9 h-9 rounded-full object-cover"
-                    src={`data:image/jpeg;base64,${comment.commenterAvatar}`}
+                    src={comment.commenterAvatar ? `data:image/jpeg;base64,${comment.commenterAvatar}` : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"}
                     alt="avatar"
                   />
                   <div className="bg-gray-100 hover:bg-gray-200 transition rounded-xl px-4 py-2 w-[350px]">

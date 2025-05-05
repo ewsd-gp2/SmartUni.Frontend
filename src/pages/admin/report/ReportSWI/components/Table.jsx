@@ -161,7 +161,7 @@ export const StudentsTable = () => {
                         <td className="text-center border-teal-500 border-r-2 text-sm lg:text-xl">{index + 1}</td>
                         <td className="py-4 ml-8 flex items-center">
                             <img
-                                src={`data:image/jpeg;base64,${data.image}`} className="w-10 h-10 lg:w-13 lg:h-13 rounded-full"/>
+                                src={data.image ? `data:image/jpeg;base64,${data.image}`: 'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png'} className="w-10 h-10 lg:w-13 lg:h-13 rounded-full"/>
                             <div className="ml-4">
                                 <p className="text-sm lg:text-xl">{data.name}</p>
                                 <p className="text-[10px] lg:text-xs text-gray-700">{data.major}</p>

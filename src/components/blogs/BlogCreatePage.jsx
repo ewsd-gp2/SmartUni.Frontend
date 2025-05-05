@@ -12,6 +12,7 @@ const BlogCreatePage = () => {
   const [content, setContent] = useState('');
   const [coverImage, setCoverImage] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
+  const [attachment, setAttachment] = useState("");
   const userRole = localStorage.getItem("user_role");
 
 const navigate = useNavigate()
@@ -22,15 +23,15 @@ const navigate = useNavigate()
         icon: "✋",
         style: {
           borderRadius: "8px",
-          background: "#ECFDF5", // Teal-50
-          color: "#065F46", // Teal-800
-          borderLeft: "4px solid #047857", // Teal-700
+          background: "#ECFDF5",
+          color: "#065F46",
+          borderLeft: "4px solid #047857",
           boxShadow: "0 2px 10px rgba(5, 150, 105, 0.1)",
           fontSize: "20px",
         },
         iconTheme: {
-          primary: "#047857", // Teal-700
-          secondary: "#D1FAE5", // Teal-100
+          primary: "#047857",
+          secondary: "#D1FAE5", 
         },
       });
       return;
@@ -40,6 +41,7 @@ const navigate = useNavigate()
     formData.append("title", title);
     formData.append("content", content);
     formData.append("coverImage", coverImage);
+    formData.append("attachment", attachment);
     try{
    const url="http://localhost:7142/blog";
    await axios.post(url,formData,{
@@ -118,6 +120,32 @@ const navigate = useNavigate()
               alt="Preview"
               className="mt-2 max-w-full h-auto"
             />
+          )}
+        </div>
+        <div>
+          <label htmlFor="attachment" className="block text-sm font-medium text-gray-700 mb-1">Attachment (Optional)</label>
+          <input
+            type="file"
+            id="attachment"
+            onChange={(e) => {
+              const file = e.target.files[0];
+              setAttachment(file);
+            }}
+            className="block w-full text-sm text-gray-700"
+          />
+          {attachment && (
+            <div className="mt-2 flex items-center">
+              <span className="text-sm text-gray-600 mr-2">
+                {attachment.name} ({Math.round(attachment.size / 1024)} KB)
+              </span>
+              <button
+                type="button"
+                onClick={() => setAttachment(null)}
+                className="text-red-500 hover:text-red-700 text-sm"
+              >
+                Remove
+              </button>
+            </div>
           )}
         </div>
         <GradientButton Icon={IoAddCircle} type="submit" text={"Create Blog"} width={"full"} rounded={"xl"} />
